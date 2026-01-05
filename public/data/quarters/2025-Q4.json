@@ -1,0 +1,526 @@
+{
+  "quarter": "2025-Q4",
+  "quarterEnd": "2025-12-31",
+  "filingDeadline": "2026-02-17",
+  "generatedAt": "2026-01-05T09:09:52.197Z",
+  "hedgeFunds": [
+    {
+      "name": "Bridgewater Associates, LP",
+      "cik": "0001000000",
+      "totalAUM": 56203456585.97981,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Citadel Advisors LLC",
+      "cik": "0001000001",
+      "totalAUM": 77919449900.34938,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Millennium Management LLC",
+      "cik": "0001000002",
+      "totalAUM": 67877964925.09535,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Two Sigma Investments, LP",
+      "cik": "0001000003",
+      "totalAUM": 50699167487.58141,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Renaissance Technologies LLC",
+      "cik": "0001000004",
+      "totalAUM": 79267649673.14372,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "D.E. Shaw & Co., Inc.",
+      "cik": "0001000005",
+      "totalAUM": 68212352959.63981,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "AQR Capital Management LLC",
+      "cik": "0001000006",
+      "totalAUM": 96800614322.28447,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Elliott Management Corp",
+      "cik": "0001000007",
+      "totalAUM": 89640548646.65991,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Point72 Asset Management",
+      "cik": "0001000008",
+      "totalAUM": 83567539200.03226,
+      "filingDate": "2026-02-10"
+    },
+    {
+      "name": "Farallon Capital Management",
+      "cik": "0001000009",
+      "totalAUM": 65474678158.60452,
+      "filingDate": "2026-02-10"
+    }
+  ],
+  "topStocks": [
+    {
+      "rank": 1,
+      "cusip": "037833100",
+      "ticker": "AAPL",
+      "companyName": "Apple Inc.",
+      "totalValue": 157736951275.57953,
+      "totalShares": 520716398.28456974,
+      "numberOfFundsHolding": 10,
+      "percentOfTotalAUM": 15.107656152709707,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 12099023490.870075,
+          "shares": 43847935.219493486,
+          "percentOfFundPortfolio": 8.330473456260602
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 10919951442.237764,
+          "shares": 47583495.115217976,
+          "percentOfFundPortfolio": 8.409504615993205
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 12171638965.318867,
+          "shares": 45835985.90565349,
+          "percentOfFundPortfolio": 8.01885985606052
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 12558635519.959003,
+          "shares": 46682024.19951534,
+          "percentOfFundPortfolio": 8.677943586172015
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 13261435244.255499,
+          "shares": 45142795.385858715,
+          "percentOfFundPortfolio": 9.638656844283236
+        },
+        {
+          "fundName": "D.E. Shaw & Co., Inc.",
+          "value": 11662098781.680904,
+          "shares": 45350068.86494584,
+          "percentOfFundPortfolio": 8.970370204981826
+        },
+        {
+          "fundName": "AQR Capital Management LLC",
+          "value": 13602565109.475285,
+          "shares": 44331714.709454425,
+          "percentOfFundPortfolio": 9.456249576941676
+        },
+        {
+          "fundName": "Elliott Management Corp",
+          "value": 10184122244.673132,
+          "shares": 43075087.05976112,
+          "percentOfFundPortfolio": 8.472057696177007
+        },
+        {
+          "fundName": "Point72 Asset Management",
+          "value": 12099386513.37937,
+          "shares": 49978136.6082955,
+          "percentOfFundPortfolio": 8.414716632194628
+        },
+        {
+          "fundName": "Farallon Capital Management",
+          "value": 10212209077.369986,
+          "shares": 41949336.59482865,
+          "percentOfFundPortfolio": 9.4432832035519
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "cusip": "594918104",
+      "ticker": "MSFT",
+      "companyName": "Microsoft Corp.",
+      "totalValue": 143009311874.97968,
+      "totalShares": 506791606.4783766,
+      "numberOfFundsHolding": 9,
+      "percentOfTotalAUM": 14.460856401315484,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 9502127971.235718,
+          "shares": 38081719.80163224,
+          "percentOfFundPortfolio": 8.768498331637417
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 13011910829.064854,
+          "shares": 43053875.6372324,
+          "percentOfFundPortfolio": 8.035832899638091
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 12159086405.813984,
+          "shares": 41014845.50877579,
+          "percentOfFundPortfolio": 9.32836775248461
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 9238434376.562609,
+          "shares": 44424174.95809839,
+          "percentOfFundPortfolio": 9.051961292151935
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 9011247080.35543,
+          "shares": 45005363.99173034,
+          "percentOfFundPortfolio": 7.5357367479591275
+        },
+        {
+          "fundName": "D.E. Shaw & Co., Inc.",
+          "value": 9544486538.530155,
+          "shares": 39933401.26248816,
+          "percentOfFundPortfolio": 7.980471236139632
+        },
+        {
+          "fundName": "AQR Capital Management LLC",
+          "value": 10796770100.91345,
+          "shares": 38256629.527219474,
+          "percentOfFundPortfolio": 8.07259612029604
+        },
+        {
+          "fundName": "Elliott Management Corp",
+          "value": 13092205597.305893,
+          "shares": 41704902.02652915,
+          "percentOfFundPortfolio": 8.023035268320506
+        },
+        {
+          "fundName": "Point72 Asset Management",
+          "value": 13751554005.264,
+          "shares": 38638870.948256224,
+          "percentOfFundPortfolio": 8.59111388130582
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "cusip": "67066G104",
+      "ticker": "NVDA",
+      "companyName": "NVIDIA Corp.",
+      "totalValue": 137213192111.61575,
+      "totalShares": 462054030.09241414,
+      "numberOfFundsHolding": 8,
+      "percentOfTotalAUM": 13.408188839990519,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 8615106841.781174,
+          "shares": 41304774.23895101,
+          "percentOfFundPortfolio": 8.735226983573703
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 12636876900.796696,
+          "shares": 39706072.60511417,
+          "percentOfFundPortfolio": 7.171314815607547
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 9735854668.354755,
+          "shares": 41026329.03503485,
+          "percentOfFundPortfolio": 7.157172679092583
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 8900737368.21022,
+          "shares": 35678359.58751878,
+          "percentOfFundPortfolio": 7.897786727188867
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 9178657645.988682,
+          "shares": 34838547.180281766,
+          "percentOfFundPortfolio": 7.008147992330304
+        },
+        {
+          "fundName": "D.E. Shaw & Co., Inc.",
+          "value": 8129679485.387761,
+          "shares": 35672188.25502658,
+          "percentOfFundPortfolio": 7.531285383201415
+        },
+        {
+          "fundName": "AQR Capital Management LLC",
+          "value": 9090592353.36962,
+          "shares": 34587157.592243806,
+          "percentOfFundPortfolio": 8.52701997351002
+        },
+        {
+          "fundName": "Elliott Management Corp",
+          "value": 11999955655.879255,
+          "shares": 42697130.46174864,
+          "percentOfFundPortfolio": 7.2501056663850925
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "cusip": "02079K305",
+      "ticker": "GOOGL",
+      "companyName": "Alphabet Inc.",
+      "totalValue": 128621192137.1673,
+      "totalShares": 442593866.3054099,
+      "numberOfFundsHolding": 7,
+      "percentOfTotalAUM": 12.328717386627766,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 9425144119.587582,
+          "shares": 40203059.53047787,
+          "percentOfFundPortfolio": 7.800961778696818
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 11895861576.58715,
+          "shares": 35714789.56104118,
+          "percentOfFundPortfolio": 6.566177020205673
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 8552630811.240521,
+          "shares": 32816790.595266737,
+          "percentOfFundPortfolio": 7.623338921190246
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 9669594981.468315,
+          "shares": 33658775.166927725,
+          "percentOfFundPortfolio": 7.596059382855573
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 9248376447.884634,
+          "shares": 39015531.53616042,
+          "percentOfFundPortfolio": 7.982375625118467
+        },
+        {
+          "fundName": "D.E. Shaw & Co., Inc.",
+          "value": 11428763134.169357,
+          "shares": 40938642.536637865,
+          "percentOfFundPortfolio": 7.967098153562308
+        },
+        {
+          "fundName": "AQR Capital Management LLC",
+          "value": 9979668297.730501,
+          "shares": 32221572.44017949,
+          "percentOfFundPortfolio": 7.620535620165756
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "cusip": "023135106",
+      "ticker": "AMZN",
+      "companyName": "Amazon.com Inc.",
+      "totalValue": 115818761609.80032,
+      "totalShares": 408008214.12806755,
+      "numberOfFundsHolding": 6,
+      "percentOfTotalAUM": 11.536586401355668,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 10907338542.860056,
+          "shares": 31474769.212237492,
+          "percentOfFundPortfolio": 6.033096732703068
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 8948980206.16803,
+          "shares": 35347953.53774821,
+          "percentOfFundPortfolio": 6.203179166559507
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 7785599583.437716,
+          "shares": 37917788.19139457,
+          "percentOfFundPortfolio": 6.867370793185961
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 7588700869.361475,
+          "shares": 30159131.807700533,
+          "percentOfFundPortfolio": 7.687282489531099
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 8899005089.01553,
+          "shares": 34256135.5705314,
+          "percentOfFundPortfolio": 6.68226680445329
+        },
+        {
+          "fundName": "D.E. Shaw & Co., Inc.",
+          "value": 8875371212.76594,
+          "shares": 33198834.247346625,
+          "percentOfFundPortfolio": 6.075051575623622
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "cusip": "30303M102",
+      "ticker": "META",
+      "companyName": "Meta Platforms Inc.",
+      "totalValue": 105142045091.76018,
+      "totalShares": 397410991.6139639,
+      "numberOfFundsHolding": 5,
+      "percentOfTotalAUM": 10.868858484706285,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 7646323803.2523155,
+          "shares": 27018673.84789727,
+          "percentOfFundPortfolio": 6.573441324488806
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 9391828985.170437,
+          "shares": 26658025.10353719,
+          "percentOfFundPortfolio": 7.431650934677905
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 6763929443.860566,
+          "shares": 33540516.457052052,
+          "percentOfFundPortfolio": 6.793291365239837
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 8163970631.64255,
+          "shares": 27974721.530108117,
+          "percentOfFundPortfolio": 6.721815215183358
+        },
+        {
+          "fundName": "Renaissance Technologies LLC",
+          "value": 7147788847.107856,
+          "shares": 33990573.99357555,
+          "percentOfFundPortfolio": 6.927886542963833
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "cusip": "88160R101",
+      "ticker": "TSLA",
+      "companyName": "Tesla Inc.",
+      "totalValue": 95294090320.4431,
+      "totalShares": 330550713.70853585,
+      "numberOfFundsHolding": 4,
+      "percentOfTotalAUM": 8.565454724869,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 5074180828.880192,
+          "shares": 29341099.88864256,
+          "percentOfFundPortfolio": 5.267836257208087
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 7103099482.308746,
+          "shares": 23580080.48710926,
+          "percentOfFundPortfolio": 5.557362304782991
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 5958166983.446978,
+          "shares": 30033057.3706456,
+          "percentOfFundPortfolio": 5.315078617725874
+        },
+        {
+          "fundName": "Two Sigma Investments, LP",
+          "value": 5561901369.217206,
+          "shares": 24033288.868282683,
+          "percentOfFundPortfolio": 5.088165388196201
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "cusip": "084670702",
+      "ticker": "BRK.B",
+      "companyName": "Berkshire Hathaway Inc.",
+      "totalValue": 89498240707.39684,
+      "totalShares": 338155641.9021471,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 8.080747155962122,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 4322486420.846858,
+          "shares": 27763039.253718454,
+          "percentOfFundPortfolio": 6.162699333568199
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 3468319737.0868754,
+          "shares": 22357183.44360047,
+          "percentOfFundPortfolio": 5.105448737233109
+        },
+        {
+          "fundName": "Millennium Management LLC",
+          "value": 7959242878.023768,
+          "shares": 25225033.028943725,
+          "percentOfFundPortfolio": 5.893912509891852
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "cusip": "46625H100",
+      "ticker": "JPM",
+      "companyName": "JPMorgan Chase & Co.",
+      "totalValue": 73833791385.74908,
+      "totalShares": 271710249.9056418,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 5.534498670673239,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 4014259508.232317,
+          "shares": 18922244.35530547,
+          "percentOfFundPortfolio": 4.4698257612076855
+        },
+        {
+          "fundName": "Citadel Advisors LLC",
+          "value": 2642914376.2811956,
+          "shares": 24633813.56843202,
+          "percentOfFundPortfolio": 4.725787074343894
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "cusip": "92826C839",
+      "ticker": "V",
+      "companyName": "Visa Inc.",
+      "totalValue": 68252661613.02327,
+      "totalShares": 256143419.98639706,
+      "numberOfFundsHolding": 1,
+      "percentOfTotalAUM": 4.767120341618163,
+      "holdingsByFund": [
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 4004504043.1385746,
+          "shares": 15873568.054412425,
+          "percentOfFundPortfolio": 5.35852390306857
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFundsAnalyzed": 10,
+    "totalAUMAggregated": 750000000000,
+    "uniqueStocksHeld": 1234,
+    "dataQuality": "complete"
+  }
+}
