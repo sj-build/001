@@ -2,15 +2,27 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const config = require('./config.cjs');
 
 /**
  * Generate mock data for testing the UI
  */
-async function generateMockData() {
-  console.log('Generating mock data for testing...\n');
+async function generateMockData(category = 'guru') {
+  console.log(`Generating mock data for category: ${category}...\n`);
 
   const quarter = '2025-Q4';
   const quarterEnd = '2025-12-31';
+
+  // Get investors for the specified category
+  const categoryConfig = config.investorCategories[category];
+  if (!categoryConfig) {
+    throw new Error(`Invalid category: ${category}. Must be 'guru' or 'emerging'`);
+  }
+
+  const investors = categoryConfig.investors;
+  const mockFunds = investors.map(inv => inv.name);
+
+  console.log(`Using ${mockFunds.length} ${category} investors`);
 
   // Mock price history (1 year of daily prices)
   function generatePriceHistory(startPrice) {
@@ -48,31 +60,19 @@ async function generateMockData() {
     { ticker: 'V', name: 'Visa Inc.', cusip: '92826C839', price: 270 }
   ];
 
-  // Mock hedge funds
-  const mockFunds = [
-    'Bridgewater Associates, LP',
-    'Citadel Advisors LLC',
-    'Millennium Management LLC',
-    'Two Sigma Investments, LP',
-    'Renaissance Technologies LLC',
-    'D.E. Shaw & Co., Inc.',
-    'AQR Capital Management LLC',
-    'Elliott Management Corp',
-    'Point72 Asset Management',
-    'Farallon Capital Management'
-  ];
-
   // Generate summary data (top 10 aggregated stocks)
   const summaryData = {
     quarter,
     quarterEnd,
     filingDeadline: '2026-02-17',
     generatedAt: new Date().toISOString(),
-    hedgeFunds: mockFunds.map((name, i) => ({
-      name,
-      cik: `000${1000000 + i}`,
+    hedgeFunds: investors.map((inv, i) => ({
+      name: inv.name,
+      cik: inv.cik,
       totalAUM: 50e9 + Math.random() * 50e9,
-      filingDate: '2026-02-10'
+      filingDate: '2026-02-10',
+      category: inv.category,
+      metadata: inv.metadata
     })),
     topStocks: mockStocks.map((stock, i) => ({
       rank: i + 1,
@@ -91,30 +91,65 @@ async function generateMockData() {
       }))
     })),
     metadata: {
-      totalFundsAnalyzed: 10,
+      totalFundsAnalyzed: investors.length,
       totalAUMAggregated: 750e9,
       uniqueStocksHeld: 1234,
-      dataQuality: 'complete'
+      dataQuality: 'complete',
+      category: category
     }
   };
 
-  // Generate detailed data (each fund's top 1 holding)
+  // Generate detailed data (each fund's most purchased stock vs previous quarter)
   const detailedData = {
     quarter,
-    fundTopHoldings: mockFunds.map((fundName, i) => {
+    category: category,
+    fundTopHoldings: investors.map((inv, i) => {
       const stock = mockStocks[i];
-      const value = 30e9 + Math.random() * 20e9;
+      const currentValue = 30e9 + Math.random() * 20e9;
+      const currentShares = currentValue / stock.price;
+      const currentPercent = 5 + Math.random() * 10;
+
+      // Generate previous quarter data (simulate a position that was increased)
+      // Previous position was 40-70% of current position size
+      const previousSizeRatio = 0.4 + Math.random() * 0.3;
+      const previousValue = currentValue * previousSizeRatio;
+      const previousShares = currentShares * previousSizeRatio;
+      const previousPercent = currentPercent * previousSizeRatio;
+
+      // Calculate changes
+      const valueChange = currentValue - previousValue;
+      const sharesChange = currentShares - previousShares;
+      const percentChange = ((currentValue - previousValue) / previousValue) * 100;
 
       return {
-        fundName,
-        fundCik: `000${1000000 + i}`,
-        topHolding: {
+        fundName: inv.name,
+        fundCik: inv.cik,
+        category: inv.category,
+        metadata: inv.metadata,
+        mostPurchased: {
           ticker: stock.ticker,
           companyName: stock.name,
           cusip: stock.cusip,
-          value,
-          shares: value / stock.price,
-          percentOfPortfolio: 5 + Math.random() * 10,
+          value: currentValue,
+          shares: currentShares,
+          percentOfPortfolio: currentPercent,
+          positionChange: {
+            previousQuarter: {
+              value: previousValue,
+              shares: previousShares,
+              percentOfPortfolio: previousPercent
+            },
+            currentQuarter: {
+              value: currentValue,
+              shares: currentShares,
+              percentOfPortfolio: currentPercent
+            },
+            change: {
+              valueChange,
+              sharesChange,
+              percentChange
+            }
+          },
           priceHistory: generatePriceHistory(stock.price),
           valuationMetrics: {
             peRatio: 15 + Math.random() * 30,
@@ -129,24 +164,40 @@ async function generateMockData() {
     })
   };
 
-  // Write to files
+  // Write to files with category prefix
   const dataDir = path.join(__dirname, '..', 'public', 'data', 'quarters');
   await fs.mkdir(dataDir, { recursive: true });
 
-  const summaryPath = path.join(dataDir, `${quarter}.json`);
-  const detailedPath = path.join(dataDir, `${quarter}-detailed.json`);
+  const summaryPath = path.join(dataDir, `${category}-${quarter}.json`);
+  const detailedPath = path.join(dataDir, `${category}-${quarter}-detailed.json`);
 
   await fs.writeFile(summaryPath, JSON.stringify(summaryData, null, 2));
   await fs.writeFile(detailedPath, JSON.stringify(detailedData, null, 2));
 
-  console.log(`✓ Generated mock data for ${quarter}`);
+  console.log(`✓ Generated mock data for ${category} - ${quarter}`);
   console.log(`  Summary: ${summaryPath}`);
   console.log(`  Detailed: ${detailedPath}`);
-  console.log('\nYou can now run: npm run dev');
 }
 
-generateMockData()
-  .then(() => process.exit(0))
+// Parse CLI arguments
+const args = process.argv.slice(2);
+let category = 'guru'; // default
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--category' && args[i + 1]) {
+    category = args[i + 1];
+  }
+}
+
+// Generate for the specified category
+generateMockData(category)
+  .then(() => {
+    console.log('\nMock data generated successfully!');
+    console.log(`\nTo generate for other category, run:`);
+    console.log(`  node scripts/generateMockData.cjs --category ${category === 'guru' ? 'emerging' : 'guru'}`);
+    console.log(`\nYou can now run: npm run dev`);
+    process.exit(0);
+  })
   .catch((err) => {
     console.error('Error:', err);
     process.exit(1);

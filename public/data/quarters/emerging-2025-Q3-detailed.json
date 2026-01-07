@@ -1,0 +1,723 @@
+{
+  "quarter": "2025-Q3",
+  "category": "emerging",
+  "fundTopHoldings": [
+    {
+      "fundName": "Situational Awareness LP",
+      "fundCik": "0002045724",
+      "mostPurchased": {
+        "ticker": "",
+        "companyName": "COREWEAVE INC",
+        "cusip": "21873S108",
+        "value": 563200154,
+        "shares": 4115456,
+        "percentOfPortfolio": 13.609230793466256,
+        "positionChange": {
+          "previousQuarter": {
+            "value": 0,
+            "shares": 0,
+            "percentOfPortfolio": 0
+          },
+          "currentQuarter": {
+            "value": 563200154,
+            "shares": 4115456,
+            "percentOfPortfolio": 13.609230793466256
+          },
+          "change": {
+            "valueChange": 563200154,
+            "sharesChange": 4115456,
+            "percentChange": null
+          }
+        },
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "AI/AGI focused, 47% H1 2025 return",
+        "estimatedAUM": 4100000000,
+        "type": "hedge fund",
+        "since": 2024,
+        "performance2025": "47%"
+      }
+    },
+    {
+      "fundName": "Aspex Management (HK) Ltd",
+      "fundCik": "0001768375",
+      "mostPurchased": {
+        "ticker": "PDD",
+        "companyName": "PDD HOLDINGS INC",
+        "cusip": "722304102",
+        "value": 419287,
+        "shares": 3172333,
+        "percentOfPortfolio": 8.875829581328553,
+        "positionChange": {
+          "previousQuarter": {
+            "value": 0,
+            "shares": 0,
+            "percentOfPortfolio": 0
+          },
+          "currentQuarter": {
+            "value": 419287,
+            "shares": 3172333,
+            "percentOfPortfolio": 8.875829581328553
+          },
+          "change": {
+            "valueChange": 419287,
+            "sharesChange": 3172333,
+            "percentChange": null
+          }
+        },
+        "priceHistory": [
+          {
+            "date": "2025-10-08",
+            "close": 133.77
+          },
+          {
+            "date": "2025-10-09",
+            "close": 131.25
+          },
+          {
+            "date": "2025-10-10",
+            "close": 124.27
+          },
+          {
+            "date": "2025-10-13",
+            "close": 127.55
+          },
+          {
+            "date": "2025-10-14",
+            "close": 127.1
+          },
+          {
+            "date": "2025-10-15",
+            "close": 127.58
+          },
+          {
+            "date": "2025-10-16",
+            "close": 127.35
+          },
+          {
+            "date": "2025-10-17",
+            "close": 128.48
+          },
+          {
+            "date": "2025-10-20",
+            "close": 131.56
+          },
+          {
+            "date": "2025-10-21",
+            "close": 130.71
+          },
+          {
+            "date": "2025-10-22",
+            "close": 130.06
+          },
+          {
+            "date": "2025-10-23",
+            "close": 133.29
+          },
+          {
+            "date": "2025-10-24",
+            "close": 133.96
+          },
+          {
+            "date": "2025-10-27",
+            "close": 137.76
+          },
+          {
+            "date": "2025-10-28",
+            "close": 138.03
+          },
+          {
+            "date": "2025-10-29",
+            "close": 138.08
+          },
+          {
+            "date": "2025-10-30",
+            "close": 136.01
+          },
+          {
+            "date": "2025-10-31",
+            "close": 134.87
+          },
+          {
+            "date": "2025-11-03",
+            "close": 134.68
+          },
+          {
+            "date": "2025-11-04",
+            "close": 133.84
+          },
+          {
+            "date": "2025-11-05",
+            "close": 136.34
+          },
+          {
+            "date": "2025-11-06",
+            "close": 136.74
+          },
+          {
+            "date": "2025-11-07",
+            "close": 135.78
+          },
+          {
+            "date": "2025-11-10",
+            "close": 138.13
+          },
+          {
+            "date": "2025-11-11",
+            "close": 137.11
+          },
+          {
+            "date": "2025-11-12",
+            "close": 136.04
+          },
+          {
+            "date": "2025-11-13",
+            "close": 134.47
+          },
+          {
+            "date": "2025-11-14",
+            "close": 130.95
+          },
+          {
+            "date": "2025-11-17",
+            "close": 129.04
+          },
+          {
+            "date": "2025-11-18",
+            "close": 119.58
+          },
+          {
+            "date": "2025-11-19",
+            "close": 118.02
+          },
+          {
+            "date": "2025-11-20",
+            "close": 112.93
+          },
+          {
+            "date": "2025-11-21",
+            "close": 113.24
+          },
+          {
+            "date": "2025-11-24",
+            "close": 113.49
+          },
+          {
+            "date": "2025-11-25",
+            "close": 114
+          },
+          {
+            "date": "2025-11-26",
+            "close": 115.8
+          },
+          {
+            "date": "2025-11-28",
+            "close": 116.08
+          },
+          {
+            "date": "2025-12-01",
+            "close": 118.27
+          },
+          {
+            "date": "2025-12-02",
+            "close": 118.9
+          },
+          {
+            "date": "2025-12-03",
+            "close": 117.2
+          },
+          {
+            "date": "2025-12-04",
+            "close": 116.82
+          },
+          {
+            "date": "2025-12-05",
+            "close": 117.62
+          },
+          {
+            "date": "2025-12-08",
+            "close": 117.62
+          },
+          {
+            "date": "2025-12-09",
+            "close": 117.14
+          },
+          {
+            "date": "2025-12-10",
+            "close": 115.28
+          },
+          {
+            "date": "2025-12-11",
+            "close": 111.97
+          },
+          {
+            "date": "2025-12-12",
+            "close": 111.96
+          },
+          {
+            "date": "2025-12-15",
+            "close": 110.4
+          },
+          {
+            "date": "2025-12-16",
+            "close": 109.02
+          },
+          {
+            "date": "2025-12-17",
+            "close": 105
+          },
+          {
+            "date": "2025-12-18",
+            "close": 105.79
+          },
+          {
+            "date": "2025-12-19",
+            "close": 109.51
+          },
+          {
+            "date": "2025-12-22",
+            "close": 111.91
+          },
+          {
+            "date": "2025-12-23",
+            "close": 112.06
+          },
+          {
+            "date": "2025-12-24",
+            "close": 113.44
+          },
+          {
+            "date": "2025-12-26",
+            "close": 115.01
+          },
+          {
+            "date": "2025-12-29",
+            "close": 114.15
+          },
+          {
+            "date": "2025-12-30",
+            "close": 113.83
+          },
+          {
+            "date": "2025-12-31",
+            "close": 113.39
+          },
+          {
+            "date": "2026-01-02",
+            "close": 115.75
+          },
+          {
+            "date": "2026-01-05",
+            "close": 119.12
+          }
+        ],
+        "valuationMetrics": {
+          "peRatio": 12.093401,
+          "pbRatio": 2.9787755,
+          "psRatio": 0.4040398,
+          "evToEbitda": 2.723,
+          "marketCap": 169108291584,
+          "lastUpdated": "2026-01-06T17:19:02.812066"
+        }
+      },
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Pan-Asian tech focus, 40.2% tech portfolio",
+        "estimatedAUM": 4700000000,
+        "type": "hedge fund",
+        "since": 2018
+      }
+    },
+    {
+      "fundName": "Altimeter Capital Management",
+      "fundCik": "0001541617",
+      "mostPurchased": {
+        "ticker": "AVGO",
+        "companyName": "BROADCOM INC",
+        "cusip": "11135F101",
+        "value": 245709050,
+        "shares": 744776,
+        "percentOfPortfolio": 3.2407149758098517,
+        "positionChange": {
+          "previousQuarter": {
+            "value": 0,
+            "shares": 0,
+            "percentOfPortfolio": 0
+          },
+          "currentQuarter": {
+            "value": 245709050,
+            "shares": 744776,
+            "percentOfPortfolio": 3.2407149758098517
+          },
+          "change": {
+            "valueChange": 245709050,
+            "sharesChange": 744776,
+            "percentChange": null
+          }
+        },
+        "priceHistory": [
+          {
+            "date": "2025-10-08",
+            "close": 344.84
+          },
+          {
+            "date": "2025-10-09",
+            "close": 344.36
+          },
+          {
+            "date": "2025-10-10",
+            "close": 324.01
+          },
+          {
+            "date": "2025-10-13",
+            "close": 356.02
+          },
+          {
+            "date": "2025-10-14",
+            "close": 343.47
+          },
+          {
+            "date": "2025-10-15",
+            "close": 350.66
+          },
+          {
+            "date": "2025-10-16",
+            "close": 353.47
+          },
+          {
+            "date": "2025-10-17",
+            "close": 348.66
+          },
+          {
+            "date": "2025-10-20",
+            "close": 348.57
+          },
+          {
+            "date": "2025-10-21",
+            "close": 342.01
+          },
+          {
+            "date": "2025-10-22",
+            "close": 339.65
+          },
+          {
+            "date": "2025-10-23",
+            "close": 343.63
+          },
+          {
+            "date": "2025-10-24",
+            "close": 353.45
+          },
+          {
+            "date": "2025-10-27",
+            "close": 361.36
+          },
+          {
+            "date": "2025-10-28",
+            "close": 372.26
+          },
+          {
+            "date": "2025-10-29",
+            "close": 385.24
+          },
+          {
+            "date": "2025-10-30",
+            "close": 375.75
+          },
+          {
+            "date": "2025-10-31",
+            "close": 368.92
+          },
+          {
+            "date": "2025-11-03",
+            "close": 361.86
+          },
+          {
+            "date": "2025-11-04",
+            "close": 351.27
+          },
+          {
+            "date": "2025-11-05",
+            "close": 358.29
+          },
+          {
+            "date": "2025-11-06",
+            "close": 354.91
+          },
+          {
+            "date": "2025-11-07",
+            "close": 348.76
+          },
+          {
+            "date": "2025-11-10",
+            "close": 357.71
+          },
+          {
+            "date": "2025-11-11",
+            "close": 351.29
+          },
+          {
+            "date": "2025-11-12",
+            "close": 354.54
+          },
+          {
+            "date": "2025-11-13",
+            "close": 339.33
+          },
+          {
+            "date": "2025-11-14",
+            "close": 341.81
+          },
+          {
+            "date": "2025-11-17",
+            "close": 342
+          },
+          {
+            "date": "2025-11-18",
+            "close": 339.85
+          },
+          {
+            "date": "2025-11-19",
+            "close": 353.74
+          },
+          {
+            "date": "2025-11-20",
+            "close": 346.16
+          },
+          {
+            "date": "2025-11-21",
+            "close": 339.55
+          },
+          {
+            "date": "2025-11-24",
+            "close": 377.24
+          },
+          {
+            "date": "2025-11-25",
+            "close": 384.29
+          },
+          {
+            "date": "2025-11-26",
+            "close": 396.81
+          },
+          {
+            "date": "2025-11-28",
+            "close": 402.19
+          },
+          {
+            "date": "2025-12-01",
+            "close": 385.34
+          },
+          {
+            "date": "2025-12-02",
+            "close": 380.84
+          },
+          {
+            "date": "2025-12-03",
+            "close": 379.88
+          },
+          {
+            "date": "2025-12-04",
+            "close": 380.3
+          },
+          {
+            "date": "2025-12-05",
+            "close": 389.49
+          },
+          {
+            "date": "2025-12-08",
+            "close": 400.33
+          },
+          {
+            "date": "2025-12-09",
+            "close": 405.51
+          },
+          {
+            "date": "2025-12-10",
+            "close": 412.18
+          },
+          {
+            "date": "2025-12-11",
+            "close": 405.59
+          },
+          {
+            "date": "2025-12-12",
+            "close": 359.24
+          },
+          {
+            "date": "2025-12-15",
+            "close": 339.16
+          },
+          {
+            "date": "2025-12-16",
+            "close": 340.65
+          },
+          {
+            "date": "2025-12-17",
+            "close": 325.4
+          },
+          {
+            "date": "2025-12-18",
+            "close": 329.25
+          },
+          {
+            "date": "2025-12-19",
+            "close": 339.71
+          },
+          {
+            "date": "2025-12-22",
+            "close": 341.45
+          },
+          {
+            "date": "2025-12-23",
+            "close": 349.32
+          },
+          {
+            "date": "2025-12-24",
+            "close": 350.22
+          },
+          {
+            "date": "2025-12-26",
+            "close": 352.13
+          },
+          {
+            "date": "2025-12-29",
+            "close": 349.39
+          },
+          {
+            "date": "2025-12-30",
+            "close": 349.85
+          },
+          {
+            "date": "2025-12-31",
+            "close": 346.1
+          },
+          {
+            "date": "2026-01-02",
+            "close": 347.62
+          },
+          {
+            "date": "2026-01-05",
+            "close": 343.42
+          }
+        ],
+        "valuationMetrics": {
+          "peRatio": 71.99581,
+          "pbRatio": 5.7989564,
+          "psRatio": 25.486378,
+          "evToEbitda": 4.872,
+          "marketCap": 1628248211456,
+          "lastUpdated": "2026-01-06T17:19:03.415919"
+        }
+      },
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech growth, software, semiconductors",
+        "estimatedAUM": 12700000000,
+        "type": "hedge fund",
+        "since": 2008,
+        "performance": "29.5% annualized since 2011"
+      }
+    },
+    {
+      "fundName": "Durable Capital Partners LP",
+      "fundCik": "0001798849",
+      "mostPurchased": {
+        "ticker": "",
+        "companyName": "FIGMA INC",
+        "cusip": "316841105",
+        "value": 278509741,
+        "shares": 5369380,
+        "percentOfPortfolio": 2.063764719578245,
+        "positionChange": {
+          "previousQuarter": {
+            "value": 0,
+            "shares": 0,
+            "percentOfPortfolio": 0
+          },
+          "currentQuarter": {
+            "value": 278509741,
+            "shares": 5369380,
+            "percentOfPortfolio": 2.063764719578245
+          },
+          "change": {
+            "valueChange": 278509741,
+            "sharesChange": 5369380,
+            "percentChange": null
+          }
+        },
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Quality tech growth, compounders",
+        "estimatedAUM": 18200000000,
+        "type": "hedge fund",
+        "since": 2019
+      }
+    },
+    {
+      "fundName": "D1 Capital Partners L.P.",
+      "fundCik": "0001747057",
+      "mostPurchased": {
+        "ticker": "",
+        "companyName": "JAMES HARDIE INDS PLC",
+        "cusip": "G4253H101",
+        "value": 364948641,
+        "shares": 18997847,
+        "percentOfPortfolio": 4.191052978306803,
+        "positionChange": {
+          "previousQuarter": {
+            "value": 0,
+            "shares": 0,
+            "percentOfPortfolio": 0
+          },
+          "currentQuarter": {
+            "value": 364948641,
+            "shares": 18997847,
+            "percentOfPortfolio": 4.191052978306803
+          },
+          "change": {
+            "valueChange": 364948641,
+            "sharesChange": 18997847,
+            "percentChange": null
+          }
+        },
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech-focused long/short equity",
+        "estimatedAUM": 27750000000,
+        "type": "hedge fund",
+        "since": 2018
+      }
+    }
+  ]
+}

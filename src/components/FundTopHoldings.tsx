@@ -28,13 +28,13 @@ export default function FundTopHoldings({ data }: FundTopHoldingsProps) {
                 {fundHolding.fundName}
               </h3>
               <p className="text-sm text-gray-500">
-                Top Holding
+                Most Purchased vs Previous Quarter
               </p>
             </div>
           </div>
 
           {/* Stock Detail Card */}
-          <StockDetailCard holding={fundHolding.topHolding} />
+          <StockDetailCard holding={fundHolding.mostPurchased} />
         </div>
       ))}
     </div>

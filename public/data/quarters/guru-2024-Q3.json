@@ -1,0 +1,2105 @@
+{
+  "quarter": "2024-Q3",
+  "quarterEnd": "2024-09-30",
+  "filingDeadline": "2024-11-14",
+  "generatedAt": "2026-01-06T02:33:08.791Z",
+  "hedgeFunds": [
+    {
+      "name": "Berkshire Hathaway Inc.",
+      "cik": "0001067983",
+      "totalAUM": 266378900503000,
+      "filingDate": "2024-11-14",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Value investing",
+        "since": 1965,
+        "type": "conglomerate"
+      }
+    },
+    {
+      "name": "Pershing Square Capital Management",
+      "cik": "0001336528",
+      "totalAUM": 12916077581000,
+      "filingDate": "2024-11-14",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Activist investing",
+        "since": 2003,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Icahn Enterprises L.P.",
+      "cik": "0000914208",
+      "totalAUM": 517950029199000,
+      "filingDate": "2024-11-12",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Corporate raider",
+        "since": 1968,
+        "type": "holding company"
+      }
+    },
+    {
+      "name": "Bridgewater Associates, LP",
+      "cik": "0001350694",
+      "totalAUM": 17658794959000,
+      "filingDate": "2024-11-13",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Macro hedge fund pioneer",
+        "since": 1975,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Soros Fund Management LLC",
+      "cik": "0001029160",
+      "totalAUM": 6921988610000,
+      "filingDate": "2024-11-14",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Legendary macro trader",
+        "since": 1970,
+        "type": "hedge fund"
+      }
+    }
+  ],
+  "topStocks": [
+    {
+      "rank": 1,
+      "cusip": 37833100,
+      "ticker": "",
+      "companyName": "APPLE INC",
+      "totalValue": 85492831298000,
+      "totalShares": 366922022,
+      "numberOfFundsHolding": 46,
+      "percentOfTotalAUM": 10.402792446969595,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 35590053796000,
+          "shares": 152747012,
+          "percentOfFundPortfolio": 13.360688000737198
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 14339516204000,
+          "shares": 61542988,
+          "percentOfFundPortfolio": 5.383127633954066
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 8090692000000,
+          "shares": 34724000,
+          "percentOfFundPortfolio": 3.0372871067199565
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7505862932000,
+          "shares": 32214004,
+          "percentOfFundPortfolio": 1.4491480855030892
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4011924799000,
+          "shares": 17218561,
+          "percentOfFundPortfolio": 0.7745775794634796
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 3618956000000,
+          "shares": 15532000,
+          "percentOfFundPortfolio": 1.3585745692193976
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 3371976000000,
+          "shares": 14472000,
+          "percentOfFundPortfolio": 1.265857015564198
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2111384488000,
+          "shares": 9061736,
+          "percentOfFundPortfolio": 0.40764250776570404
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1678532000000,
+          "shares": 7204000,
+          "percentOfFundPortfolio": 0.6301294872943948
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 894720000000,
+          "shares": 3840000,
+          "percentOfFundPortfolio": 0.33588245852449694
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 879808000000,
+          "shares": 3776000,
+          "percentOfFundPortfolio": 0.33028441754908866
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 634692000000,
+          "shares": 2724000,
+          "percentOfFundPortfolio": 0.23826661901581503
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 631896000000,
+          "shares": 2712000,
+          "percentOfFundPortfolio": 0.23721698633292596
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 431455420000,
+          "shares": 1851740,
+          "percentOfFundPortfolio": 0.08330058802530385
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 298993755000,
+          "shares": 1283235,
+          "percentOfFundPortfolio": 0.057726370913114576
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 240422448000,
+          "shares": 1031856,
+          "percentOfFundPortfolio": 1.3614884172912718
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 178092618000,
+          "shares": 764346,
+          "percentOfFundPortfolio": 0.034384131279115264
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 173541662000,
+          "shares": 744814,
+          "percentOfFundPortfolio": 0.033505483582726876
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 161236000000,
+          "shares": 692000,
+          "percentOfFundPortfolio": 0.060528818046602054
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 116346220000,
+          "shares": 499340,
+          "percentOfFundPortfolio": 0.02246282719202222
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 105681810000,
+          "shares": 453570,
+          "percentOfFundPortfolio": 0.020403862157018303
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 67900860000,
+          "shares": 291420,
+          "percentOfFundPortfolio": 0.013109538791803411
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 54615200000,
+          "shares": 234400,
+          "percentOfFundPortfolio": 0.01054449211721474
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 52913368000,
+          "shares": 227096,
+          "percentOfFundPortfolio": 0.010215921424279005
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 49688648000,
+          "shares": 213256,
+          "percentOfFundPortfolio": 0.009593328545003185
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 32684394000,
+          "shares": 140276,
+          "percentOfFundPortfolio": 0.006310337321641974
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 29998051000,
+          "shares": 128747,
+          "percentOfFundPortfolio": 0.005791688253477159
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 25850651000,
+          "shares": 110947,
+          "percentOfFundPortfolio": 0.004990954637067508
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 21549005000,
+          "shares": 92485,
+          "percentOfFundPortfolio": 0.004160440927732958
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10628761000,
+          "shares": 45617,
+          "percentOfFundPortfolio": 0.0020520823247055665
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10061639000,
+          "shares": 43183,
+          "percentOfFundPortfolio": 0.0019425887504167412
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7942038000,
+          "shares": 34086,
+          "percentOfFundPortfolio": 0.0015333598903898534
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 7922000000,
+          "shares": 34000,
+          "percentOfFundPortfolio": 0.0029739592681856503
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7862119000,
+          "shares": 33743,
+          "percentOfFundPortfolio": 0.0015179300235118472
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7832528000,
+          "shares": 33616,
+          "percentOfFundPortfolio": 0.0015122169241138681
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6899130000,
+          "shares": 29610,
+          "percentOfFundPortfolio": 0.0013320068753870668
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6875364000,
+          "shares": 29508,
+          "percentOfFundPortfolio": 0.0013274184018548317
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6098309000,
+          "shares": 26173,
+          "percentOfFundPortfolio": 0.0011773933113645965
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5861348000,
+          "shares": 25156,
+          "percentOfFundPortfolio": 0.0011316435311461348
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4523695000,
+          "shares": 19415,
+          "percentOfFundPortfolio": 0.0008733844473367072
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3736854000,
+          "shares": 16038,
+          "percentOfFundPortfolio": 0.0007214699853920222
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2641521000,
+          "shares": 11337,
+          "percentOfFundPortfolio": 0.0005099953375975405
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1304334000,
+          "shares": 5598,
+          "percentOfFundPortfolio": 0.0002518262238573725
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1237696000,
+          "shares": 5312,
+          "percentOfFundPortfolio": 0.00023896050395326237
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 386780000,
+          "shares": 1660,
+          "percentOfFundPortfolio": 0.00007467515748539449
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 32853000,
+          "shares": 141,
+          "percentOfFundPortfolio": 0.0000063428898827955564
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "cusip": 25816109,
+      "ticker": "",
+      "companyName": "AMERICAN EXPRESS CO",
+      "totalValue": 42484406498000,
+      "totalShares": 156653417,
+      "numberOfFundsHolding": 31,
+      "percentOfTotalAUM": 5.169514874187111,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 40425355404000,
+          "shares": 149061045,
+          "percentOfFundPortfolio": 15.175884924693847
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 769481111000,
+          "shares": 2837320,
+          "percentOfFundPortfolio": 0.14856280869217983
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 379602166000,
+          "shares": 1399713,
+          "percentOfFundPortfolio": 0.14250459224931175
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 311864270000,
+          "shares": 1149942,
+          "percentOfFundPortfolio": 0.11707544006342488
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 306039708000,
+          "shares": 1128465,
+          "percentOfFundPortfolio": 0.05908672473158939
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 90083962000,
+          "shares": 332168,
+          "percentOfFundPortfolio": 0.01739240407792102
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 39225012000,
+          "shares": 144635,
+          "percentOfFundPortfolio": 0.007573126708895208
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 33913831000,
+          "shares": 125051,
+          "percentOfFundPortfolio": 0.006547703270226107
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 33143081000,
+          "shares": 122209,
+          "percentOfFundPortfolio": 0.006398895478634329
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 20178365000,
+          "shares": 74404,
+          "percentOfFundPortfolio": 0.0038958130828191015
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 19787294000,
+          "shares": 72962,
+          "percentOfFundPortfolio": 0.003820309467035011
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 15316291000,
+          "shares": 56476,
+          "percentOfFundPortfolio": 0.08673463300050314
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10105726000,
+          "shares": 37263,
+          "percentOfFundPortfolio": 0.0019511005754026729
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5263721000,
+          "shares": 19409,
+          "percentOfFundPortfolio": 0.0010162603925595382
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5117002000,
+          "shares": 18868,
+          "percentOfFundPortfolio": 0.000987933528628881
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2393340000,
+          "shares": 8825,
+          "percentOfFundPortfolio": 0.0004620793252393972
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2387374000,
+          "shares": 8803,
+          "percentOfFundPortfolio": 0.0004609274766702937
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2041865000,
+          "shares": 7529,
+          "percentOfFundPortfolio": 0.0003942204623789106
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2024508000,
+          "shares": 7465,
+          "percentOfFundPortfolio": 0.0003908693669022209
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1707746000,
+          "shares": 6297,
+          "percentOfFundPortfolio": 0.00032971250192629536
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1559942000,
+          "shares": 5752,
+          "percentOfFundPortfolio": 0.0003011761583279416
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1444954000,
+          "shares": 5328,
+          "percentOfFundPortfolio": 0.0002789755610661118
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1308963000,
+          "shares": 4827,
+          "percentOfFundPortfolio": 0.0002527199394166049
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1174025000,
+          "shares": 4329,
+          "percentOfFundPortfolio": 0.00022666761923261354
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 898214000,
+          "shares": 3312,
+          "percentOfFundPortfolio": 0.00017341711542889014
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 620234000,
+          "shares": 2287,
+          "percentOfFundPortfolio": 0.00011974784535859187
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 617794000,
+          "shares": 2278,
+          "percentOfFundPortfolio": 0.00011927675744229743
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 553519000,
+          "shares": 2041,
+          "percentOfFundPortfolio": 0.00010686725915548392
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 511212000,
+          "shares": 1885,
+          "percentOfFundPortfolio": 0.00009869909666586559
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 344966000,
+          "shares": 1272,
+          "percentOfFundPortfolio": 0.0000666021779231258
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 340898000,
+          "shares": 1257,
+          "percentOfFundPortfolio": 0.00006581677397087754
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "cusip": 60505104,
+      "ticker": "",
+      "companyName": "BANK AMER CORP",
+      "totalValue": 33557321477000,
+      "totalShares": 845698626,
+      "numberOfFundsHolding": 33,
+      "percentOfTotalAUM": 4.0832645860639865,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 12371430400000,
+          "shares": 311780000,
+          "percentOfFundPortfolio": 4.644298169501856
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 8898892379000,
+          "shares": 224266441,
+          "percentOfFundPortfolio": 3.340689657550328
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 5555200000000,
+          "shares": 140000000,
+          "percentOfFundPortfolio": 2.085450457791583
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1137560763000,
+          "shares": 28668366,
+          "percentOfFundPortfolio": 0.4270461214653105
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1111040000000,
+          "shares": 28000000,
+          "percentOfFundPortfolio": 0.41709009155831667
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1021923615000,
+          "shares": 25754123,
+          "percentOfFundPortfolio": 0.19730158459115946
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 833280000000,
+          "shares": 21000000,
+          "percentOfFundPortfolio": 0.31281756866873756
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 617400563000,
+          "shares": 15559490,
+          "percentOfFundPortfolio": 0.1192007970256896
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 472192000000,
+          "shares": 11900000,
+          "percentOfFundPortfolio": 0.1772632889122846
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 388864000000,
+          "shares": 9800000,
+          "percentOfFundPortfolio": 0.14598153204541084
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 366583680000,
+          "shares": 9238500,
+          "percentOfFundPortfolio": 0.13761738610219673
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 255936000000,
+          "shares": 6450000,
+          "percentOfFundPortfolio": 0.09607968180539794
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 155545600000,
+          "shares": 3920000,
+          "percentOfFundPortfolio": 0.05839261281816434
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 150799039000,
+          "shares": 3800379,
+          "percentOfFundPortfolio": 0.029114592238407226
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 83328000000,
+          "shares": 2100000,
+          "percentOfFundPortfolio": 0.03128175686687375
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 35462373000,
+          "shares": 893709,
+          "percentOfFundPortfolio": 0.006846678444027099
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 31030752000,
+          "shares": 782025,
+          "percentOfFundPortfolio": 0.005991070615053053
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 22220800000,
+          "shares": 560000,
+          "percentOfFundPortfolio": 0.008341801831166333
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 13161737000,
+          "shares": 331697,
+          "percentOfFundPortfolio": 0.07453360793054555
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9274010000,
+          "shares": 233720,
+          "percentOfFundPortfolio": 0.001790522150243351
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6277614000,
+          "shares": 158206,
+          "percentOfFundPortfolio": 0.0012120115158036021
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4354682000,
+          "shares": 109745,
+          "percentOfFundPortfolio": 0.0008407533071741369
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2953700000,
+          "shares": 74438,
+          "percentOfFundPortfolio": 0.0005702673681798689
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2803075000,
+          "shares": 70642,
+          "percentOfFundPortfolio": 0.0005411863774455042
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2315844000,
+          "shares": 58363,
+          "percentOfFundPortfolio": 0.00044711726410777685
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2182400000,
+          "shares": 55000,
+          "percentOfFundPortfolio": 0.00042135338873810677
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1576507000,
+          "shares": 39731,
+          "percentOfFundPortfolio": 0.00030437434330065363
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1106834000,
+          "shares": 27894,
+          "percentOfFundPortfolio": 0.00021369513227206452
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 802171000,
+          "shares": 20216,
+          "percentOfFundPortfolio": 0.00015487420692697755
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 768284000,
+          "shares": 19362,
+          "percentOfFundPortfolio": 0.00014833168388621133
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 567186000,
+          "shares": 14294,
+          "percentOfFundPortfolio": 0.00010950593069318723
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 453344000,
+          "shares": 11425,
+          "percentOfFundPortfolio": 0.00008752659029696127
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 34125000,
+          "shares": 860,
+          "percentOfFundPortfolio": 0.000006588473419486755
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "cusip": 191216100,
+      "ticker": "",
+      "companyName": "COCA COLA CO",
+      "totalValue": 30397233230000,
+      "totalShares": 423006307,
+      "numberOfFundsHolding": 39,
+      "percentOfTotalAUM": 3.698744133898098,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 20316455306000,
+          "shares": 282722729,
+          "percentOfFundPortfolio": 7.626901105018711
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 5769150752000,
+          "shares": 80283200,
+          "percentOfFundPortfolio": 2.1657686630233037
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1077210144000,
+          "shares": 14990400,
+          "percentOfFundPortfolio": 0.4043901908018681
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1035588832000,
+          "shares": 14411200,
+          "percentOfFundPortfolio": 0.3887653376616956
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 531764359000,
+          "shares": 7400005,
+          "percentOfFundPortfolio": 0.10266711632826117
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 266792035000,
+          "shares": 3712664,
+          "percentOfFundPortfolio": 0.051509222890206006
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 255246720000,
+          "shares": 3552000,
+          "percentOfFundPortfolio": 0.09582092257232866
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 167189835000,
+          "shares": 2326605,
+          "percentOfFundPortfolio": 0.03227914385072165
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 160958431000,
+          "shares": 2239889,
+          "percentOfFundPortfolio": 0.03107605404500492
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 160296234000,
+          "shares": 2230674,
+          "percentOfFundPortfolio": 0.907741634534939
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 131072640000,
+          "shares": 1824000,
+          "percentOfFundPortfolio": 0.04920533861822282
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 80947559000,
+          "shares": 1126462,
+          "percentOfFundPortfolio": 0.015628449548537312
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 75583138000,
+          "shares": 1051811,
+          "percentOfFundPortfolio": 0.014592747125989722
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 68985600000,
+          "shares": 960000,
+          "percentOfFundPortfolio": 0.02589754664116991
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 68935729000,
+          "shares": 959306,
+          "percentOfFundPortfolio": 0.01330933972657706
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 57488000000,
+          "shares": 800000,
+          "percentOfFundPortfolio": 0.021581288867641588
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 37105630000,
+          "shares": 516360,
+          "percentOfFundPortfolio": 0.007163940130939496
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 26693906000,
+          "shares": 371471,
+          "percentOfFundPortfolio": 0.010021028673665304
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 19378271000,
+          "shares": 269667,
+          "percentOfFundPortfolio": 0.0037413398798274294
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 16345850000,
+          "shares": 227468,
+          "percentOfFundPortfolio": 0.003155873941213702
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 14258461000,
+          "shares": 198420,
+          "percentOfFundPortfolio": 0.002752864213957173
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 12438247000,
+          "shares": 173090,
+          "percentOfFundPortfolio": 0.0024014376481907946
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10162154000,
+          "shares": 141416,
+          "percentOfFundPortfolio": 0.001961995062673436
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9606820000,
+          "shares": 133688,
+          "percentOfFundPortfolio": 0.0018547773836130035
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 6108100000,
+          "shares": 85000,
+          "percentOfFundPortfolio": 0.0022930119421869185
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4584812000,
+          "shares": 63802,
+          "percentOfFundPortfolio": 0.0008851842342957922
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3516254000,
+          "shares": 48932,
+          "percentOfFundPortfolio": 0.0006788790041073694
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2927792000,
+          "shares": 40743,
+          "percentOfFundPortfolio": 0.0005652653412391492
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2120662000,
+          "shares": 29511,
+          "percentOfFundPortfolio": 0.00040943370604294856
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2067412000,
+          "shares": 28770,
+          "percentOfFundPortfolio": 0.00039915279147627694
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1409534000,
+          "shares": 19615,
+          "percentOfFundPortfolio": 0.0002721370635271163
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1062378000,
+          "shares": 14784,
+          "percentOfFundPortfolio": 0.0002051120648922344
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1002663000,
+          "shares": 13953,
+          "percentOfFundPortfolio": 0.0001935829604162007
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 839325000,
+          "shares": 11680,
+          "percentOfFundPortfolio": 0.00016204748579665116
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 629206000,
+          "shares": 8756,
+          "percentOfFundPortfolio": 0.0001214800587950647
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 503236000,
+          "shares": 7003,
+          "percentOfFundPortfolio": 0.00009715917977227359
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 447041000,
+          "shares": 6221,
+          "percentOfFundPortfolio": 0.00008630967753614003
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 254672000,
+          "shares": 3544,
+          "percentOfFundPortfolio": 0.000049169222056777456
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 105490000,
+          "shares": 1468,
+          "percentOfFundPortfolio": 0.000020366829627008288
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "cusip": 166764100,
+      "ticker": "",
+      "companyName": "CHEVRON CORP NEW",
+      "totalValue": 19637379461000,
+      "totalShares": 133342701,
+      "numberOfFundsHolding": 29,
+      "percentOfTotalAUM": 2.3894820142650444,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 9068816647000,
+          "shares": 61579525,
+          "percentOfFundPortfolio": 3.404480095786665
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 4788809222000,
+          "shares": 32517208,
+          "percentOfFundPortfolio": 1.7977434447538263
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 2586650427000,
+          "shares": 17564001,
+          "percentOfFundPortfolio": 0.9710417837582705
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1124014071000,
+          "shares": 7632336,
+          "percentOfFundPortfolio": 0.21701206827582703
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 656219951000,
+          "shares": 4455897,
+          "percentOfFundPortfolio": 0.12669561038829014
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 420956568000,
+          "shares": 2858400,
+          "percentOfFundPortfolio": 0.15802924601202004
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 308088840000,
+          "shares": 2092000,
+          "percentOfFundPortfolio": 0.11565812435528476
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 285409260000,
+          "shares": 1938000,
+          "percentOfFundPortfolio": 0.10714409416851907
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 142793287000,
+          "shares": 969602,
+          "percentOfFundPortfolio": 0.027568931161337542
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 98541155000,
+          "shares": 669119,
+          "percentOfFundPortfolio": 0.5580287626012522
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 43037007000,
+          "shares": 292232,
+          "percentOfFundPortfolio": 0.008309104078352099
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 32751817000,
+          "shares": 222393,
+          "percentOfFundPortfolio": 0.006323354600568334
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 30803288000,
+          "shares": 209162,
+          "percentOfFundPortfolio": 0.0059471544094005955
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 14431429000,
+          "shares": 97993,
+          "percentOfFundPortfolio": 0.0027862589412955404
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 9042378000,
+          "shares": 61400,
+          "percentOfFundPortfolio": 0.0033945548926455475
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 8736793000,
+          "shares": 59325,
+          "percentOfFundPortfolio": 0.001686802298961405
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4023416000,
+          "shares": 27320,
+          "percentOfFundPortfolio": 0.0007767961720597134
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3114466000,
+          "shares": 21148,
+          "percentOfFundPortfolio": 0.0006013062697991277
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3088841000,
+          "shares": 20974,
+          "percentOfFundPortfolio": 0.0005963588813339455
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2608594000,
+          "shares": 17713,
+          "percentOfFundPortfolio": 0.0005036381606222017
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2058982000,
+          "shares": 13981,
+          "percentOfFundPortfolio": 0.0003975252213392433
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1186931000,
+          "shares": 8060,
+          "percentOfFundPortfolio": 0.00022915936539970208
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 550790000,
+          "shares": 3740,
+          "percentOfFundPortfolio": 0.00010634037435074314
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 536357000,
+          "shares": 3642,
+          "percentOfFundPortfolio": 0.00010355381209833429
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 476566000,
+          "shares": 3236,
+          "percentOfFundPortfolio": 0.00009201003439212087
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 299842000,
+          "shares": 2036,
+          "percentOfFundPortfolio": 0.00005789014057276916
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 191746000,
+          "shares": 1302,
+          "percentOfFundPortfolio": 0.00003702017360565296
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 83355000,
+          "shares": 566,
+          "percentOfFundPortfolio": 0.000016093251337181492
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 57435000,
+          "shares": 390,
+          "percentOfFundPortfolio": 0.000011088907570643861
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "cusip": 594918104,
+      "ticker": "",
+      "companyName": "MICROSOFT CORP",
+      "totalValue": 17014116377000,
+      "totalShares": 39540126,
+      "numberOfFundsHolding": 37,
+      "percentOfTotalAUM": 2.070282603246266,
+      "holdingsByFund": [
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6765011795000,
+          "shares": 15721617,
+          "percentOfFundPortfolio": 1.3061128320548536
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5513541656000,
+          "shares": 12813250,
+          "percentOfFundPortfolio": 1.0644929713637796
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1973965535000,
+          "shares": 4587417,
+          "percentOfFundPortfolio": 0.38111119291810847
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 514105228000,
+          "shares": 1194760,
+          "percentOfFundPortfolio": 0.09925768877647406
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 386250189000,
+          "shares": 897630,
+          "percentOfFundPortfolio": 0.0745728675017798
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 374437593000,
+          "shares": 870178,
+          "percentOfFundPortfolio": 2.120402858005686
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 336035040000,
+          "shares": 780932,
+          "percentOfFundPortfolio": 0.06487788803094999
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 268036452000,
+          "shares": 622906,
+          "percentOfFundPortfolio": 0.05174948100968608
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 246425495000,
+          "shares": 572683,
+          "percentOfFundPortfolio": 0.04757707908253087
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 109917984000,
+          "shares": 255445,
+          "percentOfFundPortfolio": 0.021221735264690705
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 79738893000,
+          "shares": 185310,
+          "percentOfFundPortfolio": 0.015395093832375046
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 50073581000,
+          "shares": 116369,
+          "percentOfFundPortfolio": 0.009667647104381451
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 47372588000,
+          "shares": 110092,
+          "percentOfFundPortfolio": 0.009146169578030687
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 47351933000,
+          "shares": 110044,
+          "percentOfFundPortfolio": 0.009142181741591728
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 43302380000,
+          "shares": 100633,
+          "percentOfFundPortfolio": 0.008360339329831937
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 34969190000,
+          "shares": 81267,
+          "percentOfFundPortfolio": 0.006751460185083723
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 32541868000,
+          "shares": 75626,
+          "percentOfFundPortfolio": 0.006282819995265834
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 30672645000,
+          "shares": 71282,
+          "percentOfFundPortfolio": 0.005921931319790573
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 28217353000,
+          "shares": 65576,
+          "percentOfFundPortfolio": 0.005447890995128933
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 24401452000,
+          "shares": 56708,
+          "percentOfFundPortfolio": 0.004711159498868335
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 21785203000,
+          "shares": 50628,
+          "percentOfFundPortfolio": 0.004206043396443168
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 12809601000,
+          "shares": 29769,
+          "percentOfFundPortfolio": 0.002473134526087354
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 11605621000,
+          "shares": 26971,
+          "percentOfFundPortfolio": 0.002240683530406954
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 8345238000,
+          "shares": 19394,
+          "percentOfFundPortfolio": 0.0016112052378693276
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7695055000,
+          "shares": 17883,
+          "percentOfFundPortfolio": 0.001485675174475858
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7080587000,
+          "shares": 16455,
+          "percentOfFundPortfolio": 0.001367040563922739
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7036266000,
+          "shares": 16352,
+          "percentOfFundPortfolio": 0.0013584835608333593
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6975163000,
+          "shares": 16210,
+          "percentOfFundPortfolio": 0.0013466864768377285
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5588306000,
+          "shares": 12987,
+          "percentOfFundPortfolio": 0.0010789276348998783
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5387356000,
+          "shares": 12520,
+          "percentOfFundPortfolio": 0.001040130455891941
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3409267000,
+          "shares": 7923,
+          "percentOfFundPortfolio": 0.0006582231504595853
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3098160000,
+          "shares": 7200,
+          "percentOfFundPortfolio": 0.0005981580896503174
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2760805000,
+          "shares": 6416,
+          "percentOfFundPortfolio": 0.0005330253585021577
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2609770000,
+          "shares": 6065,
+          "percentOfFundPortfolio": 0.0005038652095523501
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1049932000,
+          "shares": 2440,
+          "percentOfFundPortfolio": 0.00020270913038149645
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 465585000,
+          "shares": 1082,
+          "percentOfFundPortfolio": 0.00008988994569997775
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 45612000,
+          "shares": 106,
+          "percentOfFundPortfolio": 0.000008806254933615527
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "cusip": "67066G104",
+      "ticker": "",
+      "companyName": "NVIDIA CORPORATION",
+      "totalValue": 15237734961000,
+      "totalShares": 125475420,
+      "numberOfFundsHolding": 33,
+      "percentOfTotalAUM": 1.854131998607977,
+      "holdingsByFund": [
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6174691121000,
+          "shares": 50845612,
+          "percentOfFundPortfolio": 1.192140317194121
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5167288880000,
+          "shares": 42550139,
+          "percentOfFundPortfolio": 0.9976423571191058
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1779307548000,
+          "shares": 14651742,
+          "percentOfFundPortfolio": 0.3435288054238873
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 577358670000,
+          "shares": 4754271,
+          "percentOfFundPortfolio": 3.269524740167747
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 380189779000,
+          "shares": 3130680,
+          "percentOfFundPortfolio": 0.07340279130555438
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 280461430000,
+          "shares": 2309465,
+          "percentOfFundPortfolio": 0.05414835682772879
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 210870359000,
+          "shares": 1736416,
+          "percentOfFundPortfolio": 0.04071249099572541
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 135013349000,
+          "shares": 1111770,
+          "percentOfFundPortfolio": 0.026066867726370364
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 97612500000,
+          "shares": 803792,
+          "percentOfFundPortfolio": 0.01884593001200442
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 92402846000,
+          "shares": 760893,
+          "percentOfFundPortfolio": 0.017840108271235985
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 51248652000,
+          "shares": 422008,
+          "percentOfFundPortfolio": 0.009894516673597852
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 46567382000,
+          "shares": 383460,
+          "percentOfFundPortfolio": 0.008990709407240614
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 44932436000,
+          "shares": 369997,
+          "percentOfFundPortfolio": 0.00867505231527589
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 34716053000,
+          "shares": 285870,
+          "percentOfFundPortfolio": 0.006702587323662811
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 25550004000,
+          "shares": 210392,
+          "percentOfFundPortfolio": 0.004932909076096125
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 21847420000,
+          "shares": 179903,
+          "percentOfFundPortfolio": 0.004218055559102222
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 20809068000,
+          "shares": 171353,
+          "percentOfFundPortfolio": 0.004017582165634943
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 17277026000,
+          "shares": 142268,
+          "percentOfFundPortfolio": 0.0033356549910265663
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 13526473000,
+          "shares": 111384,
+          "percentOfFundPortfolio": 0.0026115401558946595
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9661402000,
+          "shares": 79557,
+          "percentOfFundPortfolio": 0.0018653154658454557
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9081040000,
+          "shares": 74778,
+          "percentOfFundPortfolio": 0.0017532656604042785
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7985044000,
+          "shares": 65753,
+          "percentOfFundPortfolio": 0.0015416630079833611
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7011581000,
+          "shares": 57737,
+          "percentOfFundPortfolio": 0.0013537176570572412
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6260111000,
+          "shares": 51549,
+          "percentOfFundPortfolio": 0.0012086322322794622
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 6061070000,
+          "shares": 49910,
+          "percentOfFundPortfolio": 0.0011702036216453798
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5358054000,
+          "shares": 44121,
+          "percentOfFundPortfolio": 0.0010344731533824083
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3686918000,
+          "shares": 30360,
+          "percentOfFundPortfolio": 0.0007118289008887111
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3359030000,
+          "shares": 27660,
+          "percentOfFundPortfolio": 0.0006485239522420101
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2696454000,
+          "shares": 22204,
+          "percentOfFundPortfolio": 0.0005206011869851644
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2456731000,
+          "shares": 20230,
+          "percentOfFundPortfolio": 0.00047431815069096307
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1048270000,
+          "shares": 8632,
+          "percentOfFundPortfolio": 0.00020238825000572542
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 767258000,
+          "shares": 6318,
+          "percentOfFundPortfolio": 0.0001481335952787859
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 631002000,
+          "shares": 5196,
+          "percentOfFundPortfolio": 0.00012182681039246831
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "cusip": 674599105,
+      "ticker": "",
+      "companyName": "OCCIDENTAL PETE CORP",
+      "totalValue": 13418996869000,
+      "totalShares": 260360824,
+      "numberOfFundsHolding": 13,
+      "percentOfTotalAUM": 1.632827421379452,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 13157209747000,
+          "shares": 255281524,
+          "percentOfFundPortfolio": 4.93928375038541
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 216229164000,
+          "shares": 4195366,
+          "percentOfFundPortfolio": 0.04174710914379025
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 19911809000,
+          "shares": 386337,
+          "percentOfFundPortfolio": 0.0038443494309273888
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 17279094000,
+          "shares": 335256,
+          "percentOfFundPortfolio": 0.0033360542573425077
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4447180000,
+          "shares": 86286,
+          "percentOfFundPortfolio": 0.0008586117867156954
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1201449000,
+          "shares": 23311,
+          "percentOfFundPortfolio": 0.00023196233850165398
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1015390000,
+          "shares": 19701,
+          "percentOfFundPortfolio": 0.00019604014726483975
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 531687000,
+          "shares": 10316,
+          "percentOfFundPortfolio": 0.00010265218071755762
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 370470000,
+          "shares": 7188,
+          "percentOfFundPortfolio": 0.00007152620506131159
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 355368000,
+          "shares": 6895,
+          "percentOfFundPortfolio": 0.00006861047976955807
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 225075000,
+          "shares": 4367,
+          "percentOfFundPortfolio": 0.00004345496424588956
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 191471000,
+          "shares": 3715,
+          "percentOfFundPortfolio": 0.00003696707968066076
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 28965000,
+          "shares": 562,
+          "percentOfFundPortfolio": 0.000005592238317814911
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "cusip": 23135106,
+      "ticker": "",
+      "companyName": "AMAZON COM INC",
+      "totalValue": 12428997507000,
+      "totalShares": 66704221,
+      "numberOfFundsHolding": 37,
+      "percentOfTotalAUM": 1.5123640125864946,
+      "holdingsByFund": [
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4130790763000,
+          "shares": 22169220,
+          "percentOfFundPortfolio": 0.7975268906516311
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3633148028000,
+          "shares": 19498460,
+          "percentOfFundPortfolio": 0.7014475959425266
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 1439212920000,
+          "shares": 7724000,
+          "percentOfFundPortfolio": 0.5402878821416981
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1073739295000,
+          "shares": 5762568,
+          "percentOfFundPortfolio": 0.20730557669057723
+        },
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 424087080000,
+          "shares": 2276000,
+          "percentOfFundPortfolio": 0.1592044562085066
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 263031440000,
+          "shares": 1411643,
+          "percentOfFundPortfolio": 1.489520890925477
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 222124738000,
+          "shares": 1192104,
+          "percentOfFundPortfolio": 0.0428853606483065
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 216664524000,
+          "shares": 1162800,
+          "percentOfFundPortfolio": 0.04183116358446154
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 209174803000,
+          "shares": 1122604,
+          "percentOfFundPortfolio": 0.040385132002692406
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 205311251000,
+          "shares": 1101869,
+          "percentOfFundPortfolio": 0.039639200584177976
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 159633569000,
+          "shares": 856725,
+          "percentOfFundPortfolio": 0.030820264504448493
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 140409158000,
+          "shares": 753551,
+          "percentOfFundPortfolio": 0.027108630192982156
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 59467406000,
+          "shares": 319151,
+          "percentOfFundPortfolio": 0.011481301795071858
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 52211529000,
+          "shares": 280210,
+          "percentOfFundPortfolio": 0.7542851042050472
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 27200453000,
+          "shares": 145980,
+          "percentOfFundPortfolio": 0.0052515593139486815
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 24596492000,
+          "shares": 132005,
+          "percentOfFundPortfolio": 0.004748815641160985
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 24166256000,
+          "shares": 129696,
+          "percentOfFundPortfolio": 0.004665750485113913
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 18158976000,
+          "shares": 97456,
+          "percentOfFundPortfolio": 0.0035059320351970087
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 15513090000,
+          "shares": 83256,
+          "percentOfFundPortfolio": 0.002995093952208228
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 13273404000,
+          "shares": 71236,
+          "percentOfFundPortfolio": 0.002562680423153382
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 11183154000,
+          "shares": 60018,
+          "percentOfFundPortfolio": 0.0021591183260081166
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10479231000,
+          "shares": 56240,
+          "percentOfFundPortfolio": 0.00202321274432708
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9677049000,
+          "shares": 51935,
+          "percentOfFundPortfolio": 0.0018683364136431028
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7827351000,
+          "shares": 42008,
+          "percentOfFundPortfolio": 0.0015112174068422878
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 5518349000,
+          "shares": 29616,
+          "percentOfFundPortfolio": 0.0010654211195883169
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4538253000,
+          "shares": 24356,
+          "percentOfFundPortfolio": 0.0008761951431913853
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4472293000,
+          "shares": 24002,
+          "percentOfFundPortfolio": 0.0008634603239459832
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4183109000,
+          "shares": 22450,
+          "percentOfFundPortfolio": 0.0008076279108370936
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4100378000,
+          "shares": 22006,
+          "percentOfFundPortfolio": 0.0007916551344424399
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3300463000,
+          "shares": 17713,
+          "percentOfFundPortfolio": 0.0006372164907692165
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2708679000,
+          "shares": 14537,
+          "percentOfFundPortfolio": 0.0005229614532870905
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2533902000,
+          "shares": 13599,
+          "percentOfFundPortfolio": 0.0004892174644566835
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 2008265000,
+          "shares": 10778,
+          "percentOfFundPortfolio": 0.0003877333500889544
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1632064000,
+          "shares": 8759,
+          "percentOfFundPortfolio": 0.00031510066763080526
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1199220000,
+          "shares": 6436,
+          "percentOfFundPortfolio": 0.00023153198810598992
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1139781000,
+          "shares": 6117,
+          "percentOfFundPortfolio": 0.00022005617062376652
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 580791000,
+          "shares": 3117,
+          "percentOfFundPortfolio": 0.00011213263196416503
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "cusip": 500754106,
+      "ticker": "",
+      "companyName": "KRAFT HEINZ CO",
+      "totalValue": 12291932787000,
+      "totalShares": 350097772,
+      "numberOfFundsHolding": 20,
+      "percentOfTotalAUM": 1.4956859378015814,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 11433038460000,
+          "shares": 325634818,
+          "percentOfFundPortfolio": 4.292021041610703
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 454721793000,
+          "shares": 12951347,
+          "percentOfFundPortfolio": 0.08779259916313137
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 363906864000,
+          "shares": 10364764,
+          "percentOfFundPortfolio": 0.07025906815041118
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 18337707000,
+          "shares": 522293,
+          "percentOfFundPortfolio": 0.003540439418134394
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 10477280000,
+          "shares": 298413,
+          "percentOfFundPortfolio": 0.059331794861008556
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 3986354000,
+          "shares": 113539,
+          "percentOfFundPortfolio": 0.00076964065552131
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1855985000,
+          "shares": 52862,
+          "percentOfFundPortfolio": 0.00035833283046054576
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 1074015000,
+          "shares": 30590,
+          "percentOfFundPortfolio": 0.00020735880672908622
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 755567000,
+          "shares": 21520,
+          "percentOfFundPortfolio": 0.00014587642772575382
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 713505000,
+          "shares": 20322,
+          "percentOfFundPortfolio": 0.00013775556709658306
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 610914000,
+          "shares": 17400,
+          "percentOfFundPortfolio": 0.00011794844397340164
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 548208000,
+          "shares": 15614,
+          "percentOfFundPortfolio": 0.00010584187066227092
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 498386000,
+          "shares": 14195,
+          "percentOfFundPortfolio": 0.00009622279600422933
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 386280000,
+          "shares": 11002,
+          "percentOfFundPortfolio": 0.00007457862307631776
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 331417000,
+          "shares": 9439,
+          "percentOfFundPortfolio": 0.0000639862885059646
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 285304000,
+          "shares": 8126,
+          "percentOfFundPortfolio": 0.00005508330609445419
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 246402000,
+          "shares": 7018,
+          "percentOfFundPortfolio": 0.00004757254293064836
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 75697000,
+          "shares": 2156,
+          "percentOfFundPortfolio": 0.00001461473032776231
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 71870000,
+          "shares": 2047,
+          "percentOfFundPortfolio": 0.000013875855960689028
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10779000,
+          "shares": 307,
+          "percentOfFundPortfolio": 0.000002081088790876124
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFundsAnalyzed": 5,
+    "totalAUMAggregated": 821825790852000,
+    "uniqueStocksHeld": 3771,
+    "dataQuality": "partial",
+    "category": "guru"
+  }
+}

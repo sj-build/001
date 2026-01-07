@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import QuarterSelector from './components/QuarterSelector';
+import CategoryTabs from './components/CategoryTabs';
 import TopStocksTable from './components/TopStocksTable';
 import FundTopHoldings from './components/FundTopHoldings';
 import { loadQuarterData, getAvailableQuarters } from './utils/dataLoader';
-import type { QuarterData } from './types';
+import type { QuarterData, InvestorCategory } from './types';
 
 function App() {
   const availableQuarters = getAvailableQuarters();
   const [selectedQuarter, setSelectedQuarter] = useState(availableQuarters[0]);
+  const [activeCategory, setActiveCategory] = useState<InvestorCategory>('guru');
   const [data, setData] = useState<QuarterData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +18,7 @@ function App() {
     setLoading(true);
     setError(null);
 
-    loadQuarterData(selectedQuarter)
+    loadQuarterData(selectedQuarter, activeCategory)
       .then((quarterData) => {
         setData(quarterData);
         setLoading(false);
@@ -26,7 +28,7 @@ function App() {
         setLoading(false);
         console.error('Failed to load quarter data:', err);
       });
-  }, [selectedQuarter]);
+  }, [selectedQuarter, activeCategory]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,7 +39,7 @@ function App() {
             Hedge Fund Investment Tracker
           </h1>
           <p className="mt-2 text-sm text-gray-600">
-            Tracking top 10 hedge funds' quarterly holdings and investment patterns
+            Tracking legendary investors' most purchased stocks - largest position increases vs previous quarter
           </p>
         </div>
       </header>
@@ -52,6 +54,12 @@ function App() {
             onChange={setSelectedQuarter}
           />
         </div>
+
+        {/* Category Tabs */}
+        <CategoryTabs
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
 
         {/* Loading State */}
         {loading && (
@@ -69,9 +77,9 @@ function App() {
             <h3 className="text-red-800 font-semibold mb-2">Error Loading Data</h3>
             <p className="text-red-600 text-sm">{error}</p>
             <p className="text-red-600 text-sm mt-2">
-              Please make sure you have generated data for {selectedQuarter} by running:
+              Please make sure you have generated data for {activeCategory} {selectedQuarter} by running:
               <code className="block mt-1 bg-red-100 p-2 rounded">
-                node scripts/buildQuarterData.js --quarter {selectedQuarter}
+                node scripts/buildQuarterData.cjs --quarter {selectedQuarter} --category {activeCategory}
               </code>
             </p>
           </div>
@@ -97,14 +105,14 @@ function App() {
               </div>
             </section>
 
-            {/* Section 2: Individual Fund Top Holdings */}
+            {/* Section 2: Most Purchased Stocks by Fund */}
             <section>
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Top Holdings by Fund
+                  Most Purchased Stocks by Fund
                 </h2>
                 <p className="text-gray-600">
-                  Each hedge fund's largest position with detailed analysis
+                  Each investor's largest position increase vs previous quarter with detailed analysis
                 </p>
               </div>
 

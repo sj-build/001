@@ -6,14 +6,13 @@ Fetch stock price history and valuation metrics from Yahoo Finance
 import yfinance as yf
 import json
 import sys
-import time
 from datetime import datetime, timedelta
 
 # CUSIP to Ticker mapping (common stocks)
-# This is a simplified mapping - in production, use a comprehensive CUSIP database
 CUSIP_TO_TICKER = {
     '037833100': 'AAPL',  # Apple Inc.
-    '02079K305': 'GOOGL', # Alphabet Inc.
+    '02079K107': 'GOOGL', # Alphabet Inc. Class A
+    '02079K305': 'GOOG',  # Alphabet Inc. Class C
     '594918104': 'MSFT',  # Microsoft Corp.
     '17275R102': 'CSCO',  # Cisco Systems Inc.
     '30303M102': 'META',  # Meta Platforms Inc.
@@ -22,30 +21,34 @@ CUSIP_TO_TICKER = {
     '91324P102': 'UNH',   # UnitedHealth Group
     '67066G104': 'NVDA',  # NVIDIA Corp.
     '46625H100': 'JPM',   # JPMorgan Chase & Co.
+    '025816109': 'AXP',   # American Express Co.
+    '023135106': 'AMZN',  # Amazon.com Inc.
+    '060505104': 'BAC',   # Bank of America Corp.
+    '191216100': 'KO',    # Coca-Cola Co.
+    '166764100': 'CVX',   # Chevron Corp.
+    '11135F101': 'AVGO',  # Broadcom Inc.
+    '084670702': 'BRK.B', # Berkshire Hathaway Inc. Class B
+    '68389X105': 'ORCL',  # Oracle Corp.
+    '093712107': 'BE',    # Bloom Energy Corp.
+    '722304102': 'PDD',   # PDD Holdings Inc.
+    '02376R102': 'AMGN',  # Amgen Inc.
+    '084664107': 'BK',    # Bank of New York Mellon Corp.
+    '464287200': 'IEP',   # Icahn Enterprises L.P.
+    '464287812': 'IEP',   # Icahn Enterprises L.P.
+    '902494103': 'UBER',  # Uber Technologies Inc.
+    '45780R107': 'IWM',   # iShares Russell 2000 ETF
+    '464287838': 'IVV',   # iShares Core S&P 500 ETF
+    '464287655': 'IWF',   # iShares Russell 1000 Growth ETF
+    '78462F103': 'SPY',   # SPDR S&P 500 ETF Trust
 }
 
 def cusip_to_ticker(cusip):
     """Convert CUSIP to ticker symbol"""
-    # Try direct mapping first
-    if cusip in CUSIP_TO_TICKER:
-        return CUSIP_TO_TICKER[cusip]
+    return CUSIP_TO_TICKER.get(cusip)
 
-    # TODO: Use OpenFIGI API or other service for lookup
-    # For now, return None if not in our mapping
-    return None
-
-def fetch_stock_data(ticker, days=365):
-    """
-    Fetch stock price history and valuation metrics
-
-    Args:
-        ticker: Stock ticker symbol
-        days: Number of days of historical data (default 365)
-
-    Returns:
-        dict: Stock data with price history and valuation metrics
-    """
-    print(f"Fetching data for {ticker}...")
+def fetch_stock_data(ticker, days=90):
+    """Fetch stock price history and valuation metrics"""
+    print(f"Fetching data for {ticker}...", file=sys.stderr)
 
     try:
         stock = yf.Ticker(ticker)
@@ -56,7 +59,7 @@ def fetch_stock_data(ticker, days=365):
         history = stock.history(start=start_date, end=end_date)
 
         if history.empty:
-            print(f"Warning: No price history found for {ticker}")
+            print(f"Warning: No price history found for {ticker}", file=sys.stderr)
             return None
 
         # Convert price history to list of dicts
@@ -79,10 +82,7 @@ def fetch_stock_data(ticker, days=365):
             'lastUpdated': datetime.now().isoformat()
         }
 
-        print(f"Successfully fetched data for {ticker}")
-        print(f"  Price points: {len(price_history)}")
-        print(f"  P/E: {valuation_metrics['peRatio']}")
-        print(f"  P/B: {valuation_metrics['pbRatio']}")
+        print(f"✓ Fetched {ticker}: {len(price_history)} points, P/E={valuation_metrics['peRatio']}", file=sys.stderr)
 
         return {
             'ticker': ticker,
@@ -91,96 +91,52 @@ def fetch_stock_data(ticker, days=365):
         }
 
     except Exception as e:
-        print(f"Error fetching data for {ticker}: {str(e)}")
+        print(f"Error fetching {ticker}: {str(e)}", file=sys.stderr)
         return None
 
 def enrich_fund_top_holdings(fund_top_holdings):
-    """
-    Enrich fund top holdings with stock data
-
-    Args:
-        fund_top_holdings: List of fund top holdings with CUSIP
-
-    Returns:
-        list: Enriched fund top holdings
-    """
-    print("\n=== Enriching top holdings with stock data ===\n")
+    """Enrich fund top holdings with stock data"""
+    print("\n=== Enriching holdings ===\n", file=sys.stderr)
 
     enriched_holdings = []
-    ticker_cache = {}  # Cache to avoid duplicate API calls for same ticker
+    ticker_cache = {}
 
     for fund_holding in fund_top_holdings:
-        cusip = fund_holding['topHolding']['cusip']
-        company_name = fund_holding['topHolding']['companyName']
+        cusip = fund_holding['mostPurchased']['cusip']
+        company_name = fund_holding['mostPurchased']['companyName']
 
         # Try to get ticker from CUSIP
         ticker = cusip_to_ticker(cusip)
 
         if not ticker:
-            print(f"Warning: Could not map CUSIP {cusip} ({company_name}) to ticker")
-            # Use placeholder data
-            fund_holding['topHolding']['ticker'] = 'N/A'
-            fund_holding['topHolding']['priceHistory'] = []
-            fund_holding['topHolding']['valuationMetrics'] = {
-                'peRatio': None,
-                'pbRatio': None,
-                'psRatio': None,
-                'evToEbitda': None,
-                'marketCap': 0,
-                'lastUpdated': datetime.now().isoformat()
-            }
+            print(f"No ticker mapping for CUSIP {cusip} ({company_name})", file=sys.stderr)
             enriched_holdings.append(fund_holding)
             continue
 
         # Check cache first
         if ticker in ticker_cache:
-            print(f"Using cached data for {ticker}")
             stock_data = ticker_cache[ticker]
         else:
-            # Fetch stock data
             stock_data = fetch_stock_data(ticker)
-
             if stock_data:
                 ticker_cache[ticker] = stock_data
-                # Rate limiting
-                time.sleep(0.5)
-            else:
-                print(f"Failed to fetch data for {ticker}, using placeholder")
-                stock_data = {
-                    'ticker': ticker,
-                    'priceHistory': [],
-                    'valuationMetrics': {
-                        'peRatio': None,
-                        'pbRatio': None,
-                        'psRatio': None,
-                        'evToEbitda': None,
-                        'marketCap': 0,
-                        'lastUpdated': datetime.now().isoformat()
-                    }
-                }
 
-        # Enrich the holding
-        fund_holding['topHolding']['ticker'] = stock_data['ticker']
-        fund_holding['topHolding']['priceHistory'] = stock_data['priceHistory']
-        fund_holding['topHolding']['valuationMetrics'] = stock_data['valuationMetrics']
+        if stock_data:
+            fund_holding['mostPurchased']['ticker'] = stock_data['ticker']
+            fund_holding['mostPurchased']['priceHistory'] = stock_data['priceHistory']
+            fund_holding['mostPurchased']['valuationMetrics'] = stock_data['valuationMetrics']
 
         enriched_holdings.append(fund_holding)
 
-    print(f"\n=== Enriched {len(enriched_holdings)} holdings ===\n")
-
+    print(f"\n✓ Enriched {len(enriched_holdings)} holdings\n", file=sys.stderr)
     return enriched_holdings
 
 if __name__ == '__main__':
     # Read input JSON from stdin
-    if len(sys.argv) > 1:
-        input_file = sys.argv[1]
-        with open(input_file, 'r') as f:
-            fund_top_holdings = json.load(f)
-    else:
-        fund_top_holdings = json.load(sys.stdin)
+    fund_top_holdings = json.load(sys.stdin)
 
     # Enrich with stock data
     enriched = enrich_fund_top_holdings(fund_top_holdings)
 
-    # Output to stdout
+    # Output JSON to stdout (ONLY stdout, all logs to stderr)
     print(json.dumps(enriched, indent=2))

@@ -1,0 +1,336 @@
+{
+  "quarter": "2025-Q3",
+  "quarterEnd": "2025-09-30",
+  "filingDeadline": "2025-11-14",
+  "generatedAt": "2026-01-06T08:19:03.472Z",
+  "hedgeFunds": [
+    {
+      "name": "Situational Awareness LP",
+      "cik": "0002045724",
+      "totalAUM": 4138368748,
+      "filingDate": "2025-11-14",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "AI/AGI focused, 47% H1 2025 return",
+        "estimatedAUM": 4100000000,
+        "type": "hedge fund",
+        "since": 2024,
+        "performance2025": "47%"
+      }
+    },
+    {
+      "name": "Aspex Management (HK) Ltd",
+      "cik": "0001768375",
+      "totalAUM": 4723919,
+      "filingDate": "2025-11-14",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Pan-Asian tech focus, 40.2% tech portfolio",
+        "estimatedAUM": 4700000000,
+        "type": "hedge fund",
+        "since": 2018
+      }
+    },
+    {
+      "name": "Altimeter Capital Management",
+      "cik": "0001541617",
+      "totalAUM": 7581939536,
+      "filingDate": "2025-11-14",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech growth, software, semiconductors",
+        "estimatedAUM": 12700000000,
+        "type": "hedge fund",
+        "since": 2008,
+        "performance": "29.5% annualized since 2011"
+      }
+    },
+    {
+      "name": "Durable Capital Partners LP",
+      "cik": "0001798849",
+      "totalAUM": 13495227356,
+      "filingDate": "2025-11-14",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Quality tech growth, compounders",
+        "estimatedAUM": 18200000000,
+        "type": "hedge fund",
+        "since": 2019
+      }
+    },
+    {
+      "name": "D1 Capital Partners L.P.",
+      "cik": "0001747057",
+      "totalAUM": 8707803096,
+      "filingDate": "2025-11-14",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech-focused long/short equity",
+        "estimatedAUM": 27750000000,
+        "type": "hedge fund",
+        "since": 2018
+      }
+    }
+  ],
+  "topStocks": [
+    {
+      "rank": 1,
+      "cusip": "67066G104",
+      "ticker": "NVDA",
+      "companyName": "NVIDIA CORPORATION",
+      "totalValue": 1839958297,
+      "totalShares": 9861498,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 5.42311630260104,
+      "holdingsByFund": [
+        {
+          "fundName": "Altimeter Capital Management",
+          "value": 1426385069,
+          "shares": 7644898,
+          "percentOfFundPortfolio": 18.812931206155692
+        },
+        {
+          "fundName": "Situational Awareness LP",
+          "value": 298528000,
+          "shares": 1600000,
+          "percentOfFundPortfolio": 7.213663599800604
+        },
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 115045228,
+          "shares": 616600,
+          "percentOfFundPortfolio": 1.3211739715709345
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "cusip": "30303M102",
+      "ticker": "META",
+      "companyName": "META PLATFORMS INC",
+      "totalValue": 1569618281,
+      "totalShares": 2137338,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 4.626312728082293,
+      "holdingsByFund": [
+        {
+          "fundName": "Altimeter Capital Management",
+          "value": 1370307549,
+          "shares": 1865938,
+          "percentOfFundPortfolio": 18.073311485716918
+        },
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 199310732,
+          "shares": 271400,
+          "percentOfFundPortfolio": 2.288875044631579
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "cusip": "22266T109",
+      "ticker": "",
+      "companyName": "COUPANG INC",
+      "totalValue": 1122420291,
+      "totalShares": 34857773,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 3.3082357292646303,
+      "holdingsByFund": [
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 799628686,
+          "shares": 24833189,
+          "percentOfFundPortfolio": 5.925270207800418
+        },
+        {
+          "fundName": "Altimeter Capital Management",
+          "value": 322791605,
+          "shares": 10024584,
+          "percentOfFundPortfolio": 4.257375088093818
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "cusip": "21873S108",
+      "ticker": "",
+      "companyName": "COREWEAVE INC",
+      "totalValue": 1071529479,
+      "totalShares": 7829956,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 3.1582395077960284,
+      "holdingsByFund": [
+        {
+          "fundName": "Situational Awareness LP",
+          "value": 563200154,
+          "shares": 4115456,
+          "percentOfFundPortfolio": 13.609230793466256
+        },
+        {
+          "fundName": "Situational Awareness LP",
+          "value": 316739325,
+          "shares": 2314500,
+          "percentOfFundPortfolio": 7.653724070699947
+        },
+        {
+          "fundName": "Situational Awareness LP",
+          "value": 191590000,
+          "shares": 1400000,
+          "percentOfFundPortfolio": 4.629601943823688
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "cusip": "75524B104",
+      "ticker": "",
+      "companyName": "RBC BEARINGS INC",
+      "totalValue": 983937872,
+      "totalShares": 2521043,
+      "numberOfFundsHolding": 1,
+      "percentOfTotalAUM": 2.900070900025282,
+      "holdingsByFund": [
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 983937872,
+          "shares": 2521043,
+          "percentOfFundPortfolio": 7.291006264985523
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "cusip": "565394103",
+      "ticker": "",
+      "companyName": "MAPLEBEAR INC",
+      "totalValue": 951466653,
+      "totalShares": 25883206,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 2.804364819397614,
+      "holdingsByFund": [
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 829241454,
+          "shares": 22558255,
+          "percentOfFundPortfolio": 9.52296974171268
+        },
+        {
+          "fundName": "Altimeter Capital Management",
+          "value": 122225199,
+          "shares": 3324951,
+          "percentOfFundPortfolio": 1.6120571579298335
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "cusip": "983793100",
+      "ticker": "",
+      "companyName": "XPO INC",
+      "totalValue": 883821317,
+      "totalShares": 6837018,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 2.604986102469811,
+      "holdingsByFund": [
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 559904566,
+          "shares": 4331280,
+          "percentOfFundPortfolio": 4.148907989690633
+        },
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 323916751,
+          "shares": 2505738,
+          "percentOfFundPortfolio": 3.719844689055886
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "cusip": "58733R102",
+      "ticker": "",
+      "companyName": "MERCADOLIBRE INC",
+      "totalValue": 799420436,
+      "totalShares": 342080,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 2.356221880774524,
+      "holdingsByFund": [
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 409983406,
+          "shares": 175436,
+          "percentOfFundPortfolio": 3.037988135988837
+        },
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 301004883,
+          "shares": 128803,
+          "percentOfFundPortfolio": 3.456725877716149
+        },
+        {
+          "fundName": "Altimeter Capital Management",
+          "value": 88432147,
+          "shares": 37841,
+          "percentOfFundPortfolio": 1.1663525748274972
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "cusip": "03831W108",
+      "ticker": "",
+      "companyName": "APPLOVIN CORP",
+      "totalValue": 736229017,
+      "totalShares": 1024618,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 2.1699706950155067,
+      "holdingsByFund": [
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 601261338,
+          "shares": 836782,
+          "percentOfFundPortfolio": 6.904856843584282
+        },
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 134967679,
+          "shares": 187836,
+          "percentOfFundPortfolio": 1.0001141547273982
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "cusip": "184496107",
+      "ticker": "",
+      "companyName": "CLEAN HARBORS INC",
+      "totalValue": 701130003,
+      "totalShares": 3019249,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 2.0665194182452797,
+      "holdingsByFund": [
+        {
+          "fundName": "D1 Capital Partners L.P.",
+          "value": 567913284,
+          "shares": 2445583,
+          "percentOfFundPortfolio": 6.521889364504298
+        },
+        {
+          "fundName": "Durable Capital Partners LP",
+          "value": 133216719,
+          "shares": 573666,
+          "percentOfFundPortfolio": 0.9871394937319943
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFundsAnalyzed": 5,
+    "totalAUMAggregated": 33928062655,
+    "uniqueStocksHeld": 138,
+    "dataQuality": "partial",
+    "category": "emerging"
+  }
+}

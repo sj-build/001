@@ -1,3 +1,15 @@
+// Investor category type
+export type InvestorCategory = 'guru' | 'emerging';
+
+// Investor metadata
+export interface InvestorMetadata {
+  knownFor: string;
+  since?: number;
+  type?: string;
+  estimatedAUM?: number;
+  leader?: string;
+}
+
 // Price data point for chart
 export interface PricePoint {
   date: string;
@@ -41,6 +53,8 @@ export interface HedgeFund {
   cik: string;
   totalAUM: number;
   filingDate: string;
+  category: InvestorCategory;
+  metadata: InvestorMetadata;
 }
 
 // Metadata for quarter data
@@ -49,6 +63,7 @@ export interface QuarterMetadata {
   totalAUMAggregated: number;
   uniqueStocksHeld: number;
   dataQuality: string;
+  category: InvestorCategory;
 }
 
 // Summary data for a quarter (aggregated top 10 stocks)
@@ -62,6 +77,25 @@ export interface QuarterSummaryData {
   metadata: QuarterMetadata;
 }
 
+// Quarterly position change data
+export interface PositionChange {
+  previousQuarter: {
+    value: number;
+    shares: number;
+    percentOfPortfolio: number;
+  } | null;
+  currentQuarter: {
+    value: number;
+    shares: number;
+    percentOfPortfolio: number;
+  };
+  change: {
+    valueChange: number;
+    sharesChange: number;
+    percentChange: number;
+  };
+}
+
 // Detailed holding information (with price history and valuation metrics)
 export interface DetailedHolding {
   ticker: string;
@@ -70,20 +104,24 @@ export interface DetailedHolding {
   value: number;
   shares: number;
   percentOfPortfolio: number;
+  positionChange: PositionChange;
   priceHistory: PricePoint[];
   valuationMetrics: ValuationMetrics;
 }
 
-// Top holding for a specific fund
+// Most purchased position for a specific fund (largest increase vs previous quarter)
 export interface FundTopHolding {
   fundName: string;
   fundCik: string;
-  topHolding: DetailedHolding;
+  category: InvestorCategory;
+  metadata: InvestorMetadata;
+  mostPurchased: DetailedHolding;
 }
 
 // Detailed data for a quarter (individual fund top holdings)
 export interface DetailedQuarterData {
   quarter: string;
+  category: InvestorCategory;
   fundTopHoldings: FundTopHolding[];
 }
 

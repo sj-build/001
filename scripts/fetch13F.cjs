@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { parse13FXML } = require('./parsers/xml13FParser');
-const config = require('./config');
+const { parse13FXML } = require('./parsers/xml13FParser.cjs');
+const config = require('./config.cjs');
 
 /**
  * Sleep utility for rate limiting
@@ -36,9 +36,15 @@ async function fetch13FForFund(fund, quarterEnd) {
     }
 
     // Step 2: Find 13F-HR filing for the target quarter
-    const targetYear = new Date(quarterEnd).getFullYear();
-    const targetMonth = new Date(quarterEnd).getMonth();
-    const targetQuarter = Math.floor(targetMonth / 3) + 1;
+    const quarterEndDate = new Date(quarterEnd);
+
+    // 13F filings are due 45 days after quarter end
+    // Look for filings between quarter end and 75 days after (to account for amendments)
+    const minFilingDate = new Date(quarterEndDate);
+    minFilingDate.setDate(minFilingDate.getDate() + 1); // Day after quarter end
+
+    const maxFilingDate = new Date(quarterEndDate);
+    maxFilingDate.setDate(maxFilingDate.getDate() + 75); // 75 days buffer
 
     let filing13F = null;
 
@@ -50,16 +56,16 @@ async function fetch13FForFund(fund, quarterEnd) {
 
       // Look for 13F-HR forms
       if (form === '13F-HR' || form === '13F-HR/A') {
-        const filingYear = new Date(filingDate).getFullYear();
+        const filingDateObj = new Date(filingDate);
 
-        // Check if filing is for the target quarter (filings are typically 45 days after quarter end)
-        if (filingYear === targetYear || filingYear === targetYear + 1) {
+        // Check if filing is within the date range for this quarter
+        if (filingDateObj >= minFilingDate && filingDateObj <= maxFilingDate) {
           filing13F = {
             accessionNumber: accessionNumber.replace(/-/g, ''),
             primaryDocument,
             filingDate
           };
-          console.log(`Found 13F filing: ${filingDate}`);
+          console.log(`Found 13F filing: ${filingDate} (for quarter ending ${quarterEnd})`);
           break;
         }
       }
@@ -70,47 +76,45 @@ async function fetch13FForFund(fund, quarterEnd) {
       return null;
     }
 
-    // Step 3: Fetch the primary document (information table XML)
-    // URL format: /Archives/edgar/data/{cik}/{accession}/{filename}
+    // Step 3: Fetch the filing index to find actual files
     const cikNumber = fund.cik.replace(/^0+/, ''); // Remove leading zeros
-    const docUrl = `${config.sec.baseUrl}/Archives/edgar/data/${cikNumber}/${filing13F.accessionNumber}/${filing13F.primaryDocument}`;
+    const accessionNumberFormatted = filing13F.accessionNumber.replace(/(\d{10})(\d{2})(\d{6})/, '$1-$2-$3');
 
-    console.log(`Fetching document: ${docUrl}`);
+    // Build the index.htm URL
+    const indexUrl = `https://www.sec.gov/Archives/edgar/data/${cikNumber}/${filing13F.accessionNumber}/${accessionNumberFormatted}-index.htm`;
 
-    const documentResponse = await axios.get(docUrl, {
-      headers: {
-        'User-Agent': config.sec.userAgent
-      }
-    });
+    console.log(`Fetching filing index for ${fund.name}...`);
 
-    await sleep(config.sec.rateLimit);
-
-    // Step 4: Check if we got an XML document
-    const content = documentResponse.data;
     let xmlContent = '';
 
-    if (typeof content === 'string') {
-      xmlContent = content;
-    } else if (content) {
-      xmlContent = content.toString();
-    }
+    try {
+      const indexResponse = await axios.get(indexUrl, {
+        headers: {
+          'User-Agent': config.sec.userAgent
+        }
+      });
 
-    // Step 5: Try to find the information table XML
-    // Sometimes the primary document is an HTML wrapper, and the XML is in a separate file
-    if (!xmlContent.includes('<informationTable') && !xmlContent.includes('infoTable')) {
-      console.log('Primary document is not XML, looking for info table XML...');
+      await sleep(config.sec.rateLimit);
 
-      // Common information table filename patterns
-      const possibleFilenames = [
-        'primary_doc.xml',
-        'form13fInfoTable.xml',
-        'infotable.xml',
-        filing13F.primaryDocument.replace('.txt', '.xml')
-      ];
+      const indexHtml = typeof indexResponse.data === 'string' ? indexResponse.data : indexResponse.data.toString();
 
-      for (const filename of possibleFilenames) {
+      // Look for XML file links in the index page
+      const xmlFileMatches = indexHtml.match(/href="([^"]*\.xml)"/gi) || [];
+      const xmlFiles = xmlFileMatches.map(match => match.match(/href="([^"]*)"/i)[1]);
+
+      console.log(`  Found ${xmlFiles.length} XML files in index`);
+
+      // Try each unique XML file
+      const uniqueXmlFiles = [...new Set(xmlFiles)];
+
+      for (const xmlFile of uniqueXmlFiles) {
         try {
-          const xmlUrl = `${config.sec.baseUrl}/Archives/edgar/data/${cikNumber}/${filing13F.accessionNumber}/${filename}`;
+          const xmlUrl = xmlFile.startsWith('http') || xmlFile.startsWith('/')
+            ? (xmlFile.startsWith('http') ? xmlFile : `https://www.sec.gov${xmlFile}`)
+            : `https://www.sec.gov/Archives/edgar/data/${cikNumber}/${filing13F.accessionNumber}/${xmlFile}`;
+
+          console.log(`  Trying: ${xmlFile}`);
+
           const xmlResponse = await axios.get(xmlUrl, {
             headers: {
               'User-Agent': config.sec.userAgent
@@ -119,20 +123,31 @@ async function fetch13FForFund(fund, quarterEnd) {
 
           await sleep(config.sec.rateLimit);
 
-          xmlContent = typeof xmlResponse.data === 'string' ? xmlResponse.data : xmlResponse.data.toString();
+          const content = typeof xmlResponse.data === 'string' ? xmlResponse.data : xmlResponse.data.toString();
 
-          if (xmlContent.includes('<informationTable') || xmlContent.includes('infoTable')) {
-            console.log(`Found XML in ${filename}`);
+          if (content.includes('<informationTable') || content.includes('infoTable')) {
+            xmlContent = content;
+            console.log(`  ✓ Found information table in ${xmlFile}`);
             break;
+          } else {
+            console.log(`    (no info table found)`);
           }
         } catch (err) {
-          // File not found, continue
+          console.log(`    (error: ${err.message.substring(0, 50)})`);
           continue;
         }
       }
+    } catch (indexErr) {
+      console.log(`  Could not fetch index page: ${indexErr.message}`);
     }
 
-    // Step 6: Parse the XML
+    if (!xmlContent) {
+      console.warn(`Could not find valid XML file for ${fund.name}`);
+      return null;
+    }
+
+    // Step 4: Parse the XML
+    console.log(`Parsing XML for ${fund.name} (${xmlContent.length} bytes)...`);
     const holdings = parse13FXML(xmlContent);
 
     if (holdings.length === 0) {
@@ -158,14 +173,16 @@ async function fetch13FForFund(fund, quarterEnd) {
 /**
  * Fetch 13F filings for all hedge funds for a specific quarter
  * @param {string} quarterEnd - Quarter end date (YYYY-MM-DD)
+ * @param {Array} investors - Optional custom list of investors (defaults to config.hedgeFunds)
  * @returns {Array} Array of fund holdings data
  */
-async function fetchAll13Fs(quarterEnd) {
+async function fetchAll13Fs(quarterEnd, investors = null) {
   console.log(`\n=== Fetching 13F filings for quarter ending ${quarterEnd} ===\n`);
 
+  const fundsList = investors || config.hedgeFunds;
   const results = [];
 
-  for (const fund of config.hedgeFunds) {
+  for (const fund of fundsList) {
     const fundData = await fetch13FForFund(fund, quarterEnd);
 
     if (fundData) {

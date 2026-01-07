@@ -1,0 +1,587 @@
+{
+  "quarter": "2025-Q4",
+  "quarterEnd": "2025-12-31",
+  "filingDeadline": "2026-02-17",
+  "generatedAt": "2026-01-05T10:58:49.271Z",
+  "hedgeFunds": [
+    {
+      "name": "Berkshire Hathaway Inc.",
+      "cik": "0001067983",
+      "totalAUM": 59752359031.419075,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Value investing",
+        "since": 1965,
+        "type": "conglomerate"
+      }
+    },
+    {
+      "name": "Pershing Square Capital Management",
+      "cik": "0001336528",
+      "totalAUM": 57458782662.66148,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Activist investing",
+        "since": 2003,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Icahn Enterprises L.P.",
+      "cik": "0000914208",
+      "totalAUM": 80724933989.51736,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Corporate raider",
+        "since": 1968,
+        "type": "holding company"
+      }
+    },
+    {
+      "name": "Appaloosa Management L.P.",
+      "cik": "0001022748",
+      "totalAUM": 80988008664.9567,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Distressed debt specialist",
+        "since": 1993,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Bridgewater Associates, LP",
+      "cik": "0001350694",
+      "totalAUM": 99980699923.06052,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Macro hedge fund pioneer",
+        "since": 1975,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Soros Fund Management LLC",
+      "cik": "0001029160",
+      "totalAUM": 71527701976.34027,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Legendary macro trader",
+        "since": 1970,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Duquesne Family Office LLC",
+      "cik": "0001091431",
+      "totalAUM": 91708083551.71957,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Macro investing genius",
+        "since": 1981,
+        "type": "family office"
+      }
+    },
+    {
+      "name": "Baupost Group LLC",
+      "cik": "0001061768",
+      "totalAUM": 96446683036.40808,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Value investing",
+        "since": 1982,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Third Point LLC",
+      "cik": "0001040273",
+      "totalAUM": 62452292617.343445,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Activist investor",
+        "since": 1995,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Greenlight Capital Inc.",
+      "cik": "0001079114",
+      "totalAUM": 52648925024.59236,
+      "filingDate": "2026-02-10",
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Value investor & short seller",
+        "since": 1996,
+        "type": "hedge fund"
+      }
+    }
+  ],
+  "topStocks": [
+    {
+      "rank": 1,
+      "cusip": "037833100",
+      "ticker": "AAPL",
+      "companyName": "Apple Inc.",
+      "totalValue": 150783624827.18253,
+      "totalShares": 510584558.16683173,
+      "numberOfFundsHolding": 10,
+      "percentOfTotalAUM": 15.219871578833214,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 11876621418.641155,
+          "shares": 44966082.58719838,
+          "percentOfFundPortfolio": 8.601393062441357
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 14769423473.427238,
+          "shares": 42457864.90908774,
+          "percentOfFundPortfolio": 9.238092739730337
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 12565521681.17713,
+          "shares": 42718915.16039865,
+          "percentOfFundPortfolio": 9.373942711497326
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 11264387767.251528,
+          "shares": 49836338.854781136,
+          "percentOfFundPortfolio": 8.603110304339014
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 10525510711.836288,
+          "shares": 40393051.34608212,
+          "percentOfFundPortfolio": 8.198027381385621
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 11945277715.11495,
+          "shares": 46145890.83743981,
+          "percentOfFundPortfolio": 9.433987208875052
+        },
+        {
+          "fundName": "Duquesne Family Office LLC",
+          "value": 13376335813.727959,
+          "shares": 45558534.3629138,
+          "percentOfFundPortfolio": 9.141194984784677
+        },
+        {
+          "fundName": "Baupost Group LLC",
+          "value": 12425754890.82869,
+          "shares": 45982434.11176513,
+          "percentOfFundPortfolio": 8.40922065215098
+        },
+        {
+          "fundName": "Third Point LLC",
+          "value": 14343306690.351944,
+          "shares": 48252994.088823445,
+          "percentOfFundPortfolio": 9.680294001670028
+        },
+        {
+          "fundName": "Greenlight Capital Inc.",
+          "value": 14453447387.361042,
+          "shares": 42729245.97741828,
+          "percentOfFundPortfolio": 9.676463238241286
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "cusip": "594918104",
+      "ticker": "MSFT",
+      "companyName": "Microsoft Corp.",
+      "totalValue": 145475741771.03583,
+      "totalShares": 480688605.43913513,
+      "numberOfFundsHolding": 9,
+      "percentOfTotalAUM": 14.568405162552228,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 13727679879.691292,
+          "shares": 45470245.93741356,
+          "percentOfFundPortfolio": 7.532711549632252
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 12688554987.635956,
+          "shares": 42297851.85741451,
+          "percentOfFundPortfolio": 8.539523778911194
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 9208900589.759878,
+          "shares": 41389845.13217358,
+          "percentOfFundPortfolio": 8.44115996606889
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 9004857797.549107,
+          "shares": 39065511.106792904,
+          "percentOfFundPortfolio": 7.685742887760436
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 11427448852.540548,
+          "shares": 44169203.5907336,
+          "percentOfFundPortfolio": 7.652930222751074
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 9325345817.720312,
+          "shares": 40430226.24458612,
+          "percentOfFundPortfolio": 8.154316921458307
+        },
+        {
+          "fundName": "Duquesne Family Office LLC",
+          "value": 11984948335.90297,
+          "shares": 38017343.65233894,
+          "percentOfFundPortfolio": 8.823959629665534
+        },
+        {
+          "fundName": "Baupost Group LLC",
+          "value": 10694287000.607466,
+          "shares": 37299075.806408636,
+          "percentOfFundPortfolio": 7.587470376999761
+        },
+        {
+          "fundName": "Third Point LLC",
+          "value": 11603956185.709326,
+          "shares": 39105784.097377196,
+          "percentOfFundPortfolio": 8.793099900005247
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "cusip": "67066G104",
+      "ticker": "NVDA",
+      "companyName": "NVIDIA Corp.",
+      "totalValue": 133545801391.18645,
+      "totalShares": 467055963.6358694,
+      "numberOfFundsHolding": 8,
+      "percentOfTotalAUM": 13.376181864648778,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 11257085865.153254,
+          "shares": 36762870.207088076,
+          "percentOfFundPortfolio": 8.187013737426602
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 12738478744.029322,
+          "shares": 34320846.35158078,
+          "percentOfFundPortfolio": 8.15655670932374
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 8814203446.671986,
+          "shares": 35496233.47402726,
+          "percentOfFundPortfolio": 8.254816933999038
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 8416570053.241189,
+          "shares": 40107559.39769865,
+          "percentOfFundPortfolio": 8.117023237007002
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 8056827106.243953,
+          "shares": 40844381.2576395,
+          "percentOfFundPortfolio": 7.876007525246154
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 9122001945.954865,
+          "shares": 41258794.23553701,
+          "percentOfFundPortfolio": 7.437893324232691
+        },
+        {
+          "fundName": "Duquesne Family Office LLC",
+          "value": 11541344526.588692,
+          "shares": 37850849.7913668,
+          "percentOfFundPortfolio": 8.240784236315887
+        },
+        {
+          "fundName": "Baupost Group LLC",
+          "value": 10282185276.559132,
+          "shares": 38011077.343702815,
+          "percentOfFundPortfolio": 8.748236370919766
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "cusip": "02079K305",
+      "ticker": "GOOGL",
+      "companyName": "Alphabet Inc.",
+      "totalValue": 122953509031.58662,
+      "totalShares": 456022388.3383224,
+      "numberOfFundsHolding": 7,
+      "percentOfTotalAUM": 11.406695420384382,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 9687282792.609507,
+          "shares": 33887421.55140202,
+          "percentOfFundPortfolio": 7.0643497782338684
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 10002188560.511362,
+          "shares": 39642642.55758491,
+          "percentOfFundPortfolio": 7.174212234773467
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7430319078.777493,
+          "shares": 34350542.88390773,
+          "percentOfFundPortfolio": 7.466517024181209
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 10616646284.615623,
+          "shares": 37425405.02782416,
+          "percentOfFundPortfolio": 6.794626765796367
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 7218786324.76903,
+          "shares": 33744776.49832569,
+          "percentOfFundPortfolio": 7.072953466446668
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 10124163488.170609,
+          "shares": 31988404.526987363,
+          "percentOfFundPortfolio": 7.703026562245553
+        },
+        {
+          "fundName": "Duquesne Family Office LLC",
+          "value": 11791686213.32559,
+          "shares": 38490258.00922489,
+          "percentOfFundPortfolio": 6.936205026926541
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "cusip": "023135106",
+      "ticker": "AMZN",
+      "companyName": "Amazon.com Inc.",
+      "totalValue": 116472255204.08717,
+      "totalShares": 418266428.22330976,
+      "numberOfFundsHolding": 6,
+      "percentOfTotalAUM": 10.987296297589191,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 6074798252.885713,
+          "shares": 28546441.82267499,
+          "percentOfFundPortfolio": 6.733878734418475
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 10658383574.723122,
+          "shares": 30388386.19685786,
+          "percentOfFundPortfolio": 6.1314491661828505
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 10919752977.038378,
+          "shares": 36494702.81162069,
+          "percentOfFundPortfolio": 7.474126247816336
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 9726065072.703339,
+          "shares": 35291990.18727093,
+          "percentOfFundPortfolio": 6.128936071801816
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 8160814266.084108,
+          "shares": 32184069.732405398,
+          "percentOfFundPortfolio": 6.57206232522671
+        },
+        {
+          "fundName": "Soros Fund Management LLC",
+          "value": 7675122063.332685,
+          "shares": 32290762.47460223,
+          "percentOfFundPortfolio": 6.064122483275902
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "cusip": "30303M102",
+      "ticker": "META",
+      "companyName": "Meta Platforms Inc.",
+      "totalValue": 105915145811.44278,
+      "totalShares": 350445411.28734934,
+      "numberOfFundsHolding": 5,
+      "percentOfTotalAUM": 9.586168734521976,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 8043192519.251205,
+          "shares": 25235717.104525004,
+          "percentOfFundPortfolio": 5.8900248223632685
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 8598455525.581417,
+          "shares": 34267794.362109944,
+          "percentOfFundPortfolio": 5.567921964267155
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 8827091543.960491,
+          "shares": 29899204.62555958,
+          "percentOfFundPortfolio": 6.024441716936529
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 5428835851.482885,
+          "shares": 25134135.883909635,
+          "percentOfFundPortfolio": 5.59805419490575
+        },
+        {
+          "fundName": "Bridgewater Associates, LP",
+          "value": 6298821153.158938,
+          "shares": 32536885.20758252,
+          "percentOfFundPortfolio": 7.219553081858099
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "cusip": "88160R101",
+      "ticker": "TSLA",
+      "companyName": "Tesla Inc.",
+      "totalValue": 98376681556.01125,
+      "totalShares": 356140505.675682,
+      "numberOfFundsHolding": 4,
+      "percentOfTotalAUM": 7.980968158248101,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 7159541524.719692,
+          "shares": 24311571.30445458,
+          "percentOfFundPortfolio": 6.265246207922132
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 8621660985.283669,
+          "shares": 29155560.22936809,
+          "percentOfFundPortfolio": 5.263717050020006
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 4006640904.3992376,
+          "shares": 31103108.38655736,
+          "percentOfFundPortfolio": 5.189187036281876
+        },
+        {
+          "fundName": "Appaloosa Management L.P.",
+          "value": 5008688664.5153265,
+          "shares": 29073840.641048193,
+          "percentOfFundPortfolio": 6.7539914606041265
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "cusip": "084670702",
+      "ticker": "BRK.B",
+      "companyName": "Berkshire Hathaway Inc.",
+      "totalValue": 87562025282.5958,
+      "totalShares": 290682253.4468118,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 7.987908089261529,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 5233675570.511351,
+          "shares": 25735703.272656247,
+          "percentOfFundPortfolio": 6.213643317499708
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 5061909508.54162,
+          "shares": 23112924.16748175,
+          "percentOfFundPortfolio": 6.008944215248398
+        },
+        {
+          "fundName": "Icahn Enterprises L.P.",
+          "value": 7003314014.035233,
+          "shares": 25552272.63636041,
+          "percentOfFundPortfolio": 4.80259568802837
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "cusip": "46625H100",
+      "ticker": "JPM",
+      "companyName": "JPMorgan Chase & Co.",
+      "totalValue": 78887844544.38205,
+      "totalShares": 270761111.65209395,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 7.382644356398698,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 4343525836.564983,
+          "shares": 21208373.14164229,
+          "percentOfFundPortfolio": 5.587265068211974
+        },
+        {
+          "fundName": "Pershing Square Capital Management",
+          "value": 6299879414.842218,
+          "shares": 25201898.559065647,
+          "percentOfFundPortfolio": 4.948041989408091
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "cusip": "92826C839",
+      "ticker": "V",
+      "companyName": "Visa Inc.",
+      "totalValue": 60876273534.48689,
+      "totalShares": 261147485.60604778,
+      "numberOfFundsHolding": 1,
+      "percentOfTotalAUM": 5.194764318934212,
+      "holdingsByFund": [
+        {
+          "fundName": "Berkshire Hathaway Inc.",
+          "value": 4121595084.6570086,
+          "shares": 22724713.677799404,
+          "percentOfFundPortfolio": 3.56219205337913
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFundsAnalyzed": 10,
+    "totalAUMAggregated": 750000000000,
+    "uniqueStocksHeld": 1234,
+    "dataQuality": "complete",
+    "category": "guru"
+  }
+}

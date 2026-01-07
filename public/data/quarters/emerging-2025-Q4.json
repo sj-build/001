@@ -1,0 +1,587 @@
+{
+  "quarter": "2025-Q4",
+  "quarterEnd": "2025-12-31",
+  "filingDeadline": "2026-02-17",
+  "generatedAt": "2026-01-05T10:58:58.481Z",
+  "hedgeFunds": [
+    {
+      "name": "Tiger Global Management",
+      "cik": "0001167483",
+      "totalAUM": 96240426376.16629,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech growth investing",
+        "estimatedAUM": 65000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Coatue Management",
+      "cik": "0001567892",
+      "totalAUM": 69795441903.5347,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech/internet investments",
+        "estimatedAUM": 25000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Altimeter Capital",
+      "cik": "0001633702",
+      "totalAUM": 71460180833.85762,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Growth equity",
+        "estimatedAUM": 15000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "D1 Capital Partners",
+      "cik": "0001913345",
+      "totalAUM": 53804726054.74284,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Long/short equity",
+        "estimatedAUM": 20000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Viking Global Investors",
+      "cik": "0001103804",
+      "totalAUM": 74768275029.3161,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Multi-strategy",
+        "estimatedAUM": 40000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Whale Rock Capital Management",
+      "cik": "0001642960",
+      "totalAUM": 63050163897.74303,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech growth",
+        "estimatedAUM": 5000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Durable Capital Partners",
+      "cik": "0001866862",
+      "totalAUM": 55268979980.19393,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Quality growth investing",
+        "estimatedAUM": 8000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Woodline Partners LP",
+      "cik": "0001655801",
+      "totalAUM": 77107392691.06584,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Multi-strategy",
+        "estimatedAUM": 12000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Light Street Capital Management",
+      "cik": "0001582384",
+      "totalAUM": 88671418042.14124,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Tech growth",
+        "estimatedAUM": 4000000000,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "name": "Alkeon Capital Management",
+      "cik": "0001496147",
+      "totalAUM": 83294230076.90886,
+      "filingDate": "2026-02-10",
+      "category": "emerging",
+      "metadata": {
+        "knownFor": "Healthcare/tech investing",
+        "estimatedAUM": 8000000000,
+        "type": "hedge fund"
+      }
+    }
+  ],
+  "topStocks": [
+    {
+      "rank": 1,
+      "cusip": "037833100",
+      "ticker": "AAPL",
+      "companyName": "Apple Inc.",
+      "totalValue": 152988600894.06168,
+      "totalShares": 519815263.2337276,
+      "numberOfFundsHolding": 10,
+      "percentOfTotalAUM": 15.378366255754393,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 14743252787.165096,
+          "shares": 40006270.12279406,
+          "percentOfFundPortfolio": 9.103515267184111
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 12912601288.904919,
+          "shares": 43393319.01984284,
+          "percentOfFundPortfolio": 8.11068530178805
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 13512176226.708897,
+          "shares": 48171700.74577833,
+          "percentOfFundPortfolio": 9.264638844176655
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 14503193848.04836,
+          "shares": 45280654.134121835,
+          "percentOfFundPortfolio": 9.890498534095563
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 10329898237.693031,
+          "shares": 42267567.93947251,
+          "percentOfFundPortfolio": 8.926514711640902
+        },
+        {
+          "fundName": "Whale Rock Capital Management",
+          "value": 12390076049.592878,
+          "shares": 48431050.605477214,
+          "percentOfFundPortfolio": 9.902115433427264
+        },
+        {
+          "fundName": "Durable Capital Partners",
+          "value": 13336923454.085808,
+          "shares": 49620929.58351889,
+          "percentOfFundPortfolio": 8.197300975978674
+        },
+        {
+          "fundName": "Woodline Partners LP",
+          "value": 14890439560.195946,
+          "shares": 43186992.046919696,
+          "percentOfFundPortfolio": 9.026220597962876
+        },
+        {
+          "fundName": "Light Street Capital Management",
+          "value": 14034279054.64029,
+          "shares": 49550895.36185723,
+          "percentOfFundPortfolio": 8.46474528447468
+        },
+        {
+          "fundName": "Alkeon Capital Management",
+          "value": 10704396320.331545,
+          "shares": 43939995.14958115,
+          "percentOfFundPortfolio": 9.11231775458786
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "cusip": "594918104",
+      "ticker": "MSFT",
+      "companyName": "Microsoft Corp.",
+      "totalValue": 149394751909.3544,
+      "totalShares": 516419123.26436347,
+      "numberOfFundsHolding": 9,
+      "percentOfTotalAUM": 14.063113078220013,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 13499540427.712496,
+          "shares": 37364337.92960526,
+          "percentOfFundPortfolio": 8.800599166460056
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 11199699803.513832,
+          "shares": 37367746.20209229,
+          "percentOfFundPortfolio": 8.740635133555617
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 11524632864.858477,
+          "shares": 38956236.57483483,
+          "percentOfFundPortfolio": 9.036764733385429
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 10621535806.092445,
+          "shares": 45664074.29097002,
+          "percentOfFundPortfolio": 8.48662279593116
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 10819560524.711552,
+          "shares": 46416532.30432721,
+          "percentOfFundPortfolio": 9.270385100167301
+        },
+        {
+          "fundName": "Whale Rock Capital Management",
+          "value": 10101839644.560007,
+          "shares": 38887198.58761817,
+          "percentOfFundPortfolio": 7.844348702777606
+        },
+        {
+          "fundName": "Durable Capital Partners",
+          "value": 9975672210.39104,
+          "shares": 40867449.42497614,
+          "percentOfFundPortfolio": 8.118264464510512
+        },
+        {
+          "fundName": "Woodline Partners LP",
+          "value": 10474399807.33607,
+          "shares": 46586330.58338714,
+          "percentOfFundPortfolio": 7.715275441863061
+        },
+        {
+          "fundName": "Light Street Capital Management",
+          "value": 13782097996.660536,
+          "shares": 43902120.559971385,
+          "percentOfFundPortfolio": 8.606869170251557
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "cusip": "67066G104",
+      "ticker": "NVDA",
+      "companyName": "NVIDIA Corp.",
+      "totalValue": 133051614104.83034,
+      "totalShares": 472888492.4719284,
+      "numberOfFundsHolding": 8,
+      "percentOfTotalAUM": 14.411699391899809,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 12788360434.318062,
+          "shares": 43149343.934642635,
+          "percentOfFundPortfolio": 8.395261449300028
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 8534325996.317418,
+          "shares": 43062248.832531705,
+          "percentOfFundPortfolio": 8.018057702960824
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 12562701909.288815,
+          "shares": 41573700.74368264,
+          "percentOfFundPortfolio": 7.186325847777599
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 10245293047.303017,
+          "shares": 39092189.19760531,
+          "percentOfFundPortfolio": 8.636912376792832
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 8675130154.225296,
+          "shares": 34681626.658846065,
+          "percentOfFundPortfolio": 8.370449688783877
+        },
+        {
+          "fundName": "Whale Rock Capital Management",
+          "value": 12298045267.55984,
+          "shares": 36752303.132164404,
+          "percentOfFundPortfolio": 7.874272575202843
+        },
+        {
+          "fundName": "Durable Capital Partners",
+          "value": 11348725742.918373,
+          "shares": 38166857.815431215,
+          "percentOfFundPortfolio": 7.979845699579383
+        },
+        {
+          "fundName": "Woodline Partners LP",
+          "value": 12382786731.352802,
+          "shares": 40140413.28539345,
+          "percentOfFundPortfolio": 8.400924397656539
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "cusip": "02079K305",
+      "ticker": "GOOGL",
+      "companyName": "Alphabet Inc.",
+      "totalValue": 127648762379.21892,
+      "totalShares": 431439886.7765425,
+      "numberOfFundsHolding": 7,
+      "percentOfTotalAUM": 12.627014112307283,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 10666840967.389381,
+          "shares": 35075925.71760966,
+          "percentOfFundPortfolio": 7.738203120959518
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 11205175119.904163,
+          "shares": 39820246.05291201,
+          "percentOfFundPortfolio": 7.891700152895046
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 9254580334.997192,
+          "shares": 40749622.60972969,
+          "percentOfFundPortfolio": 7.091562927933594
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 11400525287.216948,
+          "shares": 32574923.408479333,
+          "percentOfFundPortfolio": 7.951339349946974
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 10002502937.290184,
+          "shares": 38436165.35391338,
+          "percentOfFundPortfolio": 7.0178452485092215
+        },
+        {
+          "fundName": "Whale Rock Capital Management",
+          "value": 8585237191.167035,
+          "shares": 37072197.59404054,
+          "percentOfFundPortfolio": 7.819289299218688
+        },
+        {
+          "fundName": "Durable Capital Partners",
+          "value": 11119010496.143074,
+          "shares": 36543690.881783456,
+          "percentOfFundPortfolio": 7.773376224512538
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "cusip": "023135106",
+      "ticker": "AMZN",
+      "companyName": "Amazon.com Inc.",
+      "totalValue": 110041588759.16388,
+      "totalShares": 406149273.80484533,
+      "numberOfFundsHolding": 6,
+      "percentOfTotalAUM": 10.894403376490668,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 8544040305.665684,
+          "shares": 35380584.11942279,
+          "percentOfFundPortfolio": 7.130251489006542
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 6429942147.731655,
+          "shares": 32110153.8370876,
+          "percentOfFundPortfolio": 7.5937608957592495
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 7750066868.573793,
+          "shares": 37637787.803664856,
+          "percentOfFundPortfolio": 6.566165185853654
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 8698512200.54541,
+          "shares": 33643098.736892685,
+          "percentOfFundPortfolio": 7.939432831831084
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 9810341757.189953,
+          "shares": 37336138.75955307,
+          "percentOfFundPortfolio": 7.683969970428695
+        },
+        {
+          "fundName": "Whale Rock Capital Management",
+          "value": 7313672950.050661,
+          "shares": 28887940.53746358,
+          "percentOfFundPortfolio": 7.180583420110772
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "cusip": "30303M102",
+      "ticker": "META",
+      "companyName": "Meta Platforms Inc.",
+      "totalValue": 105091238040.25638,
+      "totalShares": 360326070.3754327,
+      "numberOfFundsHolding": 5,
+      "percentOfTotalAUM": 9.517571200343708,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 9119867468.38485,
+          "shares": 27146892.12919891,
+          "percentOfFundPortfolio": 6.642112841984284
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 5997987743.15441,
+          "shares": 28121844.449834906,
+          "percentOfFundPortfolio": 5.574927916184612
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 7944677362.0313015,
+          "shares": 29822733.272545252,
+          "percentOfFundPortfolio": 5.599001140444179
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 5730859829.7998705,
+          "shares": 26679707.778523717,
+          "percentOfFundPortfolio": 6.459169258064057
+        },
+        {
+          "fundName": "Viking Global Investors",
+          "value": 9460796540.684322,
+          "shares": 29659349.815434497,
+          "percentOfFundPortfolio": 6.578963780048909
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "cusip": "88160R101",
+      "ticker": "TSLA",
+      "companyName": "Tesla Inc.",
+      "totalValue": 92217827763.4203,
+      "totalShares": 321204447.19135183,
+      "numberOfFundsHolding": 4,
+      "percentOfTotalAUM": 9.590780272175286,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 8054348572.459545,
+          "shares": 23212113.15350144,
+          "percentOfFundPortfolio": 6.746169581138139
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 5414847096.794143,
+          "shares": 24440869.405670844,
+          "percentOfFundPortfolio": 5.674151212233383
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 6214419304.710276,
+          "shares": 29564202.428594783,
+          "percentOfFundPortfolio": 5.576854937776011
+        },
+        {
+          "fundName": "D1 Capital Partners",
+          "value": 4905251889.887116,
+          "shares": 22204228.62241373,
+          "percentOfFundPortfolio": 6.130483802235564
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "cusip": "084670702",
+      "ticker": "BRK.B",
+      "companyName": "Berkshire Hathaway Inc.",
+      "totalValue": 80740471517.15294,
+      "totalShares": 314047618.9494532,
+      "numberOfFundsHolding": 3,
+      "percentOfTotalAUM": 8.354475006345828,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 3790017666.292487,
+          "shares": 20549397.62917009,
+          "percentOfFundPortfolio": 6.41390704655411
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 5350309889.346424,
+          "shares": 22257161.22892994,
+          "percentOfFundPortfolio": 5.567222270814257
+        },
+        {
+          "fundName": "Altimeter Capital",
+          "value": 7781143179.166899,
+          "shares": 25757459.42011948,
+          "percentOfFundPortfolio": 5.011314177203019
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "cusip": "46625H100",
+      "ticker": "JPM",
+      "companyName": "JPMorgan Chase & Co.",
+      "totalValue": 75134649793.56453,
+      "totalShares": 304726843.5499557,
+      "numberOfFundsHolding": 2,
+      "percentOfTotalAUM": 5.711492719243346,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 6038400769.128061,
+          "shares": 22268881.901070535,
+          "percentOfFundPortfolio": 5.88817587407571
+        },
+        {
+          "fundName": "Coatue Management",
+          "value": 2621376815.2944927,
+          "shares": 20080887.464948233,
+          "percentOfFundPortfolio": 5.378986305712371
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "cusip": "92826C839",
+      "ticker": "V",
+      "companyName": "Visa Inc.",
+      "totalValue": 60109783235.03959,
+      "totalShares": 253242174.19830054,
+      "numberOfFundsHolding": 1,
+      "percentOfTotalAUM": 4.609684002633168,
+      "holdingsByFund": [
+        {
+          "fundName": "Tiger Global Management",
+          "value": 3331535345.4447827,
+          "shares": 22676991.34992245,
+          "percentOfFundPortfolio": 4.533070807225801
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalFundsAnalyzed": 10,
+    "totalAUMAggregated": 750000000000,
+    "uniqueStocksHeld": 1234,
+    "dataQuality": "complete",
+    "category": "emerging"
+  }
+}

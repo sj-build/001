@@ -1,3 +1,5 @@
+const { cusipToTicker } = require('./cusipToTicker.cjs');
+
 /**
  * Aggregate holdings across multiple hedge funds
  * @param {Array} fundsData - Array of fund holdings data
@@ -25,7 +27,7 @@ function aggregateHoldings(fundsData) {
         holdingsMap.set(cusip, {
           cusip,
           companyName: holding.companyName,
-          ticker: '', // Will be enriched later
+          ticker: cusipToTicker(cusip),
           totalValue: 0,
           totalShares: 0,
           fundsHolding: [],

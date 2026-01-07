@@ -1,0 +1,141 @@
+{
+  "quarter": "2025-Q2",
+  "category": "guru",
+  "fundTopHoldings": [
+    {
+      "fundName": "Berkshire Hathaway Inc.",
+      "fundCik": "0001067983",
+      "topHolding": {
+        "ticker": "",
+        "companyName": "NUCOR CORP",
+        "cusip": 670346105,
+        "value": 692738413000,
+        "shares": 5756510,
+        "percentOfPortfolio": 62.60342416807284,
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Value investing",
+        "since": 1965,
+        "type": "conglomerate"
+      }
+    },
+    {
+      "fundName": "Pershing Square Capital Management",
+      "fundCik": "0001336528",
+      "topHolding": {
+        "ticker": "",
+        "companyName": "UBER TECHNOLOGIES INC",
+        "cusip": "90353T100",
+        "value": 2827098321000,
+        "shares": 30301161,
+        "percentOfPortfolio": 20.59198412749488,
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Activist investing",
+        "since": 2003,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "fundName": "Icahn Enterprises L.P.",
+      "fundCik": "0000914208",
+      "topHolding": {
+        "ticker": "",
+        "companyName": "NVIDIA CORPORATION",
+        "cusip": "67066G104",
+        "value": 10664184705000,
+        "shares": 67499112,
+        "percentOfPortfolio": 1.8136670080704778,
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Corporate raider",
+        "since": 1968,
+        "type": "holding company"
+      }
+    },
+    {
+      "fundName": "Bridgewater Associates, LP",
+      "fundCik": "0001350694",
+      "topHolding": {
+        "ticker": "",
+        "companyName": "SPDR S&P 500 ETF TR",
+        "cusip": "78462F103",
+        "value": 1612810926000,
+        "shares": 2610360,
+        "percentOfPortfolio": 6.505443556400464,
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Macro hedge fund pioneer",
+        "since": 1975,
+        "type": "hedge fund"
+      }
+    },
+    {
+      "fundName": "Soros Fund Management LLC",
+      "fundCik": "0001029160",
+      "topHolding": {
+        "ticker": "",
+        "companyName": "SPDR S&P 500 ETF TR",
+        "cusip": "78462F103",
+        "value": 332094375000,
+        "shares": 537500,
+        "percentOfPortfolio": 4.168875125710049,
+        "priceHistory": [],
+        "valuationMetrics": {
+          "peRatio": null,
+          "pbRatio": null,
+          "psRatio": null,
+          "evToEbitda": null,
+          "marketCap": 0,
+          "lastUpdated": ""
+        }
+      },
+      "category": "guru",
+      "metadata": {
+        "knownFor": "Legendary macro trader",
+        "since": 1970,
+        "type": "hedge fund"
+      }
+    }
+  ]
+}
