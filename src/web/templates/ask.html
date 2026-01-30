@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Ask - Thinking Partner{% endblock %}
+
+{% block content %}
+<h1>Ask - Thinking Partner</h1>
+<p class="subtitle">Analyze articles, pull relevant memories, get structured observations.</p>
+
+<form method="post" action="/ask" class="ask-form">
+    <div class="form-group">
+        <label for="url">Article URL (optional)</label>
+        <input type="url" id="url" name="url" value="{{ input_url or '' }}" placeholder="https://...">
+    </div>
+    <div class="form-group">
+        <label for="text">Text / Notes (optional)</label>
+        <textarea id="text" name="text" rows="4" placeholder="Paste text or write notes...">{{ input_text or '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="question">Question *</label>
+        <input type="text" id="question" name="question" value="{{ input_question or '' }}" required
+               placeholder="What should I think about regarding...?">
+    </div>
+    <button type="submit" class="btn">Ask</button>
+</form>
+
+{% if result %}
+<section class="result">
+    <div class="analysis">
+        {{ result.analysis | replace('\n', '<br>') | safe }}
+    </div>
+
+    {% if result.suggested_query %}
+    <div class="bundle-suggest">
+        <p>Want to create a context bundle from related memories?</p>
+        <form method="post" action="/bundle">
+            <input type="hidden" name="query" value="{{ result.suggested_query }}">
+            <input type="hidden" name="top" value="7">
+            <button type="submit" class="btn btn-secondary">Create Bundle: "{{ result.suggested_query }}"</button>
+        </form>
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

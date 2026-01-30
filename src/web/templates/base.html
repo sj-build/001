@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SJ Home Agent{% endblock %}</title>
+    <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">SJ Home Agent</a>
+            <div class="nav-links">
+                <a href="/morning">Morning</a>
+                <a href="/search">Search</a>
+                <a href="/bundles">Bundles</a>
+                <a href="/ask">Ask</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Recovery-first. Sustainable. Breathing room.</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

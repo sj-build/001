@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<h1>Search</h1>
+
+<form method="get" action="/search" class="search-form">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="tag">Tag</label>
+            <input type="text" id="tag" name="tag" value="{{ tag }}" placeholder="#NewDeal">
+        </div>
+        <div class="form-group">
+            <label for="q">Keyword</label>
+            <input type="text" id="q" name="q" value="{{ q }}" placeholder="HiT">
+        </div>
+        <div class="form-group">
+            <label for="days">Days</label>
+            <input type="number" id="days" name="days" value="{{ days }}" placeholder="90">
+        </div>
+        <div class="form-group form-action">
+            <button type="submit" class="btn">Search</button>
+        </div>
+    </div>
+</form>
+
+{% if results %}
+<section>
+    <h2>Results ({{ results|length }})</h2>
+
+    <form method="post" action="/bundle" class="bundle-form">
+        <input type="hidden" name="query" value="{{ query }}">
+        <input type="hidden" name="top" value="7">
+        <button type="submit" class="btn btn-secondary">Create Bundle from this search</button>
+    </form>
+
+    {% for conv, score in results %}
+    <div class="result-card">
+        <h3>{{ conv.title }}</h3>
+        <p class="meta">
+            Score: {{ "%.1f"|format(score) }} |
+            {{ conv.platform }} |
+            {{ conv.category }} |
+            {{ conv.collected_at[:10] }}
+        </p>
+        {% if conv.tags %}<p class="tags">{{ conv.tags }}</p>{% endif %}
+        {% if conv.preview %}<p class="preview">{{ conv.preview[:200] }}</p>{% endif %}
+        <p><a href="{{ conv.url }}" target="_blank">Open conversation</a></p>
+    </div>
+    {% endfor %}
+</section>
+{% elif query %}
+<p class="no-results">No results found for "{{ query }}".</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Morning Window{% endblock %}
+
+{% block content %}
+<h1>Morning Window - {{ date }}</h1>
+
+{% if flash %}
+<div class="flash">{{ flash }}</div>
+{% endif %}
+
+{% if digest_preview %}
+<details>
+    <summary>Digest Preview</summary>
+    <pre class="digest-preview">{{ digest_preview }}</pre>
+</details>
+{% endif %}
+
+<div class="actions">
+    <form method="post" action="/morning/build" style="display:inline;">
+        <button type="submit" class="btn">Build Today's Digest</button>
+    </form>
+</div>
+
+<section class="add-item">
+    <h2>Add Item Manually</h2>
+    <form method="post" action="/morning/add">
+        <div class="form-group">
+            <label for="title">Title *</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="url">URL</label>
+            <input type="url" id="url" name="url">
+        </div>
+        <div class="form-group">
+            <label for="text">Notes / Text</label>
+            <textarea id="text" name="text" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn">Add Item</button>
+    </form>
+</section>
+
+{% if top3 %}
+<section>
+    <h2>Top 3</h2>
+    {% for item in top3 %}
+    <div class="card">
+        <h3>{{ loop.index }}. {{ item.title }}</h3>
+        <p class="meta">{{ item.source }}{% if item.tags %} | {{ item.tags }}{% endif %}</p>
+        {% if item.url %}<p><a href="{{ item.url }}" target="_blank">Open link</a></p>{% endif %}
+        {% if item.summary %}<p class="summary">{{ item.summary[:200] }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if categories %}
+<section class="collapsed-section">
+    <h2>Other Items</h2>
+    {% for cat, items in categories.items() %}
+    <details>
+        <summary>{{ cat }} ({{ items|length }})</summary>
+        <ul>
+            {% for item in items %}
+            <li>
+                <a href="{{ item.url }}" target="_blank">{{ item.title }}</a>
+                <span class="meta">{{ item.source }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </details>
+    {% endfor %}
+</section>
+{% endif %}
+
+<div class="enough">
+    <button onclick="document.querySelectorAll('section').forEach(s => s.style.display='none'); this.textContent='Done for today.'" class="btn btn-muted">
+        Done for today
+    </button>
+</div>
+{% endblock %}

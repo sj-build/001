@@ -1,0 +1,10 @@
+playwright
+fastapi
+uvicorn[standard]
+jinja2
+python-dotenv
+pydantic
+pydantic-settings
+feedparser
+httpx
+beautifulsoup4

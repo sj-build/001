@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}SJ Home Agent - Home{% endblock %}
+
+{% block content %}
+<h1>SJ Home Agent</h1>
+<p class="subtitle">Second Brain + Knowledge Hub</p>
+
+<div class="tiles">
+    <a href="/morning" class="tile">
+        <h2>Morning Window</h2>
+        <p>Today's digest: Top 3 items, curated for you.</p>
+    </a>
+
+    <a href="/search" class="tile">
+        <h2>Search</h2>
+        <p>Find conversations by tag, keyword, or date range.</p>
+    </a>
+
+    <a href="/ask" class="tile">
+        <h2>Ask</h2>
+        <p>Thinking Partner: analyze articles, pull memories.</p>
+    </a>
+</div>
+
+{% if recent_conversations %}
+<section class="recent">
+    <h2>Recent Conversations</h2>
+    <ul>
+        {% for conv in recent_conversations %}
+        <li>
+            <strong>{{ conv.title }}</strong>
+            <span class="meta">{{ conv.platform }} | {{ conv.category }} | {{ conv.collected_at[:10] }}</span>
+            {% if conv.tags %}<span class="tags">{{ conv.tags }}</span>{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

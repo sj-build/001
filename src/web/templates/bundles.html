@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Bundles{% endblock %}
+
+{% block content %}
+<h1>Context Bundles</h1>
+
+{% if bundle %}
+<section class="bundle-view">
+    <h2>Bundle: {{ bundle.query }}</h2>
+    <p class="meta">Created: {{ bundle.created_at[:10] }} | ID: {{ bundle.id }}</p>
+    <div class="bundle-content">
+        <pre>{{ bundle.markdown }}</pre>
+    </div>
+    <button onclick="navigator.clipboard.writeText(document.querySelector('.bundle-content pre').textContent).then(() => this.textContent = 'Copied!')" class="btn btn-secondary">
+        Copy to clipboard
+    </button>
+</section>
+{% endif %}
+
+{% if bundles %}
+<section>
+    <h2>Recent Bundles</h2>
+    {% for b in bundles %}
+    <div class="card">
+        <h3>{{ b.query }}</h3>
+        <p class="meta">{{ b.created_at[:10] }} | ID: {{ b.id }}</p>
+        <details>
+            <summary>View markdown</summary>
+            <pre>{{ b.markdown[:500] }}</pre>
+        </details>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if not bundle and not bundles %}
+<p>No bundles yet. Create one from the <a href="/search">Search</a> page.</p>
+{% endif %}
+{% endblock %}
