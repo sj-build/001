@@ -7,12 +7,17 @@ from src.search import vector as vector_mod
 
 
 @pytest.fixture(autouse=True)
-def reset_vector_state():
-    """Reset vector module global state before each test."""
+def reset_vector_state(tmp_settings):
+    """Reset vector module global state before each test.
+
+    Uses tmp_settings to ensure vector_search_enabled=False
+    and get_settings is patched in the vector module.
+    """
     vector_mod._collection = None
     vector_mod._embed_fn = None
     vector_mod._available = None
-    yield
+    with patch("src.search.vector.get_settings", return_value=tmp_settings):
+        yield
     vector_mod._collection = None
     vector_mod._embed_fn = None
     vector_mod._available = None

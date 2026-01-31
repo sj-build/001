@@ -3,8 +3,22 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
+from src.search import vector as vector_mod
 from src.search.hybrid import search, _rrf_score, _fuse, _vector_only_search
 from src.storage.dao import Conversation
+
+
+@pytest.fixture(autouse=True)
+def reset_vector_for_hybrid(tmp_settings):
+    """Ensure vector module uses tmp_settings (vector disabled) in all hybrid tests."""
+    vector_mod._collection = None
+    vector_mod._embed_fn = None
+    vector_mod._available = None
+    with patch("src.search.vector.get_settings", return_value=tmp_settings):
+        yield
+    vector_mod._collection = None
+    vector_mod._embed_fn = None
+    vector_mod._available = None
 
 
 def _make_conv(cid: str, title: str = "Test") -> Conversation:

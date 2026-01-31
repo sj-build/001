@@ -27,8 +27,8 @@ class _E5EmbeddingFunction:
     def __init__(self, st_model):
         self._model = st_model
 
-    def __call__(self, texts: list[str]) -> list[list[float]]:
-        embeddings = self._model.encode(texts, normalize_embeddings=True)
+    def __call__(self, input: list[str]) -> list[list[float]]:  # noqa: A002
+        embeddings = self._model.encode(input, normalize_embeddings=True)
         return embeddings.tolist()
 
 
