@@ -16,8 +16,9 @@ def cmd_collect(args):
 
     platforms = None if args.platform == "all" else [args.platform]
     headless = args.headless.lower() == "true" if hasattr(args, "headless") and args.headless else False
+    days = args.days
 
-    results = asyncio.run(run_all(platforms=platforms, headless=headless))
+    results = asyncio.run(run_all(platforms=platforms, headless=headless, days=days))
     for platform, count in results.items():
         print(f"  {platform}: {count} conversations")
 
@@ -115,12 +116,19 @@ def cmd_bundle(args):
 
 
 def cmd_morning(args):
-    """Build morning digest."""
-    from src.morning.digest import build_digest
-
-    markdown = build_digest()
-    print("Morning digest built.")
-    print(markdown[:500])
+    """Handle morning digest commands."""
+    if args.action == "build":
+        from src.morning.digest import build_digest
+        markdown = build_digest()
+        print("Morning digest built.")
+        print(markdown[:500])
+    elif args.action == "fetch":
+        from src.morning.sources.fetch_all import fetch_all_sources
+        days = args.days
+        results = fetch_all_sources(days=days)
+        print("News sources fetched:")
+        for source_type, count in results.items():
+            print(f"  {source_type}: {count} items")
 
 
 def cmd_ask(args):
@@ -154,6 +162,7 @@ def main():
         choices=["all", "claude", "chatgpt", "gemini", "granola", "fyxer"],
     )
     p_collect.add_argument("--headless", default="false")
+    p_collect.add_argument("--days", type=int, default=30, help="Only keep conversations from last N days")
     p_collect.set_defaults(func=cmd_collect)
 
     # serve
@@ -185,7 +194,8 @@ def main():
 
     # morning
     p_morning = subparsers.add_parser("morning", help="Morning digest")
-    p_morning.add_argument("action", choices=["build"])
+    p_morning.add_argument("action", choices=["build", "fetch"])
+    p_morning.add_argument("--days", type=int, default=7, help="Fetch news from last N days")
     p_morning.set_defaults(func=cmd_morning)
 
     # ask

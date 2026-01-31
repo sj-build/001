@@ -216,6 +216,95 @@ class SourceItemDAO:
             conn.close()
 
 
+@dataclass(frozen=True)
+class Post:
+    id: str
+    title: str
+    content: str
+    status: str
+    created_at: str
+    updated_at: str
+    published_at: Optional[str] = None
+    obsidian_path: Optional[str] = None
+    published_url: Optional[str] = None
+    tags: str = ""
+    category: str = "Other"
+
+
+class PostDAO:
+    def insert(self, post: Post) -> None:
+        conn = get_connection()
+        try:
+            conn.execute(
+                """INSERT INTO posts
+                   (id, title, content, status, created_at, updated_at,
+                    published_at, obsidian_path, published_url, tags, category)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (post.id, post.title, post.content, post.status,
+                 post.created_at, post.updated_at, post.published_at,
+                 post.obsidian_path, post.published_url, post.tags,
+                 post.category),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
+    def update(self, post: Post) -> None:
+        """Update a post. Accepts new Post object (immutable pattern)."""
+        conn = get_connection()
+        try:
+            conn.execute(
+                """UPDATE posts SET
+                     title=?, content=?, status=?, updated_at=?,
+                     published_at=?, obsidian_path=?, published_url=?,
+                     tags=?, category=?
+                   WHERE id=?""",
+                (post.title, post.content, post.status, post.updated_at,
+                 post.published_at, post.obsidian_path, post.published_url,
+                 post.tags, post.category, post.id),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
+    def find_by_id(self, pid: str) -> Optional[Post]:
+        conn = get_connection()
+        try:
+            row = conn.execute(
+                "SELECT * FROM posts WHERE id = ?", (pid,)
+            ).fetchone()
+            if row is None:
+                return None
+            return Post(**dict(row))
+        finally:
+            conn.close()
+
+    def find_all(self, status: Optional[str] = None, limit: int = 50) -> list[Post]:
+        conn = get_connection()
+        try:
+            if status:
+                rows = conn.execute(
+                    "SELECT * FROM posts WHERE status = ? ORDER BY updated_at DESC LIMIT ?",
+                    (status, limit),
+                ).fetchall()
+            else:
+                rows = conn.execute(
+                    "SELECT * FROM posts ORDER BY updated_at DESC LIMIT ?",
+                    (limit,),
+                ).fetchall()
+            return [Post(**dict(r)) for r in rows]
+        finally:
+            conn.close()
+
+    def delete(self, pid: str) -> None:
+        conn = get_connection()
+        try:
+            conn.execute("DELETE FROM posts WHERE id = ?", (pid,))
+            conn.commit()
+        finally:
+            conn.close()
+
+
 class BundleDAO:
     def insert(self, bundle: Bundle) -> None:
         conn = get_connection()

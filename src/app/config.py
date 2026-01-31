@@ -20,6 +20,34 @@ class Settings(BaseSettings):
     html_dump_dir: Path = PROJECT_ROOT / "data" / "logs" / "html"
     vector_search_enabled: bool = False
     vector_model_name: str = "intfloat/multilingual-e5-small"
+    rss_feeds: str = ""
+    nitter_instance: str = "nitter.net"
+    twitter_accounts: str = ""
+
+    def get_rss_feeds(self) -> dict[str, str]:
+        """Parse RSS_FEEDS env var into {name: url} dict.
+
+        Format: "name1:https://url1,name2:https://url2"
+        Uses split(":", 1) so the URL's "://" is preserved.
+        """
+        if not self.rss_feeds:
+            return {}
+        result: dict[str, str] = {}
+        for entry in self.rss_feeds.split(","):
+            entry = entry.strip()
+            if ":" in entry:
+                name, url = entry.split(":", 1)
+                name = name.strip()
+                url = url.strip()
+                if name and url:
+                    result[name] = url
+        return result
+
+    def get_twitter_accounts(self) -> list[str]:
+        """Parse TWITTER_ACCOUNTS env var into list of usernames."""
+        if not self.twitter_accounts:
+            return []
+        return [a.strip() for a in self.twitter_accounts.split(",") if a.strip()]
 
     @property
     def vector_path(self) -> Path:

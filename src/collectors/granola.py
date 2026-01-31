@@ -1,4 +1,4 @@
-"""Granola conversation collector (stub)."""
+"""Granola meeting notes collector."""
 import logging
 from src.collectors.base import BaseCollector
 from src.ingest.normalize import RawConversation
@@ -11,6 +11,9 @@ SELECTORS = [
     'div[class*="meeting"] a',
 ]
 
+LOAD_WAIT_MS = 5000
+
+
 class GranolaCollector(BaseCollector):
     platform = "granola"
 
@@ -18,29 +21,49 @@ class GranolaCollector(BaseCollector):
         return "https://app.granola.ai"
 
     async def check_login(self, page) -> bool:
+        """Check login via polling instead of networkidle."""
         try:
-            await page.wait_for_load_state("networkidle", timeout=10000)
+            await page.wait_for_timeout(LOAD_WAIT_MS)
+
             if "/login" in page.url or "/signin" in page.url:
                 return False
-            return True
+
+            found = await self._wait_for_content(page, SELECTORS)
+            if found:
+                return True
+
+            current_url = page.url
+            if "granola.ai" in current_url and "/login" not in current_url:
+                logger.info("Login assumed OK (on granola.ai, no redirect)")
+                return True
+
+            return False
         except Exception as e:
             logger.error("Login check failed: %s", e)
             return False
 
     async def get_conversation_list(self, page) -> list[RawConversation]:
+        """Scrape meeting notes list from Granola."""
         conversations: list[RawConversation] = []
-        await page.wait_for_load_state("networkidle", timeout=15000)
-        await page.wait_for_timeout(2000)
 
-        found_selector = None
-        for selector in SELECTORS:
-            if await page.locator(selector).count() > 0:
-                found_selector = selector
-                break
+        await page.wait_for_timeout(LOAD_WAIT_MS)
+
+        found_selector = await self._find_working_selector(page, SELECTORS)
+
+        if not found_selector:
+            logger.info("No elements found; scrolling to trigger lazy load")
+            try:
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                await page.wait_for_timeout(2000)
+                found_selector = await self._find_working_selector(page, SELECTORS)
+            except Exception:
+                pass
 
         if not found_selector:
             logger.warning("No Granola elements found")
             return conversations
+
+        await self._scroll_to_load_all(page, found_selector)
 
         elements = await page.locator(found_selector).all()
         for el in elements:
@@ -48,11 +71,29 @@ class GranolaCollector(BaseCollector):
                 href = await el.get_attribute("href")
                 if not href:
                     continue
+
                 title_text = await el.inner_text()
                 title = title_text.strip() if title_text else "Untitled"
                 url = href if href.startswith("http") else f"https://app.granola.ai{href}"
+
+                preview = None
+                conv_date = None
+                try:
+                    parent = el.locator("..")
+                    parent_text = await parent.inner_text()
+                    if parent_text and len(parent_text) > len(title) + 5:
+                        extra_text = parent_text.replace(title, "").strip()
+                        preview = extra_text[:200] if extra_text else None
+                        conv_date = self._extract_date_from_text(extra_text)
+                except Exception:
+                    pass
+
                 conversations.append(RawConversation(
-                    platform="granola", title=title, url=url,
+                    platform="granola",
+                    title=title,
+                    url=url,
+                    date=conv_date,
+                    preview=preview,
                 ))
             except Exception as e:
                 logger.error("Error extracting Granola element: %s", e)

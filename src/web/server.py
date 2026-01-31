@@ -1,5 +1,6 @@
 """FastAPI web server for SJ Home Agent."""
 import logging
+import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -12,7 +13,9 @@ from fastapi.templating import Jinja2Templates
 from src.app.config import get_settings
 from src.app.paths import ensure_dirs
 from src.storage.db import init_db
-from src.storage.dao import ConversationDAO, SourceItemDAO, SourceItem, BundleDAO
+from src.storage.dao import (
+    ConversationDAO, SourceItemDAO, SourceItem, BundleDAO, PostDAO, Post,
+)
 from src.search.hybrid import search as hybrid_search
 from src.search.bundle import create_bundle
 from src.morning.digest import build_digest
@@ -205,3 +208,166 @@ async def ask_submit(
         "input_text": text,
         "input_question": question,
     })
+
+
+# ── Write & Publish routes ─────────────────────────────────────
+
+
+@app.get("/write", response_class=HTMLResponse)
+async def write_view(request: Request):
+    """New post form."""
+    return templates.TemplateResponse("write.html", {
+        "request": request,
+        "post": None,
+    })
+
+
+@app.post("/write", response_class=HTMLResponse)
+async def write_create(
+    request: Request,
+    title: str = Form(...),
+    content: str = Form(...),
+    tags: str = Form(""),
+):
+    """Create a new draft post."""
+    dao = PostDAO()
+    now = datetime.now().isoformat()
+    post_id = uuid.uuid4().hex[:16]
+
+    category, auto_tags = classify(title, content)
+    merged_tags = tags if tags else ",".join(auto_tags)
+
+    post = Post(
+        id=post_id,
+        title=title,
+        content=content,
+        status="draft",
+        created_at=now,
+        updated_at=now,
+        tags=merged_tags,
+        category=category,
+    )
+    dao.insert(post)
+
+    return RedirectResponse(url=f"/posts/{post_id}/edit", status_code=303)
+
+
+@app.get("/posts", response_class=HTMLResponse)
+async def posts_list(request: Request, status: Optional[str] = None):
+    """List posts with optional status filter."""
+    dao = PostDAO()
+    posts = dao.find_all(status=status, limit=50)
+    return templates.TemplateResponse("posts.html", {
+        "request": request,
+        "posts": posts,
+        "status_filter": status,
+    })
+
+
+@app.get("/posts/{post_id}/edit", response_class=HTMLResponse)
+async def post_edit_view(request: Request, post_id: str):
+    """Edit form for an existing post."""
+    dao = PostDAO()
+    post = dao.find_by_id(post_id)
+    if not post:
+        return RedirectResponse(url="/posts", status_code=303)
+    return templates.TemplateResponse("write.html", {
+        "request": request,
+        "post": post,
+    })
+
+
+@app.post("/posts/{post_id}/edit", response_class=HTMLResponse)
+async def post_edit_save(
+    request: Request,
+    post_id: str,
+    title: str = Form(...),
+    content: str = Form(...),
+    tags: str = Form(""),
+    status: str = Form("draft"),
+):
+    """Save changes to an existing post."""
+    dao = PostDAO()
+    existing = dao.find_by_id(post_id)
+    if not existing:
+        return RedirectResponse(url="/posts", status_code=303)
+
+    now = datetime.now().isoformat()
+    category, _ = classify(title, content)
+
+    updated = Post(
+        id=existing.id,
+        title=title,
+        content=content,
+        status=status,
+        created_at=existing.created_at,
+        updated_at=now,
+        published_at=existing.published_at,
+        obsidian_path=existing.obsidian_path,
+        published_url=existing.published_url,
+        tags=tags,
+        category=category,
+    )
+    dao.update(updated)
+
+    return RedirectResponse(url=f"/posts/{post_id}/edit", status_code=303)
+
+
+@app.post("/posts/{post_id}/publish", response_class=HTMLResponse)
+async def post_publish(request: Request, post_id: str):
+    """Publish a post: write to Obsidian + HTML export, set status=published."""
+    from src.ingest.post_writer import write_post_to_obsidian, export_post_to_html
+
+    dao = PostDAO()
+    existing = dao.find_by_id(post_id)
+    if not existing:
+        return RedirectResponse(url="/posts", status_code=303)
+
+    now = datetime.now().isoformat()
+
+    # Create published version
+    published = Post(
+        id=existing.id,
+        title=existing.title,
+        content=existing.content,
+        status="published",
+        created_at=existing.created_at,
+        updated_at=now,
+        published_at=now,
+        obsidian_path=existing.obsidian_path,
+        published_url=existing.published_url,
+        tags=existing.tags,
+        category=existing.category,
+    )
+
+    # Write to Obsidian
+    obsidian_path = write_post_to_obsidian(published)
+
+    # Export HTML
+    html_path = export_post_to_html(published)
+
+    # Update with paths
+    final = Post(
+        id=published.id,
+        title=published.title,
+        content=published.content,
+        status="published",
+        created_at=published.created_at,
+        updated_at=now,
+        published_at=now,
+        obsidian_path=str(obsidian_path),
+        published_url=str(html_path),
+        tags=published.tags,
+        category=published.category,
+    )
+    dao.update(final)
+
+    return RedirectResponse(url="/posts", status_code=303)
+
+
+@app.post("/posts/{post_id}/delete", response_class=HTMLResponse)
+async def post_delete(request: Request, post_id: str):
+    """Delete a post."""
+    dao = PostDAO()
+    dao.delete(post_id)
+    return RedirectResponse(url="/posts", status_code=303)

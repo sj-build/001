@@ -33,7 +33,6 @@ class ClaudeCollector(BaseCollector):
         or check for login redirect. Avoids networkidle (SPA never settles).
         """
         try:
-            # Wait for initial DOM
             await page.wait_for_timeout(LOAD_WAIT_MS)
 
             current_url = page.url
@@ -41,23 +40,19 @@ class ClaudeCollector(BaseCollector):
                 logger.warning("Redirected to login page - not logged in")
                 return False
 
-            # Poll for conversation elements (SPA may still be hydrating)
-            for attempt in range(6):
-                for selector in SELECTORS:
-                    count = await page.locator(selector).count()
-                    if count > 0:
-                        logger.info("Login confirmed via selector %s (%d elements)", selector, count)
-                        return True
-                # Check body text as fallback
-                try:
-                    body_text = await page.inner_text("body", timeout=3000)
-                    if len(body_text) > 200:
-                        logger.info("Login confirmed via body text length (%d chars)", len(body_text))
-                        return True
-                except Exception:
-                    pass
-                logger.info("Login check attempt %d/6 - waiting for content...", attempt + 1)
-                await page.wait_for_timeout(3000)
+            # Poll for conversation elements using base helper
+            found = await self._wait_for_content(page, SELECTORS)
+            if found:
+                return True
+
+            # Check body text as fallback
+            try:
+                body_text = await page.inner_text("body", timeout=3000)
+                if len(body_text) > 200:
+                    logger.info("Login confirmed via body text length (%d chars)", len(body_text))
+                    return True
+            except Exception:
+                pass
 
             # Final URL check after all waits
             current_url = page.url
@@ -77,16 +72,8 @@ class ClaudeCollector(BaseCollector):
         # Wait for SPA content to render (don't use networkidle)
         await page.wait_for_timeout(3000)
 
-        found_selector = None
-        for selector in SELECTORS:
-            try:
-                count = await page.locator(selector).count()
-                if count > 0:
-                    found_selector = selector
-                    logger.info("Using selector: %s (found %d elements)", selector, count)
-                    break
-            except Exception:
-                continue
+        # Find working selector using base helper
+        found_selector = await self._find_working_selector(page, SELECTORS)
 
         if found_selector is None:
             # Try scrolling to trigger lazy-loaded content
@@ -94,18 +81,16 @@ class ClaudeCollector(BaseCollector):
             try:
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(2000)
-                for selector in SELECTORS:
-                    count = await page.locator(selector).count()
-                    if count > 0:
-                        found_selector = selector
-                        logger.info("After scroll, using selector: %s (%d elements)", selector, count)
-                        break
+                found_selector = await self._find_working_selector(page, SELECTORS)
             except Exception:
                 pass
 
         if found_selector is None:
             logger.warning("No conversation elements found with any selector")
             return conversations
+
+        # Scroll to load all lazy content
+        await self._scroll_to_load_all(page, found_selector)
 
         elements = await page.locator(found_selector).all()
         for el in elements:
@@ -119,13 +104,16 @@ class ClaudeCollector(BaseCollector):
 
                 url = href if href.startswith("http") else f"https://claude.ai{href}"
 
-                # Try to get a preview snippet from parent or sibling
+                # Try to get preview and date from parent element
                 preview = None
+                conv_date = None
                 try:
                     parent = el.locator("..")
                     parent_text = await parent.inner_text()
                     if parent_text and len(parent_text) > len(title) + 5:
-                        preview = parent_text.replace(title, "").strip()[:200]
+                        extra_text = parent_text.replace(title, "").strip()
+                        preview = extra_text[:200] if extra_text else None
+                        conv_date = self._extract_date_from_text(extra_text)
                 except Exception:
                     pass
 
@@ -133,6 +121,7 @@ class ClaudeCollector(BaseCollector):
                     platform="claude",
                     title=title,
                     url=url,
+                    date=conv_date,
                     preview=preview,
                 ))
             except Exception as e:

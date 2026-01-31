@@ -39,3 +39,19 @@ CREATE INDEX IF NOT EXISTS idx_conversations_category ON conversations(category)
 CREATE INDEX IF NOT EXISTS idx_conversations_collected_at ON conversations(collected_at);
 CREATE INDEX IF NOT EXISTS idx_source_items_published_at ON source_items(published_at);
 CREATE INDEX IF NOT EXISTS idx_source_items_importance ON source_items(importance);
+
+CREATE TABLE IF NOT EXISTS posts (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'draft',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    published_at TEXT,
+    obsidian_path TEXT,
+    published_url TEXT,
+    tags TEXT NOT NULL DEFAULT '',
+    category TEXT NOT NULL DEFAULT 'Other'
+);
+CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
+CREATE INDEX IF NOT EXISTS idx_posts_created_at ON posts(created_at);

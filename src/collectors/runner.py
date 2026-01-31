@@ -3,7 +3,7 @@ import asyncio
 import logging
 import shutil
 import tempfile
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from src.app.config import get_settings
@@ -110,9 +110,31 @@ async def _save_debug_info(page, platform: str) -> None:
         logger.error("Failed to save HTML: %s", e)
 
 
+def _filter_by_date(
+    conversations: list[RawConversation],
+    days: int,
+) -> list[RawConversation]:
+    """Filter conversations to only include those within the date range.
+
+    Conservative: items without dates are kept (not filtered out).
+    """
+    cutoff = (date.today() - timedelta(days=days)).isoformat()
+    result = []
+    for conv in conversations:
+        if conv.date is None:
+            # No date info — keep it (conservative)
+            result.append(conv)
+        elif conv.date >= cutoff:
+            result.append(conv)
+        else:
+            logger.info("Filtered out (too old): %s [%s]", conv.title, conv.date)
+    return result
+
+
 async def run_collector(
     platform: str,
     headless: bool = False,
+    days: int = 30,
 ) -> list[RawConversation]:
     """Run a single platform collector."""
     from playwright.async_api import async_playwright
@@ -169,6 +191,13 @@ async def run_collector(
                 await _save_debug_info(page, platform)
             else:
                 conversations = [normalize_conversation(r) for r in raw_list]
+                # Apply date filter
+                before_count = len(conversations)
+                conversations = _filter_by_date(conversations, days)
+                logger.info(
+                    "Date filter (last %d days): %d → %d conversations",
+                    days, before_count, len(conversations),
+                )
 
             await context.close()
         except Exception as e:
@@ -248,6 +277,7 @@ def _persist_conversations(
 async def run_all(
     platforms: list[str] | None = None,
     headless: bool = False,
+    days: int = 30,
 ) -> dict[str, int]:
     """Run collectors for specified platforms (or all)."""
     init_db()
@@ -258,7 +288,7 @@ async def run_all(
     for platform in target_platforms:
         logger.info("--- Collecting from %s ---", platform)
         try:
-            conversations = await run_collector(platform, headless=headless)
+            conversations = await run_collector(platform, headless=headless, days=days)
             count = _persist_conversations(platform, conversations)
             results[platform] = count
         except Exception as e:
