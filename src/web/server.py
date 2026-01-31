@@ -13,7 +13,7 @@ from src.app.config import get_settings
 from src.app.paths import ensure_dirs
 from src.storage.db import init_db
 from src.storage.dao import ConversationDAO, SourceItemDAO, SourceItem, BundleDAO
-from src.search.bm25 import search as bm25_search
+from src.search.hybrid import search as hybrid_search
 from src.search.bundle import create_bundle
 from src.morning.digest import build_digest
 from src.thinking.agent import think, ThinkingInput
@@ -126,9 +126,11 @@ async def search_view(
     tag: Optional[str] = None,
     q: Optional[str] = None,
     days: Optional[int] = None,
+    mode: Optional[str] = None,
 ):
     results = []
     query = ""
+    search_mode = mode or "hybrid"
 
     if tag or q:
         query_parts = []
@@ -137,7 +139,7 @@ async def search_view(
         if q:
             query_parts.append(q)
         query = " ".join(query_parts)
-        results = bm25_search(query, days=days)
+        results = hybrid_search(query, days=days, mode=search_mode)
 
     return templates.TemplateResponse("search.html", {
         "request": request,
@@ -146,6 +148,7 @@ async def search_view(
         "tag": tag or "",
         "q": q or "",
         "days": days or "",
+        "mode": search_mode,
     })
 
 

@@ -17,6 +17,7 @@ from src.ingest.normalize import normalize_conversation, RawConversation
 from src.ingest.dedupe import make_conversation_id, make_content_hash
 from src.ingest.obsidian_writer import write_daily_collection
 from src.tagging.classifier import classify
+from src.search import vector as vector_mod
 from src.storage.dao import ConversationDAO, Conversation
 from src.storage.db import init_db
 
@@ -228,6 +229,16 @@ def _persist_conversations(
             content_hash=content_hash,
         )
         dao.upsert(db_conv)
+
+        # Vector index: title + tags + preview
+        tag_text = " ".join(tags)
+        index_text = f"{conv.title} {tag_text} {conv.preview or ''}".strip()
+        vector_mod.index(
+            doc_id=cid,
+            text=index_text,
+            metadata={"platform": conv.platform, "category": category},
+        )
+
         inserted += 1
 
     logger.info("Persisted %d conversations for %s", inserted, platform)

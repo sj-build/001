@@ -12,5 +12,6 @@ def ensure_dirs() -> None:
         settings.log_path.parent,
         settings.screenshot_dir,
         settings.html_dump_dir,
+        settings.vector_path,
     ]:
         d.mkdir(parents=True, exist_ok=True)

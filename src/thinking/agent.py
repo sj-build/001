@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from src.app.config import get_settings
-from src.search.bm25 import search
+from src.search.hybrid import search
 from src.tagging.classifier import classify
 from src.thinking.models import LLMClient, NoLLMClient
 from src.thinking.prompts import build_analysis_prompt, build_summary_prompt

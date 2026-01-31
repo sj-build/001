@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     log_path: Path = PROJECT_ROOT / "data" / "logs" / "app.log"
     screenshot_dir: Path = PROJECT_ROOT / "data" / "logs" / "screens"
     html_dump_dir: Path = PROJECT_ROOT / "data" / "logs" / "html"
+    vector_search_enabled: bool = False
+    vector_model_name: str = "intfloat/multilingual-e5-small"
+
+    @property
+    def vector_path(self) -> Path:
+        return PROJECT_ROOT / "data" / "vector"
 
     @property
     def output_path(self) -> Path:

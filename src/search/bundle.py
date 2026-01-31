@@ -10,7 +10,7 @@ from pathlib import Path
 
 from src.app.config import get_settings
 from src.ingest.dedupe import make_source_item_id
-from src.search.bm25 import search
+from src.search.hybrid import search
 from src.storage.dao import BundleDAO, Bundle, Conversation
 
 logger = logging.getLogger("sj_home_agent.search.bundle")

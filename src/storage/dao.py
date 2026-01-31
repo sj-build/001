@@ -86,6 +86,20 @@ class ConversationDAO:
         finally:
             conn.close()
 
+    def find_by_ids(self, cids: list[str]) -> list[Conversation]:
+        if not cids:
+            return []
+        conn = get_connection()
+        try:
+            placeholders = ",".join("?" for _ in cids)
+            rows = conn.execute(
+                f"SELECT * FROM conversations WHERE id IN ({placeholders})",
+                cids,
+            ).fetchall()
+            return [Conversation(**dict(r)) for r in rows]
+        finally:
+            conn.close()
+
     def search(
         self,
         tags: Optional[str] = None,
@@ -127,12 +141,20 @@ class ConversationDAO:
         finally:
             conn.close()
 
-    def find_all(self, limit: int = 100) -> list[Conversation]:
+    def count_all(self) -> int:
+        conn = get_connection()
+        try:
+            row = conn.execute("SELECT COUNT(*) FROM conversations").fetchone()
+            return row[0]
+        finally:
+            conn.close()
+
+    def find_all(self, limit: int = 100, offset: int = 0) -> list[Conversation]:
         conn = get_connection()
         try:
             rows = conn.execute(
-                "SELECT * FROM conversations ORDER BY collected_at DESC LIMIT ?",
-                (limit,),
+                "SELECT * FROM conversations ORDER BY collected_at DESC LIMIT ? OFFSET ?",
+                (limit, offset),
             ).fetchall()
             return [Conversation(**dict(r)) for r in rows]
         finally:

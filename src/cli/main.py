@@ -37,7 +37,7 @@ def cmd_serve(args):
 
 def cmd_search(args):
     """Search conversations."""
-    from src.search.bm25 import search
+    from src.search.hybrid import search
 
     query_parts = []
     if args.tag:
@@ -50,16 +50,55 @@ def cmd_search(args):
         print("Provide --tag or --q for search")
         return
 
-    results = search(query, days=args.days)
+    mode = getattr(args, "mode", "hybrid") or "hybrid"
+    results = search(query, days=args.days, mode=mode)
     if not results:
         print("No results found.")
         return
 
+    print(f"  mode={mode}")
     for conv, score in results:
-        print(f"  [{score:.1f}] {conv.title}")
+        print(f"  [{score:.3f}] {conv.title}")
         print(f"         {conv.url}")
         print(f"         tags={conv.tags}  category={conv.category}")
         print()
+
+
+def cmd_reindex(args):
+    """Reindex all conversations into the vector store."""
+    from src.search import vector as vector_mod
+    from src.storage.dao import ConversationDAO
+
+    if not vector_mod.is_available():
+        print("Vector search not available. Install chromadb and sentence-transformers.")
+        return
+
+    dao = ConversationDAO()
+    total = dao.count_all()
+    print(f"Reindexing {total} conversations...")
+
+    batch_size = 50
+    indexed = 0
+    offset = 0
+    while offset < total:
+        batch = dao.find_all(limit=batch_size, offset=offset)
+        if not batch:
+            break
+        offset += len(batch)
+        ids = [c.id for c in batch]
+        texts = [
+            f"{c.title} {c.tags.replace(',', ' ')} {c.preview or ''}".strip()
+            for c in batch
+        ]
+        metas = [
+            {"platform": c.platform, "category": c.category}
+            for c in batch
+        ]
+        vector_mod.index_batch(ids, texts, metas)
+        indexed += len(batch)
+        print(f"  {indexed}/{total}")
+
+    print(f"Done. {vector_mod.count()} documents in vector index.")
 
 
 def cmd_bundle(args):
@@ -127,7 +166,16 @@ def main():
     p_search.add_argument("--tag", default=None)
     p_search.add_argument("--q", default=None)
     p_search.add_argument("--days", type=int, default=None)
+    p_search.add_argument(
+        "--mode", default="hybrid",
+        choices=["keyword", "semantic", "hybrid"],
+        help="Search mode (default: hybrid)",
+    )
     p_search.set_defaults(func=cmd_search)
+
+    # reindex
+    p_reindex = subparsers.add_parser("reindex", help="Reindex all conversations into vector store")
+    p_reindex.set_defaults(func=cmd_reindex)
 
     # bundle
     p_bundle = subparsers.add_parser("bundle", help="Create context bundle")

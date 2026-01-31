@@ -19,6 +19,14 @@
             <label for="days">Days</label>
             <input type="number" id="days" name="days" value="{{ days }}" placeholder="90">
         </div>
+        <div class="form-group">
+            <label for="mode">Mode</label>
+            <select id="mode" name="mode">
+                <option value="hybrid" {% if mode == 'hybrid' %}selected{% endif %}>Hybrid</option>
+                <option value="keyword" {% if mode == 'keyword' %}selected{% endif %}>Keyword</option>
+                <option value="semantic" {% if mode == 'semantic' %}selected{% endif %}>Semantic</option>
+            </select>
+        </div>
         <div class="form-group form-action">
             <button type="submit" class="btn">Search</button>
         </div>
