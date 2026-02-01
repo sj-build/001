@@ -146,30 +146,28 @@ async def run_collector(
     settings = get_settings()
     collector = COLLECTORS[platform]()
 
-    # Chrome's default data dir cannot be used with Playwright's remote debugging.
-    # We always copy the profile to a temp dir. This works when Chrome is closed
-    # (cookies/session files are unlocked). When Chrome is running, the profile
-    # is locked and cookies are Keychain-encrypted, so it won't work.
+    # Use a dedicated Playwright profile so sessions persist across runs.
+    # On first run for a platform, the user logs in manually (headless=false).
+    # Subsequent runs reuse the saved session cookies.
     chrome_running = _is_chrome_running()
     if chrome_running:
         logger.warning(
-            "Chrome is running. Profile is locked and cookies are "
-            "Keychain-encrypted. Please close Chrome and retry."
+            "Chrome is running. Profile may conflict. Please close Chrome and retry."
         )
         print("\n[!] Chrome is currently running.")
         print("    Please close Chrome (Cmd+Q), then rerun this command.\n")
         return []
 
-    logger.info("Chrome is closed; copying profile for Playwright")
-    profile_dir = _copy_chrome_profile(settings.chrome_profile)
-    _cleanup_profile = True
+    playwright_profile = settings.db_path.parent / "playwright_profile"
+    playwright_profile.mkdir(parents=True, exist_ok=True)
+    logger.info("Using Playwright profile: %s", playwright_profile)
 
     conversations: list[RawConversation] = []
 
     async with async_playwright() as pw:
         try:
             context = await pw.chromium.launch_persistent_context(
-                user_data_dir=str(profile_dir),
+                user_data_dir=str(playwright_profile),
                 headless=headless,
                 channel="chrome",
                 args=["--disable-blink-features=AutomationControlled"],
@@ -180,6 +178,9 @@ async def run_collector(
             logged_in = await collector.check_login(page)
             if not logged_in:
                 logger.error("Not logged in to %s", platform)
+                print(f"\n[!] Not logged in to {platform}.")
+                print("    Run with --headless false to log in manually:")
+                print(f"    python -m src.cli.main collect --platform {platform} --headless false\n")
                 await _save_debug_info(page, platform)
                 await context.close()
                 return []
@@ -206,13 +207,6 @@ async def run_collector(
                 await _save_debug_info(page, platform)
             except Exception:
                 pass
-
-    # Clean up temp profile
-    if _cleanup_profile:
-        try:
-            shutil.rmtree(str(profile_dir), ignore_errors=True)
-        except Exception:
-            pass
 
     return conversations
 
