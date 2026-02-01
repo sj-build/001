@@ -9,7 +9,7 @@
 - `src/collectors/gemini.py` — 동일 처리, sidebar-open 로직 유지
 - `src/collectors/granola.py` — 동일 처리
 - `src/collectors/fyxer.py` — 동일 처리
-- `src/collectors/runner.py` — `_filter_by_date()` 함수 + `days` 파라미터 (보수적: 날짜 없는 항목 유지)
+- `src/collectors/runner.py` — CDP 방식 + `_filter_by_date()` 함수 + `days` 파라미터
 - `src/cli/main.py` — `collect` 명령에 `--days` 플래그 추가 (기본값 30)
 
 ### Phase B: Write & Publish 기능
@@ -22,83 +22,80 @@
 - `src/web/templates/base.html` — Write + Posts 네비게이션 링크 추가
 
 ### Phase C: 뉴스 소스 (RSS + Twitter/X Nitter)
-- `src/app/config.py` — `rss_feeds`, `nitter_instance`, `twitter_accounts` 설정 + 파서 헬퍼
+- `src/app/config.py` — `rss_feeds`, `nitter_instance`, `twitter_accounts`, `cdp_port`, `chrome_path` 설정
 - `src/morning/sources/rss.py` — 날짜 필터링, `classify()` 분류, 중요도 스코어링, 키워드 부스트, 50개로 제한 증가
 - `src/morning/sources/twitter.py` — Nitter RSS 프록시를 통한 Twitter/X (API 키 불필요), Nitter URL → X URL 변환
 - `src/morning/sources/fetch_all.py` — RSS + Twitter 통합 페처
 - `src/cli/main.py` — `morning fetch --days 7` 명령
 - `.env` — RSS_FEEDS, TWITTER_ACCOUNTS, NITTER_INSTANCE 설정 추가
 
-### 테스트: 95개 전체 통과
-- `tests/test_collectors.py` — 30개 (날짜 추출, 셀렉터, 스크롤, 로그인 감지, 날짜 필터링, 대화 추출)
+### 테스트: 103개 전체 통과
+- `tests/test_collectors.py` — 38개 (날짜 추출, 셀렉터, 스크롤, 로그인 감지, 날짜 필터링, 대화 추출, CDP 헬퍼, 프로필 복사)
 - `tests/test_news_sources.py` — 22개 (중요도 스코어링, 날짜 필터링, RSS, Twitter/Nitter, 설정 파싱, 통합 페처)
 - `tests/test_posts.py` — 7개 (PostDAO CRUD, Obsidian 내보내기, HTML 내보내기)
 - 기존 36개 (hybrid search, vector search) 모두 유지
 
 ---
 
-## 핵심 이슈: Chrome 프로필 / 쿠키 문제
+## 해결됨: Chrome CDP 방식으로 Collector 동작 확인
 
-### 문제
-Playwright로 Chrome 프로필을 사용하여 AI 챗봇에 자동 로그인하려 했으나 실패:
+### 최종 구현: CDP (Chrome DevTools Protocol) + 전용 프로필
 
-1. **프로필 복사 방식**: Chrome 쿠키가 macOS Keychain으로 암호화되어 있어, 복사된 프로필에서는 복호화 불가
-2. **원본 프로필 직접 사용**: Chrome이 자체 기본 data directory를 remote debugging과 함께 사용하는 것을 거부 (`DevTools remote debugging requires a non-default data directory`)
-3. **Chrome 실행 중**: 프로필이 잠겨있어 사용 불가
+Chrome이 기본 데이터 디렉토리에서는 `--remote-debugging-port`를 거부하므로,
+전용 CDP 프로필 디렉토리(`data/chrome_cdp_profile/`)를 사용.
 
-### 시도한 방법들
+**동작 플로우:**
+1. Chrome이 안 실행중 → 자동으로 `--remote-debugging-port=9222 --user-data-dir=data/chrome_cdp_profile/`로 실행
+2. Chrome이 CDP 포트 열린 상태 → 바로 연결
+3. Chrome이 CDP 없이 실행중 → 사용자에게 Chrome 종료 요청
+
+**첫 실행:** 플랫폼별 1회 수동 로그인 필요 (Chrome 창에서 직접)
+**이후 실행:** CDP 프로필에 세션 저장되어 자동 로그인
+
+**검증 완료:** Claude에서 60개 대화 수집 성공
+
+### 시도했으나 실패한 방법들
 | 방법 | 결과 |
 |------|------|
-| 프로필을 temp dir에 복사 → Playwright 사용 | 쿠키 복호화 실패 (Keychain 암호화) |
-| 원본 Chrome 프로필 직접 사용 | Chrome이 거부 (non-default dir 요구) |
-| Chrome 종료 후 시도 | 위 두 가지 모두 실패 |
+| Chrome 프로필을 temp dir에 복사 → Playwright 사용 | 쿠키 복호화 실패 (Keychain 암호화) |
+| Chrome 원본 프로필 직접 사용 (CDP) | Chrome이 거부 (non-default dir 요구) |
+| Chrome 프로필 복사 → CDP user-data-dir로 사용 | 쿠키 복호화 실패 (동일 Keychain 이슈) |
+| Playwright persistent context (전용 프로필) | 동작하지만 별도 로그인 필요 |
 
-### 가능한 대안
+### Chrome 프로필 정보
+- `Default` = SJ (개인메일) ← 사용 중
+- `Profile 3` = Hashed (SJ Baek)
 
-#### 1. 전용 Playwright 프로필 (수동 1회 로그인)
-- `data/playwright_profile/` 에 별도 Playwright 프로필 유지
-- 첫 실행 시 브라우저 열림 → 사용자가 수동 로그인
-- 이후 세션 쿠키 재사용
-- **장점**: 가장 안정적, 구현 간단
-- **단점**: 플랫폼별 1회 수동 로그인 필요, 세션 만료 시 재로그인
+---
 
-#### 2. 각 AI 챗봇 API 활용
-- Claude: Anthropic API로 대화 내역 조회 (가능 여부 확인 필요)
-- ChatGPT: OpenAI API conversations endpoint
-- Gemini: Google AI API
-- **장점**: 브라우저 자동화 불필요, 안정적
-- **단점**: API 키 필요, 일부 플랫폼은 대화 내역 API 미제공
+## 남은 작업 / 다음 할 일
 
-#### 3. 각 챗봇에서 자동 저장 설정
-- Claude Projects: 자동 저장 기능 없음 (수동 내보내기만 가능)
-- ChatGPT: "Data controls" → export 가능하지만 자동화 아님
-- Gemini: Google Takeout으로 내보내기 가능
-- **장점**: 챗봇 자체 기능 활용
-- **단점**: 대부분 수동 내보내기만 지원, 자동화 어려움
+### 다른 플랫폼 수집
+- [ ] ChatGPT — CDP Chrome에서 로그인 후 수집 테스트
+- [ ] Gemini — 동일
+- [ ] Granola — 동일
+- [ ] Fyxer — 동일
+- 실행: `python -m src.cli.main collect --platform chatgpt --days 30`
 
-#### 4. 브라우저 확장 프로그램
-- Chrome extension으로 대화 내용을 로컬 DB에 자동 저장
-- `chrome.history` / `content_script`로 AI 챗봇 페이지 감지 → 대화 내용 추출
-- **장점**: Chrome 로그인 세션 그대로 활용, 실시간 자동 저장
-- **단점**: 확장 프로그램 개발 필요, 각 챗봇 DOM 구조 의존
-
-#### 5. CDP (Chrome DevTools Protocol) 직접 연결
-- Chrome을 `--remote-debugging-port=9222`로 실행
-- Playwright가 기존 Chrome 인스턴스에 CDP로 연결
-- **장점**: 기존 로그인 세션 그대로 사용
-- **단점**: Chrome 시작 방법 변경 필요
+### 추가 개선 가능 사항
+- [ ] 세션 만료 시 자동 감지 + 재로그인 안내
+- [ ] `collect --platform all`로 전체 플랫폼 일괄 수집
+- [ ] 수집 스케줄러 (cron 또는 launchd)
+- [ ] Morning digest에 수집된 대화 요약 포함
 
 ---
 
 ## Git 상태
 - **브랜치**: master
-- **마지막 커밋**: `442d883` - `feat: add collector SPA fixes, write/publish feature, and news sources`
-- **push 완료**: origin/master에 반영됨
-- **runner.py**: 마지막 수정 (직접 프로필 사용 시도) 은 아직 커밋 안 됨 — 동작하지 않으므로 되돌려야 함
+- **마지막 커밋**: `768e6a5` - `feat: implement CDP connection for collector browser automation`
+- **push 필요**: `git push origin master`
 
 ## 실행 방법
 
 ```bash
+# 대화 수집 (Chrome 자동 실행됨, 첫 실행 시 수동 로그인 필요)
+python -m src.cli.main collect --platform claude --days 30
+
 # 웹 서버
 python -m src.cli.main serve
 
