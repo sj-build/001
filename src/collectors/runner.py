@@ -1,8 +1,9 @@
 """Collector runner: orchestrates browser-based collection across platforms."""
-import asyncio
 import logging
 import shutil
-import tempfile
+import socket
+import subprocess
+import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -34,7 +35,6 @@ COLLECTORS: dict[str, type[BaseCollector]] = {
 
 def _is_chrome_running() -> bool:
     """Check if Chrome is currently running."""
-    import subprocess
     try:
         result = subprocess.run(
             ["pgrep", "-x", "Google Chrome"],
@@ -45,46 +45,85 @@ def _is_chrome_running() -> bool:
         return False
 
 
-def _copy_chrome_profile(source: Path) -> Path:
-    """Copy Chrome profile to a temp directory to avoid 'profile in use' errors.
+def _is_cdp_available(port: int) -> bool:
+    """Check if Chrome CDP is listening on the given port."""
+    try:
+        with socket.create_connection(("localhost", port), timeout=2):
+            return True
+    except (ConnectionRefusedError, OSError):
+        return False
 
-    Copies only essential auth/cookie files to keep it fast and avoid lock conflicts.
-    source = the 'Default' profile directory (e.g. .../Chrome/Default).
-    Returns the parent temp dir (the user-data-dir level).
+
+def _prepare_cdp_profile(source_profile: Path, cdp_data_dir: Path) -> None:
+    """Copy essential auth files from the user's Chrome profile to the CDP dir.
+
+    Chrome requires --user-data-dir to be non-default for CDP to work.
+    We copy cookies and session files so existing logins are preserved.
+    Chrome can decrypt these via macOS Keychain (same binary = same access).
     """
-    temp_dir = Path(tempfile.mkdtemp(prefix="sj_chrome_"))
-    target = temp_dir / "Default"
+    target = cdp_data_dir / "Default"
     target.mkdir(parents=True, exist_ok=True)
 
-    # Essential files for session persistence
     essential_files = [
         "Cookies",
         "Login Data",
         "Web Data",
         "Preferences",
         "Secure Preferences",
-        "Local State",
     ]
-
-    # Copy essential files from Default profile
     for fname in essential_files:
-        src_file = source / fname
+        src_file = source_profile / fname
         if src_file.exists():
             try:
                 shutil.copy2(str(src_file), str(target / fname))
             except Exception as e:
                 logger.warning("Could not copy %s: %s", fname, e)
 
-    # Copy Local State from parent (Chrome root dir)
-    local_state = source.parent / "Local State"
+    # Local State lives in the Chrome root (parent of profile dir)
+    local_state = source_profile.parent / "Local State"
     if local_state.exists():
         try:
-            shutil.copy2(str(local_state), str(temp_dir / "Local State"))
+            shutil.copy2(str(local_state), str(cdp_data_dir / "Local State"))
         except Exception as e:
             logger.warning("Could not copy Local State: %s", e)
 
-    logger.info("Copied Chrome profile essentials to %s", temp_dir)
-    return temp_dir
+
+def _launch_chrome_with_cdp(
+    chrome_path: str,
+    port: int,
+    cdp_data_dir: Path,
+) -> subprocess.Popen:
+    """Launch Chrome with remote debugging enabled.
+
+    Uses a non-default --user-data-dir (required by Chrome for CDP)
+    populated with copied session files from the real profile.
+    Returns the subprocess handle.
+    """
+    path = Path(chrome_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Chrome not found at {path}")
+
+    proc = subprocess.Popen(
+        [
+            str(path),
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={cdp_data_dir}",
+            "--no-first-run",
+            "--disable-blink-features=AutomationControlled",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    # Wait for CDP to become available (up to 15 seconds)
+    for _ in range(15):
+        time.sleep(1)
+        if _is_cdp_available(port):
+            logger.info("Chrome launched with CDP on port %d (pid=%d)", port, proc.pid)
+            return proc
+
+    proc.kill()
+    raise TimeoutError(f"Chrome did not start CDP on port {port} within 15 seconds")
 
 
 async def _save_debug_info(page, platform: str) -> None:
@@ -122,7 +161,6 @@ def _filter_by_date(
     result = []
     for conv in conversations:
         if conv.date is None:
-            # No date info — keep it (conservative)
             result.append(conv)
         elif conv.date >= cutoff:
             result.append(conv)
@@ -136,7 +174,13 @@ async def run_collector(
     headless: bool = False,
     days: int = 30,
 ) -> list[RawConversation]:
-    """Run a single platform collector."""
+    """Run a single platform collector via CDP connection to Chrome.
+
+    Flow:
+      1. If CDP port is open → connect to existing Chrome
+      2. If Chrome is not running → launch Chrome with CDP, then connect
+      3. If Chrome is running without CDP → ask user to close Chrome
+    """
     from playwright.async_api import async_playwright
 
     if platform not in COLLECTORS:
@@ -145,44 +189,60 @@ async def run_collector(
 
     settings = get_settings()
     collector = COLLECTORS[platform]()
-
-    # Use a dedicated Playwright profile so sessions persist across runs.
-    # On first run for a platform, the user logs in manually (headless=false).
-    # Subsequent runs reuse the saved session cookies.
-    chrome_running = _is_chrome_running()
-    if chrome_running:
-        logger.warning(
-            "Chrome is running. Profile may conflict. Please close Chrome and retry."
-        )
-        print("\n[!] Chrome is currently running.")
-        print("    Please close Chrome (Cmd+Q), then rerun this command.\n")
-        return []
-
-    playwright_profile = settings.db_path.parent / "playwright_profile"
-    playwright_profile.mkdir(parents=True, exist_ok=True)
-    logger.info("Using Playwright profile: %s", playwright_profile)
-
+    cdp_port = settings.cdp_port
+    chrome_launched = False
     conversations: list[RawConversation] = []
 
+    cdp_data_dir = settings.db_path.parent / "chrome_cdp_profile"
+
+    # --- Determine CDP availability ---
+    if _is_cdp_available(cdp_port):
+        logger.info("CDP already available on port %d", cdp_port)
+    elif _is_chrome_running():
+        logger.warning("Chrome is running without CDP on port %d", cdp_port)
+        print("\n[!] Chrome is running but CDP (remote debugging) is not enabled.")
+        print("    Please close Chrome (Cmd+Q), then rerun this command.")
+        print("    We'll automatically relaunch Chrome with CDP enabled.\n")
+        return []
+    else:
+        logger.info("Chrome not running; launching with CDP on port %d", cdp_port)
+        # Only seed the CDP profile on first run (empty dir).
+        # After the user logs in once, sessions persist in this dir.
+        if not (cdp_data_dir / "Default").exists():
+            print("[*] First run: seeding CDP profile from Chrome...")
+            _prepare_cdp_profile(settings.chrome_profile, cdp_data_dir)
+        print("[*] Launching Chrome with remote debugging...")
+        try:
+            _launch_chrome_with_cdp(settings.chrome_path, cdp_port, cdp_data_dir)
+            chrome_launched = True
+        except Exception as e:
+            logger.error("Failed to launch Chrome with CDP: %s", e)
+            print(f"\n[!] Failed to launch Chrome: {e}\n")
+            return []
+
+    # --- Connect via CDP and collect ---
+    page = None
     async with async_playwright() as pw:
         try:
-            context = await pw.chromium.launch_persistent_context(
-                user_data_dir=str(playwright_profile),
-                headless=headless,
-                channel="chrome",
-                args=["--disable-blink-features=AutomationControlled"],
+            browser = await pw.chromium.connect_over_cdp(
+                f"http://localhost:{cdp_port}"
             )
-            page = context.pages[0] if context.pages else await context.new_page()
-            await page.goto(collector.get_url(), wait_until="domcontentloaded", timeout=30000)
+            context = browser.contexts[0]
+            page = await context.new_page()
+
+            await page.goto(
+                collector.get_url(),
+                wait_until="domcontentloaded",
+                timeout=30000,
+            )
 
             logged_in = await collector.check_login(page)
             if not logged_in:
                 logger.error("Not logged in to %s", platform)
                 print(f"\n[!] Not logged in to {platform}.")
-                print("    Run with --headless false to log in manually:")
-                print(f"    python -m src.cli.main collect --platform {platform} --headless false\n")
+                print(f"    Please log in to {platform} in Chrome, then rerun.\n")
                 await _save_debug_info(page, platform)
-                await context.close()
+                await page.close()
                 return []
 
             raw_list = await collector.get_conversation_list(page)
@@ -192,7 +252,6 @@ async def run_collector(
                 await _save_debug_info(page, platform)
             else:
                 conversations = [normalize_conversation(r) for r in raw_list]
-                # Apply date filter
                 before_count = len(conversations)
                 conversations = _filter_by_date(conversations, days)
                 logger.info(
@@ -200,11 +259,14 @@ async def run_collector(
                     days, before_count, len(conversations),
                 )
 
-            await context.close()
+            await page.close()
+
         except Exception as e:
             logger.error("Collector error for %s: %s", platform, e)
             try:
-                await _save_debug_info(page, platform)
+                if page:
+                    await _save_debug_info(page, platform)
+                    await page.close()
             except Exception:
                 pass
 

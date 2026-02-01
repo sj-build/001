@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     html_dump_dir: Path = PROJECT_ROOT / "data" / "logs" / "html"
     vector_search_enabled: bool = False
     vector_model_name: str = "intfloat/multilingual-e5-small"
+    cdp_port: int = 9222
+    chrome_path: str = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     rss_feeds: str = ""
     nitter_instance: str = "nitter.net"
     twitter_accounts: str = ""

@@ -9,7 +9,9 @@ from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
 from src.collectors.granola import GranolaCollector
 from src.collectors.fyxer import FyxerCollector
-from src.collectors.runner import _filter_by_date
+from src.collectors.runner import (
+    _filter_by_date, _is_cdp_available, _launch_chrome_with_cdp, _prepare_cdp_profile,
+)
 from src.ingest.normalize import RawConversation
 
 
@@ -369,3 +371,95 @@ class TestCollectorConversationList:
         collector = ChatGPTCollector()
         result = await collector.get_conversation_list(page)
         assert len(result) == 0
+
+
+# ── CDP helper tests ──────────────────────────────────────────
+
+
+class TestIsCdpAvailable:
+    """Test CDP port detection."""
+
+    @patch("src.collectors.runner.socket.create_connection")
+    def test_returns_true_when_port_open(self, mock_conn):
+        mock_conn.return_value.__enter__ = MagicMock()
+        mock_conn.return_value.__exit__ = MagicMock(return_value=False)
+        assert _is_cdp_available(9222) is True
+
+    @patch("src.collectors.runner.socket.create_connection")
+    def test_returns_false_when_port_closed(self, mock_conn):
+        mock_conn.side_effect = ConnectionRefusedError
+        assert _is_cdp_available(9222) is False
+
+    @patch("src.collectors.runner.socket.create_connection")
+    def test_returns_false_on_os_error(self, mock_conn):
+        mock_conn.side_effect = OSError("timeout")
+        assert _is_cdp_available(9222) is False
+
+
+class TestLaunchChromeWithCdp:
+    """Test Chrome launch with CDP."""
+
+    @patch("src.collectors.runner._is_cdp_available")
+    @patch("src.collectors.runner.subprocess.Popen")
+    def test_launch_success(self, mock_popen, mock_cdp, tmp_path):
+        mock_cdp.side_effect = [False, True]  # not available, then available
+        mock_proc = MagicMock()
+        mock_proc.pid = 12345
+        mock_popen.return_value = mock_proc
+
+        result = _launch_chrome_with_cdp(
+            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            9222,
+            tmp_path / "cdp",
+        )
+        assert result == mock_proc
+
+    @patch("src.collectors.runner._is_cdp_available", return_value=False)
+    @patch("src.collectors.runner.subprocess.Popen")
+    @patch("src.collectors.runner.time.sleep")
+    def test_launch_timeout(self, mock_sleep, mock_popen, mock_cdp, tmp_path):
+        mock_proc = MagicMock()
+        mock_popen.return_value = mock_proc
+
+        with pytest.raises(TimeoutError):
+            _launch_chrome_with_cdp(
+                "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+                9222,
+                tmp_path / "cdp",
+            )
+        mock_proc.kill.assert_called_once()
+
+    def test_launch_chrome_not_found(self, tmp_path):
+        with pytest.raises(FileNotFoundError):
+            _launch_chrome_with_cdp("/nonexistent/path/to/chrome", 9222, tmp_path / "cdp")
+
+
+class TestPrepareCdpProfile:
+    """Test Chrome profile copy for CDP."""
+
+    def test_copies_essential_files(self, tmp_path):
+        # Create fake Chrome profile
+        source = tmp_path / "Chrome" / "Default"
+        source.mkdir(parents=True)
+        (source / "Cookies").write_text("cookie-data")
+        (source / "Preferences").write_text("pref-data")
+        (source.parent / "Local State").write_text("local-state")
+
+        cdp_dir = tmp_path / "cdp_profile"
+        _prepare_cdp_profile(source, cdp_dir)
+
+        assert (cdp_dir / "Default" / "Cookies").read_text() == "cookie-data"
+        assert (cdp_dir / "Default" / "Preferences").read_text() == "pref-data"
+        assert (cdp_dir / "Local State").read_text() == "local-state"
+
+    def test_skips_missing_files(self, tmp_path):
+        source = tmp_path / "Chrome" / "Default"
+        source.mkdir(parents=True)
+        # Only Cookies exists
+        (source / "Cookies").write_text("cookie-data")
+
+        cdp_dir = tmp_path / "cdp_profile"
+        _prepare_cdp_profile(source, cdp_dir)
+
+        assert (cdp_dir / "Default" / "Cookies").exists()
+        assert not (cdp_dir / "Default" / "Login Data").exists()

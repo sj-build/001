@@ -5,6 +5,8 @@ data/sj.db
 data/vector/
 data/cache/
 data/logs/
+data/chrome_cdp_profile/
+data/playwright_profile/
 *.egg-info/
 dist/
 build/
