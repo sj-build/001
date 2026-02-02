@@ -17,8 +17,14 @@ def cmd_collect(args):
     platforms = None if args.platform == "all" else [args.platform]
     headless = args.headless.lower() == "true" if hasattr(args, "headless") and args.headless else False
     days = args.days
+    profile_override = getattr(args, "profile", None)
 
-    results = asyncio.run(run_all(platforms=platforms, headless=headless, days=days))
+    results = asyncio.run(run_all(
+        platforms=platforms,
+        headless=headless,
+        days=days,
+        profile_override=profile_override,
+    ))
     for platform, count in results.items():
         print(f"  {platform}: {count} conversations")
 
@@ -163,6 +169,10 @@ def main():
     )
     p_collect.add_argument("--headless", default="false")
     p_collect.add_argument("--days", type=int, default=30, help="Only keep conversations from last N days")
+    p_collect.add_argument(
+        "--profile", default=None,
+        help="Force CDP profile (personal/company). Auto-detected if omitted.",
+    )
     p_collect.set_defaults(func=cmd_collect)
 
     # serve

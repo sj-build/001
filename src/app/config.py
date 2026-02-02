@@ -67,6 +67,10 @@ class Settings(BaseSettings):
     def morning_path(self) -> Path:
         return self.output_path / "morning"
 
+    @property
+    def cdp_profiles_dir(self) -> Path:
+        return PROJECT_ROOT / "data" / "chrome_cdp_profiles"
+
     class Config:
         env_file = str(PROJECT_ROOT / ".env")
         env_file_encoding = "utf-8"

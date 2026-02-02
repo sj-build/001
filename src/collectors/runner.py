@@ -1,6 +1,8 @@
 """Collector runner: orchestrates browser-based collection across platforms."""
 import logging
+import os
 import shutil
+import signal
 import socket
 import subprocess
 import time
@@ -8,6 +10,11 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from src.app.config import get_settings
+from src.app.profiles import (
+    get_cdp_data_dir,
+    get_profile_for_platform,
+    group_platforms_by_profile,
+)
 from src.collectors.base import BaseCollector
 from src.collectors.claude import ClaudeCollector
 from src.collectors.chatgpt import ChatGPTCollector
@@ -52,6 +59,57 @@ def _is_cdp_available(port: int) -> bool:
             return True
     except (ConnectionRefusedError, OSError):
         return False
+
+
+def _close_chrome(cdp_port: int | None = None) -> None:
+    """Gracefully shut down Chrome (SIGTERM, then SIGKILL if needed).
+
+    Waits up to 5 seconds for graceful exit before force-killing.
+    Optionally waits for the CDP port to be freed.
+    """
+    try:
+        result = subprocess.run(
+            ["pgrep", "-x", "Google Chrome"],
+            capture_output=True, text=True,
+        )
+        if result.returncode != 0:
+            return
+
+        pids = [p.strip() for p in result.stdout.strip().split("\n") if p.strip()]
+        for pid in pids:
+            try:
+                os.kill(int(pid), signal.SIGTERM)
+            except (ProcessLookupError, ValueError):
+                pass
+
+        for _ in range(10):
+            time.sleep(0.5)
+            if not _is_chrome_running():
+                logger.info("Chrome closed gracefully")
+                break
+        else:
+            result = subprocess.run(
+                ["pgrep", "-x", "Google Chrome"],
+                capture_output=True, text=True,
+            )
+            if result.returncode == 0:
+                for pid in result.stdout.strip().split("\n"):
+                    pid = pid.strip()
+                    if pid:
+                        try:
+                            os.kill(int(pid), signal.SIGKILL)
+                        except (ProcessLookupError, ValueError):
+                            pass
+                logger.warning("Chrome force-killed")
+
+        if cdp_port is not None:
+            for _ in range(10):
+                if not _is_cdp_available(cdp_port):
+                    break
+                time.sleep(0.5)
+
+    except Exception as e:
+        logger.error("Failed to close Chrome: %s", e)
 
 
 def _prepare_cdp_profile(source_profile: Path, cdp_data_dir: Path) -> None:
@@ -173,13 +231,21 @@ async def run_collector(
     platform: str,
     headless: bool = False,
     days: int = 30,
+    cdp_data_dir: Path | None = None,
 ) -> list[RawConversation]:
     """Run a single platform collector via CDP connection to Chrome.
 
     Flow:
-      1. If CDP port is open → connect to existing Chrome
-      2. If Chrome is not running → launch Chrome with CDP, then connect
-      3. If Chrome is running without CDP → ask user to close Chrome
+      1. If CDP port is open -> connect to existing Chrome
+      2. If Chrome is not running -> launch Chrome with CDP, then connect
+      3. If Chrome is running without CDP -> ask user to close Chrome
+
+    Args:
+        platform: Platform name (claude, chatgpt, gemini, etc.)
+        headless: Not used (kept for API compatibility).
+        days: Only keep conversations from the last N days.
+        cdp_data_dir: Override the CDP profile directory. When None,
+            automatically selects based on the platform's profile mapping.
     """
     from playwright.async_api import async_playwright
 
@@ -190,10 +256,15 @@ async def run_collector(
     settings = get_settings()
     collector = COLLECTORS[platform]()
     cdp_port = settings.cdp_port
-    chrome_launched = False
     conversations: list[RawConversation] = []
 
-    cdp_data_dir = settings.db_path.parent / "chrome_cdp_profile"
+    # Resolve CDP data directory
+    if cdp_data_dir is None:
+        profile = get_profile_for_platform(platform)
+        if profile:
+            cdp_data_dir = get_cdp_data_dir(profile)
+        else:
+            cdp_data_dir = settings.db_path.parent / "chrome_cdp_profile"
 
     # --- Determine CDP availability ---
     if _is_cdp_available(cdp_port):
@@ -214,7 +285,6 @@ async def run_collector(
         print("[*] Launching Chrome with remote debugging...")
         try:
             _launch_chrome_with_cdp(settings.chrome_path, cdp_port, cdp_data_dir)
-            chrome_launched = True
         except Exception as e:
             logger.error("Failed to launch Chrome with CDP: %s", e)
             print(f"\n[!] Failed to launch Chrome: {e}\n")
@@ -255,7 +325,7 @@ async def run_collector(
                 before_count = len(conversations)
                 conversations = _filter_by_date(conversations, days)
                 logger.info(
-                    "Date filter (last %d days): %d → %d conversations",
+                    "Date filter (last %d days): %d -> %d conversations",
                     days, before_count, len(conversations),
                 )
 
@@ -334,21 +404,66 @@ async def run_all(
     platforms: list[str] | None = None,
     headless: bool = False,
     days: int = 30,
+    profile_override: str | None = None,
 ) -> dict[str, int]:
-    """Run collectors for specified platforms (or all)."""
+    """Run collectors for specified platforms, grouping by CDP profile.
+
+    Platforms are grouped by their CDP profile. When switching between
+    profiles, Chrome is restarted with the new profile's data directory.
+
+    Args:
+        platforms: List of platform names, or None for all.
+        headless: Not used (kept for API compatibility).
+        days: Only keep conversations from the last N days.
+        profile_override: Force all platforms to use this profile name.
+    """
+    from src.app.profiles import DEFAULT_PROFILES
+
     init_db()
 
+    settings = get_settings()
     target_platforms = platforms or list(COLLECTORS.keys())
     results: dict[str, int] = {}
 
-    for platform in target_platforms:
-        logger.info("--- Collecting from %s ---", platform)
-        try:
-            conversations = await run_collector(platform, headless=headless, days=days)
-            count = _persist_conversations(platform, conversations)
-            results[platform] = count
-        except Exception as e:
-            logger.error("Failed to collect from %s: %s", platform, e)
-            results[platform] = 0
+    if profile_override:
+        profile = next(
+            (p for p in DEFAULT_PROFILES if p.name == profile_override), None,
+        )
+        if profile is None:
+            logger.error("Unknown profile: %s", profile_override)
+            print(f"\n[!] Unknown profile: {profile_override}")
+            print(f"    Available: {', '.join(p.name for p in DEFAULT_PROFILES)}\n")
+            return results
+        groups = [(profile, target_platforms)]
+    else:
+        groups = group_platforms_by_profile(target_platforms)
+
+    last_profile_name: str | None = None
+
+    for profile, group_platforms in groups:
+        current_name = profile.name if profile else None
+
+        if current_name != last_profile_name and last_profile_name is not None:
+            logger.info(
+                "Switching CDP profile: %s -> %s", last_profile_name, current_name,
+            )
+            print(f"\n[*] Switching Chrome profile: {last_profile_name} -> {current_name}")
+            _close_chrome(cdp_port=settings.cdp_port)
+
+        last_profile_name = current_name
+
+        cdp_data_dir = get_cdp_data_dir(profile) if profile else None
+
+        for platform in group_platforms:
+            logger.info("--- Collecting from %s (profile=%s) ---", platform, current_name)
+            try:
+                conversations = await run_collector(
+                    platform, headless=headless, days=days, cdp_data_dir=cdp_data_dir,
+                )
+                count = _persist_conversations(platform, conversations)
+                results[platform] = count
+            except Exception as e:
+                logger.error("Failed to collect from %s: %s", platform, e)
+                results[platform] = 0
 
     return results

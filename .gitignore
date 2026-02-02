@@ -6,6 +6,7 @@ data/vector/
 data/cache/
 data/logs/
 data/chrome_cdp_profile/
+data/chrome_cdp_profiles/
 data/playwright_profile/
 *.egg-info/
 dist/

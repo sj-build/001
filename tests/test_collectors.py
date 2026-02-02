@@ -1,7 +1,7 @@
 """Tests for collector base helpers and individual collectors."""
 import pytest
 from datetime import date, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch, call
 
 from src.collectors.base import BaseCollector
 from src.collectors.claude import ClaudeCollector
@@ -10,7 +10,8 @@ from src.collectors.gemini import GeminiCollector
 from src.collectors.granola import GranolaCollector
 from src.collectors.fyxer import FyxerCollector
 from src.collectors.runner import (
-    _filter_by_date, _is_cdp_available, _launch_chrome_with_cdp, _prepare_cdp_profile,
+    _close_chrome, _filter_by_date, _is_cdp_available,
+    _launch_chrome_with_cdp, _prepare_cdp_profile, run_all,
 )
 from src.ingest.normalize import RawConversation
 
@@ -463,3 +464,140 @@ class TestPrepareCdpProfile:
 
         assert (cdp_dir / "Default" / "Cookies").exists()
         assert not (cdp_dir / "Default" / "Login Data").exists()
+
+
+# ── _close_chrome tests ──────────────────────────────────────────
+
+
+class TestCloseChrome:
+    """Test Chrome graceful shutdown."""
+
+    @patch("src.collectors.runner._is_cdp_available", return_value=False)
+    @patch("src.collectors.runner._is_chrome_running", return_value=False)
+    @patch("src.collectors.runner.subprocess.run")
+    def test_noop_when_chrome_not_running(self, mock_run, mock_running, mock_cdp):
+        mock_run.return_value = MagicMock(returncode=1, stdout="")
+        _close_chrome()
+        # Should not attempt to kill anything
+
+    @patch("src.collectors.runner.time.sleep")
+    @patch("src.collectors.runner._is_chrome_running")
+    @patch("src.collectors.runner.os.kill")
+    @patch("src.collectors.runner.subprocess.run")
+    def test_graceful_shutdown(self, mock_run, mock_kill, mock_running, mock_sleep):
+        # pgrep returns one PID
+        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
+        # Chrome stops after SIGTERM
+        mock_running.return_value = False
+
+        _close_chrome()
+
+        import signal
+        mock_kill.assert_called_once_with(12345, signal.SIGTERM)
+
+    @patch("src.collectors.runner.time.sleep")
+    @patch("src.collectors.runner._is_chrome_running", return_value=True)
+    @patch("src.collectors.runner.os.kill")
+    @patch("src.collectors.runner.subprocess.run")
+    def test_force_kill_after_timeout(self, mock_run, mock_kill, mock_running, mock_sleep):
+        # pgrep always returns a PID
+        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
+
+        _close_chrome()
+
+        import signal
+        # Should have sent SIGTERM first, then SIGKILL
+        sigterm_calls = [c for c in mock_kill.call_args_list if c == call(12345, signal.SIGTERM)]
+        sigkill_calls = [c for c in mock_kill.call_args_list if c == call(12345, signal.SIGKILL)]
+        assert len(sigterm_calls) >= 1
+        assert len(sigkill_calls) >= 1
+
+    @patch("src.collectors.runner.time.sleep")
+    @patch("src.collectors.runner._is_cdp_available")
+    @patch("src.collectors.runner._is_chrome_running", return_value=False)
+    @patch("src.collectors.runner.os.kill")
+    @patch("src.collectors.runner.subprocess.run")
+    def test_waits_for_cdp_port_freed(self, mock_run, mock_kill, mock_running, mock_cdp, mock_sleep):
+        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
+        # CDP port still open, then freed
+        mock_cdp.side_effect = [True, True, False]
+
+        _close_chrome(cdp_port=9222)
+
+        assert mock_cdp.call_count == 3
+
+
+# ── Profile-aware run_all tests ──────────────────────────────────
+
+
+class TestRunAllWithProfiles:
+    """Test run_all with profile grouping and switching."""
+
+    @pytest.mark.asyncio
+    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._persist_conversations", return_value=5)
+    @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.init_db")
+    async def test_groups_by_profile(self, mock_init, mock_collector, mock_persist, mock_close):
+        mock_collector.return_value = [
+            RawConversation(platform="claude", title="Test", url="https://example.com/1"),
+        ]
+
+        results = await run_all(platforms=["claude", "chatgpt", "gemini"])
+
+        assert "claude" in results
+        assert "chatgpt" in results
+        assert "gemini" in results
+
+    @pytest.mark.asyncio
+    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._persist_conversations", return_value=3)
+    @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.init_db")
+    async def test_chrome_restart_on_profile_switch(self, mock_init, mock_collector, mock_persist, mock_close):
+        mock_collector.return_value = []
+
+        await run_all(platforms=["claude", "gemini"])
+
+        # Should close Chrome when switching from personal to company
+        mock_close.assert_called_once()
+
+    @pytest.mark.asyncio
+    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._persist_conversations", return_value=2)
+    @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.init_db")
+    async def test_no_restart_within_same_profile(self, mock_init, mock_collector, mock_persist, mock_close):
+        mock_collector.return_value = []
+
+        await run_all(platforms=["claude", "chatgpt"])
+
+        # Both are personal profile, no restart needed
+        mock_close.assert_not_called()
+
+    @pytest.mark.asyncio
+    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._persist_conversations", return_value=1)
+    @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.init_db")
+    async def test_profile_override(self, mock_init, mock_collector, mock_persist, mock_close):
+        mock_collector.return_value = []
+
+        results = await run_all(
+            platforms=["gemini"],
+            profile_override="personal",
+        )
+
+        # Gemini forced to use personal profile
+        assert "gemini" in results
+        # No profile switch since everything is one profile
+        mock_close.assert_not_called()
+
+    @pytest.mark.asyncio
+    @patch("src.collectors.runner.init_db")
+    async def test_unknown_profile_override(self, mock_init):
+        results = await run_all(
+            platforms=["claude"],
+            profile_override="nonexistent",
+        )
+        assert results == {}
