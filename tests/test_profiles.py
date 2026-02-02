@@ -62,7 +62,6 @@ class TestDefaultProfiles:
         company = next(p for p in DEFAULT_PROFILES if p.name == "company")
         assert "gemini" in company.platforms
         assert "fyxer" in company.platforms
-        assert "granola" in company.platforms
 
     def test_no_platform_overlap(self):
         all_platforms: list[str] = []
@@ -98,10 +97,9 @@ class TestGetProfileForPlatform:
         assert profile is not None
         assert profile.name == "company"
 
-    def test_granola_maps_to_company(self):
+    def test_granola_not_in_cdp_profiles(self):
         profile = get_profile_for_platform("granola")
-        assert profile is not None
-        assert profile.name == "company"
+        assert profile is None  # granola uses API, not CDP
 
     def test_unknown_platform_returns_none(self):
         result = get_profile_for_platform("unknown_platform")
@@ -143,8 +141,8 @@ class TestGetCdpDataDir:
 class TestGroupPlatformsByProfile:
     """Test platform grouping by profile."""
 
-    def test_all_platforms_grouped(self):
-        platforms = ["claude", "chatgpt", "gemini", "fyxer", "granola"]
+    def test_all_cdp_platforms_grouped(self):
+        platforms = ["claude", "chatgpt", "gemini", "fyxer"]
         groups = group_platforms_by_profile(platforms)
 
         assert len(groups) == 2
@@ -153,7 +151,7 @@ class TestGroupPlatformsByProfile:
         company_group = next(g for g in groups if g[0] and g[0].name == "company")
 
         assert set(personal_group[1]) == {"claude", "chatgpt"}
-        assert set(company_group[1]) == {"gemini", "fyxer", "granola"}
+        assert set(company_group[1]) == {"gemini", "fyxer"}
 
     def test_single_platform(self):
         groups = group_platforms_by_profile(["claude"])

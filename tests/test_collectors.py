@@ -7,7 +7,6 @@ from src.collectors.base import BaseCollector
 from src.collectors.claude import ClaudeCollector
 from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
-from src.collectors.granola import GranolaCollector
 from src.collectors.fyxer import FyxerCollector
 from src.collectors.runner import (
     _close_chrome, _filter_by_date, _is_cdp_available,

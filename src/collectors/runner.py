@@ -1,4 +1,4 @@
-"""Collector runner: orchestrates browser-based collection across platforms."""
+"""Collector runner: orchestrates browser-based and API-based collection."""
 import logging
 import os
 import shutil
@@ -8,6 +8,7 @@ import subprocess
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from typing import Callable
 
 from src.app.config import get_settings
 from src.app.profiles import (
@@ -19,8 +20,8 @@ from src.collectors.base import BaseCollector
 from src.collectors.claude import ClaudeCollector
 from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
-from src.collectors.granola import GranolaCollector
 from src.collectors.fyxer import FyxerCollector
+from src.collectors.granola_api import collect_granola
 from src.ingest.normalize import normalize_conversation, RawConversation
 from src.ingest.dedupe import make_conversation_id, make_content_hash
 from src.ingest.obsidian_writer import write_daily_collection
@@ -31,13 +32,20 @@ from src.storage.db import init_db
 
 logger = logging.getLogger("sj_home_agent.collectors.runner")
 
+# Browser-based collectors (require Chrome CDP)
 COLLECTORS: dict[str, type[BaseCollector]] = {
     "claude": ClaudeCollector,
     "chatgpt": ChatGPTCollector,
     "gemini": GeminiCollector,
-    "granola": GranolaCollector,
     "fyxer": FyxerCollector,
 }
+
+# API-based collectors (no browser needed)
+API_COLLECTORS: dict[str, Callable[..., list[RawConversation]]] = {
+    "granola": collect_granola,
+}
+
+ALL_PLATFORMS: set[str] = set(COLLECTORS) | set(API_COLLECTORS)
 
 
 def _is_chrome_running() -> bool:
@@ -422,8 +430,27 @@ async def run_all(
     init_db()
 
     settings = get_settings()
-    target_platforms = platforms or list(COLLECTORS.keys())
+    target_platforms = platforms or sorted(ALL_PLATFORMS)
     results: dict[str, int] = {}
+
+    # --- Phase 1: API-based collectors (no Chrome needed) ---
+    api_platforms = [p for p in target_platforms if p in API_COLLECTORS]
+    browser_platforms = [p for p in target_platforms if p in COLLECTORS]
+
+    for platform in api_platforms:
+        logger.info("--- Collecting from %s (API) ---", platform)
+        try:
+            conversations = API_COLLECTORS[platform](days=days)
+            conversations = [normalize_conversation(c) for c in conversations]
+            count = _persist_conversations(platform, conversations)
+            results[platform] = count
+        except Exception as e:
+            logger.error("Failed to collect from %s: %s", platform, e)
+            results[platform] = 0
+
+    # --- Phase 2: Browser-based collectors (Chrome CDP) ---
+    if not browser_platforms:
+        return results
 
     if profile_override:
         profile = next(
@@ -434,9 +461,9 @@ async def run_all(
             print(f"\n[!] Unknown profile: {profile_override}")
             print(f"    Available: {', '.join(p.name for p in DEFAULT_PROFILES)}\n")
             return results
-        groups = [(profile, target_platforms)]
+        groups = [(profile, browser_platforms)]
     else:
-        groups = group_platforms_by_profile(target_platforms)
+        groups = group_platforms_by_profile(browser_platforms)
 
     last_profile_name: str | None = None
 

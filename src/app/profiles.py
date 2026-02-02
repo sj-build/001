@@ -21,7 +21,7 @@ class CDPProfile:
 
 DEFAULT_PROFILES: tuple[CDPProfile, ...] = (
     CDPProfile(name="personal", platforms=("claude", "chatgpt")),
-    CDPProfile(name="company", platforms=("gemini", "fyxer", "granola")),
+    CDPProfile(name="company", platforms=("gemini", "fyxer")),
 )
 
 
