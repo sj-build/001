@@ -89,7 +89,7 @@ def _fetch_documents(
 
     if isinstance(body, list):
         return body
-    return body.get("documents", body.get("data", []))
+    return body.get("docs", body.get("documents", body.get("data", [])))
 
 
 def _prosemirror_to_text(node: dict | list | None) -> str:
