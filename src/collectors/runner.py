@@ -47,17 +47,8 @@ API_COLLECTORS: dict[str, Callable[..., list[RawConversation]]] = {
 
 ALL_PLATFORMS: set[str] = set(COLLECTORS) | set(API_COLLECTORS)
 
-
-def _is_chrome_running() -> bool:
-    """Check if Chrome is currently running."""
-    try:
-        result = subprocess.run(
-            ["pgrep", "-x", "Google Chrome"],
-            capture_output=True, text=True,
-        )
-        return result.returncode == 0
-    except Exception:
-        return False
+# Tracks the CDP Chrome subprocess we launched (not the user's Chrome).
+_cdp_proc: subprocess.Popen | None = None
 
 
 def _is_cdp_available(port: int) -> bool:
@@ -69,55 +60,42 @@ def _is_cdp_available(port: int) -> bool:
         return False
 
 
-def _close_chrome(cdp_port: int | None = None) -> None:
-    """Gracefully shut down Chrome (SIGTERM, then SIGKILL if needed).
+def _close_cdp_chrome(cdp_port: int | None = None) -> None:
+    """Shut down only the CDP Chrome instance we launched.
 
-    Waits up to 5 seconds for graceful exit before force-killing.
-    Optionally waits for the CDP port to be freed.
+    Sends SIGTERM, waits up to 5 s, then SIGKILL.
+    The user's normal Chrome is never touched.
     """
+    global _cdp_proc  # noqa: PLW0603
+
+    if _cdp_proc is None:
+        return
+
+    pid = _cdp_proc.pid
     try:
-        result = subprocess.run(
-            ["pgrep", "-x", "Google Chrome"],
-            capture_output=True, text=True,
-        )
-        if result.returncode != 0:
-            return
+        os.kill(pid, signal.SIGTERM)
+    except (ProcessLookupError, ValueError):
+        _cdp_proc = None
+        return
 
-        pids = [p.strip() for p in result.stdout.strip().split("\n") if p.strip()]
-        for pid in pids:
-            try:
-                os.kill(int(pid), signal.SIGTERM)
-            except (ProcessLookupError, ValueError):
-                pass
+    try:
+        _cdp_proc.wait(timeout=5)
+        logger.info("CDP Chrome (pid=%d) closed gracefully", pid)
+    except subprocess.TimeoutExpired:
+        try:
+            os.kill(pid, signal.SIGKILL)
+            _cdp_proc.wait(timeout=3)
+            logger.warning("CDP Chrome (pid=%d) force-killed", pid)
+        except (ProcessLookupError, subprocess.TimeoutExpired):
+            pass
 
+    _cdp_proc = None
+
+    if cdp_port is not None:
         for _ in range(10):
-            time.sleep(0.5)
-            if not _is_chrome_running():
-                logger.info("Chrome closed gracefully")
+            if not _is_cdp_available(cdp_port):
                 break
-        else:
-            result = subprocess.run(
-                ["pgrep", "-x", "Google Chrome"],
-                capture_output=True, text=True,
-            )
-            if result.returncode == 0:
-                for pid in result.stdout.strip().split("\n"):
-                    pid = pid.strip()
-                    if pid:
-                        try:
-                            os.kill(int(pid), signal.SIGKILL)
-                        except (ProcessLookupError, ValueError):
-                            pass
-                logger.warning("Chrome force-killed")
-
-        if cdp_port is not None:
-            for _ in range(10):
-                if not _is_cdp_available(cdp_port):
-                    break
-                time.sleep(0.5)
-
-    except Exception as e:
-        logger.error("Failed to close Chrome: %s", e)
+            time.sleep(0.5)
 
 
 def _prepare_cdp_profile(source_profile: Path, cdp_data_dir: Path) -> None:
@@ -163,8 +141,11 @@ def _launch_chrome_with_cdp(
 
     Uses a non-default --user-data-dir (required by Chrome for CDP)
     populated with copied session files from the real profile.
-    Returns the subprocess handle.
+    Runs as a separate instance alongside the user's normal Chrome.
+    Returns the subprocess handle and stores it in _cdp_proc.
     """
+    global _cdp_proc  # noqa: PLW0603
+
     path = Path(chrome_path)
     if not path.exists():
         raise FileNotFoundError(f"Chrome not found at {path}")
@@ -186,6 +167,7 @@ def _launch_chrome_with_cdp(
         time.sleep(1)
         if _is_cdp_available(port):
             logger.info("Chrome launched with CDP on port %d (pid=%d)", port, proc.pid)
+            _cdp_proc = proc
             return proc
 
     proc.kill()
@@ -244,9 +226,8 @@ async def run_collector(
     """Run a single platform collector via CDP connection to Chrome.
 
     Flow:
-      1. If CDP port is open -> connect to existing Chrome
-      2. If Chrome is not running -> launch Chrome with CDP, then connect
-      3. If Chrome is running without CDP -> ask user to close Chrome
+      1. If CDP port is open -> connect to existing CDP Chrome
+      2. Otherwise -> launch a separate CDP Chrome instance (user's Chrome stays open)
 
     Args:
         platform: Platform name (claude, chatgpt, gemini, etc.)
@@ -274,19 +255,11 @@ async def run_collector(
         else:
             cdp_data_dir = settings.db_path.parent / "chrome_cdp_profile"
 
-    # --- Determine CDP availability ---
+    # --- Ensure CDP Chrome is running ---
     if _is_cdp_available(cdp_port):
         logger.info("CDP already available on port %d", cdp_port)
-    elif _is_chrome_running():
-        logger.warning("Chrome is running without CDP on port %d", cdp_port)
-        print("\n[!] Chrome is running but CDP (remote debugging) is not enabled.")
-        print("    Please close Chrome (Cmd+Q), then rerun this command.")
-        print("    We'll automatically relaunch Chrome with CDP enabled.\n")
-        return []
     else:
-        logger.info("Chrome not running; launching with CDP on port %d", cdp_port)
-        # Only seed the CDP profile on first run (empty dir).
-        # After the user logs in once, sessions persist in this dir.
+        logger.info("Launching CDP Chrome on port %d", cdp_port)
         if not (cdp_data_dir / "Default").exists():
             print("[*] First run: seeding CDP profile from Chrome...")
             _prepare_cdp_profile(settings.chrome_profile, cdp_data_dir)
@@ -475,7 +448,7 @@ async def run_all(
                 "Switching CDP profile: %s -> %s", last_profile_name, current_name,
             )
             print(f"\n[*] Switching Chrome profile: {last_profile_name} -> {current_name}")
-            _close_chrome(cdp_port=settings.cdp_port)
+            _close_cdp_chrome(cdp_port=settings.cdp_port)
 
         last_profile_name = current_name
 

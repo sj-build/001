@@ -9,7 +9,7 @@ from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
 from src.collectors.fyxer import FyxerCollector
 from src.collectors.runner import (
-    _close_chrome, _filter_by_date, _is_cdp_available,
+    _close_cdp_chrome, _filter_by_date, _is_cdp_available,
     _launch_chrome_with_cdp, _prepare_cdp_profile, run_all,
 )
 from src.ingest.normalize import RawConversation
@@ -402,6 +402,8 @@ class TestLaunchChromeWithCdp:
     @patch("src.collectors.runner._is_cdp_available")
     @patch("src.collectors.runner.subprocess.Popen")
     def test_launch_success(self, mock_popen, mock_cdp, tmp_path):
+        import src.collectors.runner as runner_mod
+
         mock_cdp.side_effect = [False, True]  # not available, then available
         mock_proc = MagicMock()
         mock_proc.pid = 12345
@@ -413,6 +415,7 @@ class TestLaunchChromeWithCdp:
             tmp_path / "cdp",
         )
         assert result == mock_proc
+        assert runner_mod._cdp_proc == mock_proc
 
     @patch("src.collectors.runner._is_cdp_available", return_value=False)
     @patch("src.collectors.runner.subprocess.Popen")
@@ -465,63 +468,66 @@ class TestPrepareCdpProfile:
         assert not (cdp_dir / "Default" / "Login Data").exists()
 
 
-# ── _close_chrome tests ──────────────────────────────────────────
+# ── _close_cdp_chrome tests ───────────────────────────────────────
 
 
-class TestCloseChrome:
-    """Test Chrome graceful shutdown."""
+class TestCloseCdpChrome:
+    """Test CDP Chrome shutdown (only kills our process, not user Chrome)."""
 
-    @patch("src.collectors.runner._is_cdp_available", return_value=False)
-    @patch("src.collectors.runner._is_chrome_running", return_value=False)
-    @patch("src.collectors.runner.subprocess.run")
-    def test_noop_when_chrome_not_running(self, mock_run, mock_running, mock_cdp):
-        mock_run.return_value = MagicMock(returncode=1, stdout="")
-        _close_chrome()
-        # Should not attempt to kill anything
+    def test_noop_when_no_cdp_proc(self):
+        import src.collectors.runner as runner_mod
+        runner_mod._cdp_proc = None
+        _close_cdp_chrome()
+        # Should not raise or attempt to kill anything
 
-    @patch("src.collectors.runner.time.sleep")
-    @patch("src.collectors.runner._is_chrome_running")
     @patch("src.collectors.runner.os.kill")
-    @patch("src.collectors.runner.subprocess.run")
-    def test_graceful_shutdown(self, mock_run, mock_kill, mock_running, mock_sleep):
-        # pgrep returns one PID
-        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
-        # Chrome stops after SIGTERM
-        mock_running.return_value = False
+    def test_graceful_shutdown(self, mock_kill):
+        import src.collectors.runner as runner_mod
 
-        _close_chrome()
+        mock_proc = MagicMock()
+        mock_proc.pid = 12345
+        mock_proc.wait = MagicMock(return_value=0)
+        runner_mod._cdp_proc = mock_proc
+
+        _close_cdp_chrome()
 
         import signal
         mock_kill.assert_called_once_with(12345, signal.SIGTERM)
+        assert runner_mod._cdp_proc is None
 
-    @patch("src.collectors.runner.time.sleep")
-    @patch("src.collectors.runner._is_chrome_running", return_value=True)
     @patch("src.collectors.runner.os.kill")
-    @patch("src.collectors.runner.subprocess.run")
-    def test_force_kill_after_timeout(self, mock_run, mock_kill, mock_running, mock_sleep):
-        # pgrep always returns a PID
-        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
+    def test_force_kill_after_timeout(self, mock_kill):
+        import subprocess as sp
+        import src.collectors.runner as runner_mod
 
-        _close_chrome()
+        mock_proc = MagicMock()
+        mock_proc.pid = 12345
+        mock_proc.wait = MagicMock(side_effect=[sp.TimeoutExpired("chrome", 5), None])
+        runner_mod._cdp_proc = mock_proc
+
+        _close_cdp_chrome()
 
         import signal
-        # Should have sent SIGTERM first, then SIGKILL
         sigterm_calls = [c for c in mock_kill.call_args_list if c == call(12345, signal.SIGTERM)]
         sigkill_calls = [c for c in mock_kill.call_args_list if c == call(12345, signal.SIGKILL)]
-        assert len(sigterm_calls) >= 1
-        assert len(sigkill_calls) >= 1
+        assert len(sigterm_calls) == 1
+        assert len(sigkill_calls) == 1
+        assert runner_mod._cdp_proc is None
 
     @patch("src.collectors.runner.time.sleep")
     @patch("src.collectors.runner._is_cdp_available")
-    @patch("src.collectors.runner._is_chrome_running", return_value=False)
     @patch("src.collectors.runner.os.kill")
-    @patch("src.collectors.runner.subprocess.run")
-    def test_waits_for_cdp_port_freed(self, mock_run, mock_kill, mock_running, mock_cdp, mock_sleep):
-        mock_run.return_value = MagicMock(returncode=0, stdout="12345\n")
-        # CDP port still open, then freed
+    def test_waits_for_cdp_port_freed(self, mock_kill, mock_cdp, mock_sleep):
+        import src.collectors.runner as runner_mod
+
+        mock_proc = MagicMock()
+        mock_proc.pid = 12345
+        mock_proc.wait = MagicMock(return_value=0)
+        runner_mod._cdp_proc = mock_proc
+
         mock_cdp.side_effect = [True, True, False]
 
-        _close_chrome(cdp_port=9222)
+        _close_cdp_chrome(cdp_port=9222)
 
         assert mock_cdp.call_count == 3
 
@@ -533,7 +539,7 @@ class TestRunAllWithProfiles:
     """Test run_all with profile grouping and switching."""
 
     @pytest.mark.asyncio
-    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=5)
     @patch("src.collectors.runner.run_collector")
     @patch("src.collectors.runner.init_db")
@@ -549,7 +555,7 @@ class TestRunAllWithProfiles:
         assert "gemini" in results
 
     @pytest.mark.asyncio
-    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=3)
     @patch("src.collectors.runner.run_collector")
     @patch("src.collectors.runner.init_db")
@@ -562,7 +568,7 @@ class TestRunAllWithProfiles:
         mock_close.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=2)
     @patch("src.collectors.runner.run_collector")
     @patch("src.collectors.runner.init_db")
@@ -575,7 +581,7 @@ class TestRunAllWithProfiles:
         mock_close.assert_not_called()
 
     @pytest.mark.asyncio
-    @patch("src.collectors.runner._close_chrome")
+    @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=1)
     @patch("src.collectors.runner.run_collector")
     @patch("src.collectors.runner.init_db")
