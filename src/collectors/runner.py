@@ -17,11 +17,11 @@ from src.app.profiles import (
     group_platforms_by_profile,
 )
 from src.collectors.base import BaseCollector
-from src.collectors.claude import ClaudeCollector
-from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
-from src.collectors.fyxer import FyxerCollector
 from src.collectors.granola_api import collect_granola
+from src.collectors.claude_api import collect_claude
+from src.collectors.chatgpt_api import collect_chatgpt
+from src.collectors.fyxer_api import collect_fyxer
 from src.ingest.normalize import normalize_conversation, RawConversation
 from src.ingest.dedupe import make_conversation_id, make_content_hash
 from src.ingest.obsidian_writer import write_daily_collection
@@ -34,15 +34,15 @@ logger = logging.getLogger("sj_home_agent.collectors.runner")
 
 # Browser-based collectors (require Chrome CDP)
 COLLECTORS: dict[str, type[BaseCollector]] = {
-    "claude": ClaudeCollector,
-    "chatgpt": ChatGPTCollector,
     "gemini": GeminiCollector,
-    "fyxer": FyxerCollector,
 }
 
 # API-based collectors (no browser needed)
 API_COLLECTORS: dict[str, Callable[..., list[RawConversation]]] = {
     "granola": collect_granola,
+    "claude": collect_claude,
+    "chatgpt": collect_chatgpt,
+    "fyxer": collect_fyxer,
 }
 
 ALL_PLATFORMS: set[str] = set(COLLECTORS) | set(API_COLLECTORS)

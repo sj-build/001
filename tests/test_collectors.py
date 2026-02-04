@@ -1,16 +1,14 @@
-"""Tests for collector base helpers and individual collectors."""
+"""Tests for collector base helpers, browser collectors, and runner."""
 import pytest
 from datetime import date, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch, call
 
 from src.collectors.base import BaseCollector
-from src.collectors.claude import ClaudeCollector
-from src.collectors.chatgpt import ChatGPTCollector
 from src.collectors.gemini import GeminiCollector
-from src.collectors.fyxer import FyxerCollector
 from src.collectors.runner import (
     _close_cdp_chrome, _filter_by_date, _is_cdp_available,
     _launch_chrome_with_cdp, _prepare_cdp_profile, run_all,
+    API_COLLECTORS, COLLECTORS,
 )
 from src.ingest.normalize import RawConversation
 
@@ -88,7 +86,6 @@ class TestFindWorkingSelector:
     async def test_finds_first_matching_selector(self):
         page = AsyncMock()
 
-        # First selector returns 0, second returns 3
         locator_mock_1 = AsyncMock()
         locator_mock_1.count = AsyncMock(return_value=0)
         locator_mock_2 = AsyncMock()
@@ -101,7 +98,7 @@ class TestFindWorkingSelector:
 
         page.locator = MagicMock(side_effect=locator_side_effect)
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         result = await collector._find_working_selector(page, ["a.first", "a.second"])
         assert result == "a.second"
 
@@ -112,7 +109,7 @@ class TestFindWorkingSelector:
         locator_mock.count = AsyncMock(return_value=0)
         page.locator = MagicMock(return_value=locator_mock)
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         result = await collector._find_working_selector(page, ["a.first", "a.second"])
         assert result is None
 
@@ -123,7 +120,7 @@ class TestFindWorkingSelector:
         locator_mock.count = AsyncMock(side_effect=Exception("timeout"))
         page.locator = MagicMock(return_value=locator_mock)
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         result = await collector._find_working_selector(page, ["a.first"])
         assert result is None
 
@@ -142,7 +139,7 @@ class TestWaitForContent:
         page.locator = MagicMock(return_value=locator_mock)
         page.wait_for_timeout = AsyncMock()
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         result = await collector._wait_for_content(
             page, ["a.test"], max_attempts=3, poll_interval=100,
         )
@@ -156,7 +153,7 @@ class TestWaitForContent:
         page.locator = MagicMock(return_value=locator_mock)
         page.wait_for_timeout = AsyncMock()
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         result = await collector._wait_for_content(
             page, ["a.test"], max_attempts=2, poll_interval=100,
         )
@@ -178,7 +175,7 @@ class TestScrollToLoadAll:
         page.evaluate = AsyncMock()
         page.wait_for_timeout = AsyncMock()
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         count = await collector._scroll_to_load_all(
             page, "a.test", max_scrolls=3, scroll_delay=100,
         )
@@ -194,7 +191,7 @@ class TestScrollToLoadAll:
         page.evaluate = AsyncMock()
         page.wait_for_timeout = AsyncMock()
 
-        collector = ClaudeCollector()
+        collector = GeminiCollector()
         count = await collector._scroll_to_load_all(
             page, "a.test", max_scrolls=5, scroll_delay=100,
         )
@@ -202,47 +199,6 @@ class TestScrollToLoadAll:
 
 
 # ── Collector login check tests ─────────────────────────────────
-
-
-class TestClaudeCheckLogin:
-    """Test ClaudeCollector login detection."""
-
-    @pytest.mark.asyncio
-    async def test_detects_login_redirect(self):
-        page = AsyncMock()
-        page.url = "https://claude.ai/login"
-        page.wait_for_timeout = AsyncMock()
-
-        collector = ClaudeCollector()
-        result = await collector.check_login(page)
-        assert result is False
-
-    @pytest.mark.asyncio
-    async def test_confirms_login_via_selector(self):
-        page = AsyncMock()
-        page.url = "https://claude.ai/recents"
-        page.wait_for_timeout = AsyncMock()
-        locator_mock = AsyncMock()
-        locator_mock.count = AsyncMock(return_value=5)
-        page.locator = MagicMock(return_value=locator_mock)
-
-        collector = ClaudeCollector()
-        result = await collector.check_login(page)
-        assert result is True
-
-
-class TestChatGPTCheckLogin:
-    """Test ChatGPTCollector login detection."""
-
-    @pytest.mark.asyncio
-    async def test_detects_auth_redirect(self):
-        page = AsyncMock()
-        page.url = "https://chatgpt.com/auth/login"
-        page.wait_for_timeout = AsyncMock()
-
-        collector = ChatGPTCollector()
-        result = await collector.check_login(page)
-        assert result is False
 
 
 class TestGeminiCheckLogin:
@@ -308,69 +264,6 @@ class TestFilterByDate:
         assert "No date" in titles
         assert "Recent" in titles
         assert "Old" not in titles
-
-
-# ── Collector get_conversation_list tests ────────────────────────
-
-
-class TestCollectorConversationList:
-    """Test conversation list extraction with mocked page."""
-
-    @pytest.mark.asyncio
-    async def test_claude_extracts_conversations(self):
-        page = AsyncMock()
-        page.wait_for_timeout = AsyncMock()
-
-        # Mock _find_working_selector to return a selector
-        locator_mock = AsyncMock()
-        locator_mock.count = AsyncMock(return_value=2)
-
-        el1 = AsyncMock()
-        el1.get_attribute = AsyncMock(return_value="/chat/abc123")
-        el1.inner_text = AsyncMock(return_value="Test Conversation")
-        parent1 = AsyncMock()
-        parent1.inner_text = AsyncMock(return_value="Test Conversation Today some preview text")
-        el1.locator = MagicMock(return_value=parent1)
-
-        el2 = AsyncMock()
-        el2.get_attribute = AsyncMock(return_value="/chat/def456")
-        el2.inner_text = AsyncMock(return_value="Another Chat")
-        parent2 = AsyncMock()
-        parent2.inner_text = AsyncMock(return_value="Another Chat")
-        el2.locator = MagicMock(return_value=parent2)
-
-        locator_mock.all = AsyncMock(return_value=[el1, el2])
-
-        page.locator = MagicMock(return_value=locator_mock)
-        page.evaluate = AsyncMock()
-
-        collector = ClaudeCollector()
-        result = await collector.get_conversation_list(page)
-
-        assert len(result) == 2
-        assert result[0].title == "Test Conversation"
-        assert result[0].url == "https://claude.ai/chat/abc123"
-        assert result[1].title == "Another Chat"
-
-    @pytest.mark.asyncio
-    async def test_chatgpt_skips_invalid_hrefs(self):
-        page = AsyncMock()
-        page.wait_for_timeout = AsyncMock()
-
-        locator_mock = AsyncMock()
-        locator_mock.count = AsyncMock(return_value=1)
-
-        el = AsyncMock()
-        el.get_attribute = AsyncMock(return_value="/settings")
-        el.inner_text = AsyncMock(return_value="Settings")
-
-        locator_mock.all = AsyncMock(return_value=[el])
-        page.locator = MagicMock(return_value=locator_mock)
-        page.evaluate = AsyncMock()
-
-        collector = ChatGPTCollector()
-        result = await collector.get_conversation_list(page)
-        assert len(result) == 0
 
 
 # ── CDP helper tests ──────────────────────────────────────────
@@ -532,52 +425,101 @@ class TestCloseCdpChrome:
         assert mock_cdp.call_count == 3
 
 
+# ── Runner architecture tests ────────────────────────────────────
+
+
+class TestRunnerArchitecture:
+    """Verify the collector dictionaries are wired correctly."""
+
+    def test_api_collectors_include_granola(self):
+        assert "granola" in API_COLLECTORS
+
+    def test_api_collectors_include_claude(self):
+        assert "claude" in API_COLLECTORS
+
+    def test_api_collectors_include_chatgpt(self):
+        assert "chatgpt" in API_COLLECTORS
+
+    def test_browser_collectors_include_gemini(self):
+        assert "gemini" in COLLECTORS
+
+    def test_fyxer_is_api_collector(self):
+        assert "fyxer" not in COLLECTORS
+        assert "fyxer" in API_COLLECTORS
+
+    def test_claude_not_in_browser_collectors(self):
+        assert "claude" not in COLLECTORS
+
+    def test_chatgpt_not_in_browser_collectors(self):
+        assert "chatgpt" not in COLLECTORS
+
+
 # ── Profile-aware run_all tests ──────────────────────────────────
 
 
 class TestRunAllWithProfiles:
-    """Test run_all with profile grouping and switching."""
+    """Test run_all with API/browser split and profile grouping."""
 
     @pytest.mark.asyncio
     @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=5)
     @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.normalize_conversation", side_effect=lambda c: c)
     @patch("src.collectors.runner.init_db")
-    async def test_groups_by_profile(self, mock_init, mock_collector, mock_persist, mock_close):
+    async def test_api_and_browser_split(
+        self, mock_init, mock_normalize, mock_collector, mock_persist, mock_close,
+    ):
         mock_collector.return_value = [
-            RawConversation(platform="claude", title="Test", url="https://example.com/1"),
+            RawConversation(platform="gemini", title="Test", url="https://example.com/1"),
         ]
 
-        results = await run_all(platforms=["claude", "chatgpt", "gemini"])
+        with patch.dict(
+            "src.collectors.runner.API_COLLECTORS",
+            {"claude": MagicMock(return_value=[]), "chatgpt": MagicMock(return_value=[])},
+        ):
+            results = await run_all(platforms=["claude", "chatgpt", "gemini"])
 
         assert "claude" in results
         assert "chatgpt" in results
         assert "gemini" in results
 
+        # Only gemini should go through run_collector (browser)
+        mock_collector.assert_called_once()
+
     @pytest.mark.asyncio
     @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=3)
     @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.normalize_conversation", side_effect=lambda c: c)
     @patch("src.collectors.runner.init_db")
-    async def test_chrome_restart_on_profile_switch(self, mock_init, mock_collector, mock_persist, mock_close):
-        mock_collector.return_value = []
+    async def test_no_chrome_for_api_only(
+        self, mock_init, mock_normalize, mock_collector, mock_persist, mock_close,
+    ):
+        with patch.dict(
+            "src.collectors.runner.API_COLLECTORS",
+            {"claude": MagicMock(return_value=[]), "chatgpt": MagicMock(return_value=[])},
+        ):
+            results = await run_all(platforms=["claude", "chatgpt"])
 
-        await run_all(platforms=["claude", "gemini"])
-
-        # Should close Chrome when switching from personal to company
-        mock_close.assert_called_once()
+        # No browser collectors -> run_collector never called
+        mock_collector.assert_not_called()
+        mock_close.assert_not_called()
 
     @pytest.mark.asyncio
     @patch("src.collectors.runner._close_cdp_chrome")
     @patch("src.collectors.runner._persist_conversations", return_value=2)
     @patch("src.collectors.runner.run_collector")
+    @patch("src.collectors.runner.normalize_conversation", side_effect=lambda c: c)
     @patch("src.collectors.runner.init_db")
-    async def test_no_restart_within_same_profile(self, mock_init, mock_collector, mock_persist, mock_close):
+    async def test_no_restart_within_same_profile(
+        self, mock_init, mock_normalize, mock_collector, mock_persist, mock_close,
+    ):
         mock_collector.return_value = []
 
-        await run_all(platforms=["claude", "chatgpt"])
+        # gemini is the only CDP platform now; run with it alone
+        await run_all(platforms=["gemini"])
 
-        # Both are personal profile, no restart needed
+        # Single profile, no restart needed
         mock_close.assert_not_called()
 
     @pytest.mark.asyncio
@@ -585,24 +527,24 @@ class TestRunAllWithProfiles:
     @patch("src.collectors.runner._persist_conversations", return_value=1)
     @patch("src.collectors.runner.run_collector")
     @patch("src.collectors.runner.init_db")
-    async def test_profile_override(self, mock_init, mock_collector, mock_persist, mock_close):
+    async def test_profile_override(
+        self, mock_init, mock_collector, mock_persist, mock_close,
+    ):
         mock_collector.return_value = []
 
         results = await run_all(
             platforms=["gemini"],
-            profile_override="personal",
+            profile_override="company",
         )
 
-        # Gemini forced to use personal profile
         assert "gemini" in results
-        # No profile switch since everything is one profile
         mock_close.assert_not_called()
 
     @pytest.mark.asyncio
     @patch("src.collectors.runner.init_db")
     async def test_unknown_profile_override(self, mock_init):
         results = await run_all(
-            platforms=["claude"],
+            platforms=["gemini"],
             profile_override="nonexistent",
         )
         assert results == {}

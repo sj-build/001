@@ -10,3 +10,4 @@ httpx
 beautifulsoup4
 chromadb>=0.5.0,<1.0
 sentence-transformers>=2.2.0,<4.0
+ccl-chromium-reader @ git+https://github.com/cclgroupltd/ccl_chromium_reader.git

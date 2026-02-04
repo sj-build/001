@@ -30,13 +30,13 @@ class TestCDPProfileImmutability:
             profile.platforms = ("b",)
 
     def test_equality(self):
-        a = CDPProfile(name="x", platforms=("claude",))
-        b = CDPProfile(name="x", platforms=("claude",))
+        a = CDPProfile(name="x", platforms=("gemini",))
+        b = CDPProfile(name="x", platforms=("gemini",))
         assert a == b
 
     def test_hashable(self):
-        profile = CDPProfile(name="test", platforms=("claude",))
-        assert hash(profile) == hash(CDPProfile(name="test", platforms=("claude",)))
+        profile = CDPProfile(name="test", platforms=("gemini",))
+        assert hash(profile) == hash(CDPProfile(name="test", platforms=("gemini",)))
 
 
 # ── DEFAULT_PROFILES ─────────────────────────────────────────────
@@ -45,23 +45,18 @@ class TestCDPProfileImmutability:
 class TestDefaultProfiles:
     """Verify the default profile definitions."""
 
-    def test_personal_profile_exists(self):
-        names = [p.name for p in DEFAULT_PROFILES]
-        assert "personal" in names
-
     def test_company_profile_exists(self):
         names = [p.name for p in DEFAULT_PROFILES]
         assert "company" in names
 
-    def test_personal_platforms(self):
-        personal = next(p for p in DEFAULT_PROFILES if p.name == "personal")
-        assert "claude" in personal.platforms
-        assert "chatgpt" in personal.platforms
+    def test_only_company_profile(self):
+        assert len(DEFAULT_PROFILES) == 1
+        assert DEFAULT_PROFILES[0].name == "company"
 
     def test_company_platforms(self):
         company = next(p for p in DEFAULT_PROFILES if p.name == "company")
         assert "gemini" in company.platforms
-        assert "fyxer" in company.platforms
+        assert "fyxer" not in company.platforms
 
     def test_no_platform_overlap(self):
         all_platforms: list[str] = []
@@ -77,25 +72,22 @@ class TestDefaultProfiles:
 class TestGetProfileForPlatform:
     """Test platform -> profile lookup."""
 
-    def test_claude_maps_to_personal(self):
+    def test_claude_not_in_cdp_profiles(self):
         profile = get_profile_for_platform("claude")
-        assert profile is not None
-        assert profile.name == "personal"
+        assert profile is None  # claude uses API, not CDP
 
-    def test_chatgpt_maps_to_personal(self):
+    def test_chatgpt_not_in_cdp_profiles(self):
         profile = get_profile_for_platform("chatgpt")
-        assert profile is not None
-        assert profile.name == "personal"
+        assert profile is None  # chatgpt uses API, not CDP
 
     def test_gemini_maps_to_company(self):
         profile = get_profile_for_platform("gemini")
         assert profile is not None
         assert profile.name == "company"
 
-    def test_fyxer_maps_to_company(self):
+    def test_fyxer_not_in_cdp_profiles(self):
         profile = get_profile_for_platform("fyxer")
-        assert profile is not None
-        assert profile.name == "company"
+        assert profile is None  # fyxer now uses API, not CDP
 
     def test_granola_not_in_cdp_profiles(self):
         profile = get_profile_for_platform("granola")
@@ -117,16 +109,16 @@ class TestGetProfileForPlatform:
 class TestGetCdpDataDir:
     """Test CDP data directory path generation."""
 
-    def test_personal_dir(self):
-        profile = CDPProfile(name="personal", platforms=("claude",))
-        result = get_cdp_data_dir(profile)
-        expected = PROJECT_ROOT / "data" / "chrome_cdp_profiles" / "personal"
-        assert result == expected
-
     def test_company_dir(self):
         profile = CDPProfile(name="company", platforms=("gemini",))
         result = get_cdp_data_dir(profile)
         expected = PROJECT_ROOT / "data" / "chrome_cdp_profiles" / "company"
+        assert result == expected
+
+    def test_arbitrary_name_dir(self):
+        profile = CDPProfile(name="custom", platforms=("x",))
+        result = get_cdp_data_dir(profile)
+        expected = PROJECT_ROOT / "data" / "chrome_cdp_profiles" / "custom"
         assert result == expected
 
     def test_returns_path_object(self):
@@ -141,28 +133,39 @@ class TestGetCdpDataDir:
 class TestGroupPlatformsByProfile:
     """Test platform grouping by profile."""
 
-    def test_all_cdp_platforms_grouped(self):
-        platforms = ["claude", "chatgpt", "gemini", "fyxer"]
+    def test_cdp_platforms_grouped(self):
+        platforms = ["gemini"]
+        groups = group_platforms_by_profile(platforms)
+
+        assert len(groups) == 1
+        assert groups[0][0].name == "company"
+        assert groups[0][1] == ["gemini"]
+
+    def test_api_platforms_grouped_under_none(self):
+        platforms = ["claude", "chatgpt", "granola"]
+        groups = group_platforms_by_profile(platforms)
+
+        assert len(groups) == 1
+        assert groups[0][0] is None
+        assert set(groups[0][1]) == {"claude", "chatgpt", "granola"}
+
+    def test_mixed_cdp_and_api_platforms(self):
+        platforms = ["gemini", "claude", "fyxer"]
         groups = group_platforms_by_profile(platforms)
 
         assert len(groups) == 2
+        assert groups[0][0].name == "company"
+        assert groups[0][1] == ["gemini"]
 
-        personal_group = next(g for g in groups if g[0] and g[0].name == "personal")
-        company_group = next(g for g in groups if g[0] and g[0].name == "company")
-
-        assert set(personal_group[1]) == {"claude", "chatgpt"}
-        assert set(company_group[1]) == {"gemini", "fyxer"}
-
-    def test_single_platform(self):
-        groups = group_platforms_by_profile(["claude"])
-        assert len(groups) == 1
-        assert groups[0][0].name == "personal"
-        assert groups[0][1] == ["claude"]
+        assert groups[1][0] is None
+        assert set(groups[1][1]) == {"claude", "fyxer"}
 
     def test_preserves_input_order(self):
-        groups = group_platforms_by_profile(["gemini", "claude"])
-        assert groups[0][0].name == "company"
-        assert groups[1][0].name == "personal"
+        platforms = ["claude", "gemini"]
+        groups = group_platforms_by_profile(platforms)
+
+        assert groups[0][0] is None  # claude first (API, no profile)
+        assert groups[1][0].name == "company"  # gemini second
 
     def test_unknown_platform_grouped_under_none(self):
         groups = group_platforms_by_profile(["unknown_platform"])
@@ -170,19 +173,6 @@ class TestGroupPlatformsByProfile:
         profile, platforms = groups[0]
         assert profile is None
         assert platforms == ["unknown_platform"]
-
-    def test_mixed_known_and_unknown(self):
-        groups = group_platforms_by_profile(["claude", "unknown", "gemini"])
-        assert len(groups) == 3
-
-        assert groups[0][0].name == "personal"
-        assert groups[0][1] == ["claude"]
-
-        assert groups[1][0] is None
-        assert groups[1][1] == ["unknown"]
-
-        assert groups[2][0].name == "company"
-        assert groups[2][1] == ["gemini"]
 
     def test_empty_list(self):
         groups = group_platforms_by_profile([])
