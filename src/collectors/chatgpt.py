@@ -12,6 +12,12 @@ SELECTORS = [
     'li a[data-testid]',
 ]
 
+# Selectors for the collapsed "My chats" sidebar section
+CHAT_SECTION_EXPAND_SELECTORS = [
+    'button:has(h2.__menu-label)',
+    'button[aria-expanded="false"]',
+]
+
 LOAD_WAIT_MS = 5000
 
 
@@ -21,6 +27,23 @@ class ChatGPTCollector(BaseCollector):
     def get_url(self) -> str:
         return "https://chatgpt.com"
 
+    async def _expand_chat_sections(self, page) -> None:
+        """Expand collapsed sidebar sections (e.g. 'My chats') to reveal conversation links."""
+        try:
+            buttons = await page.locator(
+                'button[aria-expanded="false"]:has(h2.__menu-label)'
+            ).all()
+            for btn in buttons:
+                try:
+                    label = await btn.inner_text()
+                    logger.info("Expanding sidebar section: %s", label.strip())
+                    await btn.click()
+                    await page.wait_for_timeout(1500)
+                except Exception as e:
+                    logger.warning("Failed to expand section: %s", e)
+        except Exception as e:
+            logger.warning("Could not find sidebar sections to expand: %s", e)
+
     async def check_login(self, page) -> bool:
         """Check login via polling instead of networkidle."""
         try:
@@ -28,6 +51,14 @@ class ChatGPTCollector(BaseCollector):
 
             if "/auth" in page.url or "/login" in page.url:
                 return False
+
+            # Check for profile button (present when logged in)
+            try:
+                profile = page.locator('[data-testid="accounts-profile-button"]')
+                if await profile.count() > 0:
+                    return True
+            except Exception:
+                pass
 
             found = await self._wait_for_content(page, SELECTORS)
             if found:
@@ -52,6 +83,11 @@ class ChatGPTCollector(BaseCollector):
 
         await page.wait_for_timeout(LOAD_WAIT_MS)
 
+        # ChatGPT 2025+ UI: sidebar sections are collapsed by default.
+        # Expand all sections (especially "My chats") to reveal conversation links.
+        await self._expand_chat_sections(page)
+        await page.wait_for_timeout(2000)
+
         found_selector = await self._find_working_selector(page, SELECTORS)
 
         if not found_selector:
@@ -68,8 +104,26 @@ class ChatGPTCollector(BaseCollector):
             logger.warning("No ChatGPT conversation elements found")
             return conversations
 
-        # Scroll to load all lazy content
-        await self._scroll_to_load_all(page, found_selector)
+        # Scroll sidebar to load all lazy content
+        try:
+            sidebar_nav = page.locator('nav[aria-label]').first
+            if await sidebar_nav.count() > 0:
+                for _ in range(10):
+                    before_count = await page.locator(found_selector).count()
+                    await sidebar_nav.evaluate(
+                        "el => el.scrollTo(0, el.scrollHeight)"
+                    )
+                    await page.wait_for_timeout(1500)
+                    after_count = await page.locator(found_selector).count()
+                    logger.info(
+                        "Sidebar scroll: %d → %d elements", before_count, after_count
+                    )
+                    if after_count == before_count:
+                        break
+            else:
+                await self._scroll_to_load_all(page, found_selector)
+        except Exception:
+            await self._scroll_to_load_all(page, found_selector)
 
         elements = await page.locator(found_selector).all()
         for el in elements:
