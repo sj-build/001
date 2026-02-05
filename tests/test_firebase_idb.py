@@ -7,9 +7,14 @@ from unittest.mock import patch, MagicMock
 from src.collectors.firebase_idb import (
     _find_idb_path,
     _read_firebase_auth,
+    _read_app_check_token,
+    _extract_valid_app_check,
+    _refresh_app_check_via_browser,
+    get_app_check_token,
     refresh_id_token,
     get_firebase_token,
 )
+import subprocess
 
 
 # ── _find_idb_path tests ───────────────────────────────────────
@@ -122,14 +127,16 @@ class TestReadFirebaseAuth:
         idb_dir.mkdir()
 
         mock_record = MagicMock()
-        mock_record.key = "firebase:authUser:test-api-key:[DEFAULT]"
         mock_record.value = {
-            "uid": "user-123",
-            "email": "test@example.com",
-            "stsTokenManager": {
-                "refreshToken": "refresh-abc",
-                "accessToken": "access-xyz",
-                "expirationTime": 9999999999999,
+            "fbase_key": "firebase:authUser:test-api-key:[DEFAULT]",
+            "value": {
+                "uid": "user-123",
+                "email": "test@example.com",
+                "stsTokenManager": {
+                    "refreshToken": "refresh-abc",
+                    "accessToken": "access-xyz",
+                    "expirationTime": 9999999999999,
+                },
             },
         }
 
@@ -268,3 +275,239 @@ class TestGetFirebaseToken:
 
         with pytest.raises(FileNotFoundError, match="IndexedDB not found"):
             get_firebase_token("app.fyxer.com", "api-key")
+
+
+# ── _read_app_check_token tests ──────────────────────────────
+
+
+class TestReadAppCheckToken:
+    """Test App Check token extraction from IndexedDB."""
+
+    def test_raises_on_missing_directory(self, tmp_path):
+        with pytest.raises(FileNotFoundError):
+            _read_app_check_token(tmp_path / "nonexistent")
+
+    @patch("src.collectors.firebase_idb.ccl_chromium_indexeddb")
+    def test_raises_when_db_missing(self, mock_ccl, tmp_path):
+        idb_dir = tmp_path / "leveldb"
+        idb_dir.mkdir()
+
+        mock_idb = MagicMock()
+        mock_idb.__contains__ = MagicMock(return_value=False)
+        mock_ccl.WrappedIndexDB.return_value = mock_idb
+
+        with pytest.raises(ValueError, match="firebase-app-check-database"):
+            _read_app_check_token(idb_dir)
+
+        mock_idb.close.assert_called_once()
+
+    @patch("src.collectors.firebase_idb.ccl_chromium_indexeddb")
+    def test_raises_when_store_missing(self, mock_ccl, tmp_path):
+        idb_dir = tmp_path / "leveldb"
+        idb_dir.mkdir()
+
+        mock_db = MagicMock()
+        mock_db.get_object_store_by_name.return_value = None
+
+        mock_idb = MagicMock()
+        mock_idb.__contains__ = MagicMock(return_value=True)
+        mock_idb.__getitem__ = MagicMock(return_value=mock_db)
+        mock_ccl.WrappedIndexDB.return_value = mock_idb
+
+        with pytest.raises(ValueError, match="firebase-app-check-store"):
+            _read_app_check_token(idb_dir)
+
+        mock_idb.close.assert_called_once()
+
+    @patch("src.collectors.firebase_idb.ccl_chromium_indexeddb")
+    def test_extracts_app_check_token(self, mock_ccl, tmp_path):
+        idb_dir = tmp_path / "leveldb"
+        idb_dir.mkdir()
+
+        mock_record = MagicMock()
+        mock_record.value = {
+            "compositeKey": "1:408115782056:web:abc-[DEFAULT]",
+            "value": {
+                "token": "eyJhbGciOiJSUzI1NiJ9.test-token",
+                "expireTimeMillis": 9999999999999.0,
+                "issuedAtTimeMillis": 1000000000000.0,
+            },
+        }
+
+        mock_store = MagicMock()
+        mock_store.iterate_records.return_value = [mock_record]
+
+        mock_db = MagicMock()
+        mock_db.get_object_store_by_name.return_value = mock_store
+
+        mock_idb = MagicMock()
+        mock_idb.__contains__ = MagicMock(return_value=True)
+        mock_idb.__getitem__ = MagicMock(return_value=mock_db)
+        mock_ccl.WrappedIndexDB.return_value = mock_idb
+
+        result = _read_app_check_token(idb_dir)
+
+        assert result["token"] == "eyJhbGciOiJSUzI1NiJ9.test-token"
+        assert result["expireTimeMillis"] == 9999999999999.0
+        mock_idb.close.assert_called_once()
+
+    @patch("src.collectors.firebase_idb.ccl_chromium_indexeddb")
+    def test_raises_when_no_token_record(self, mock_ccl, tmp_path):
+        idb_dir = tmp_path / "leveldb"
+        idb_dir.mkdir()
+
+        mock_store = MagicMock()
+        mock_store.iterate_records.return_value = []
+
+        mock_db = MagicMock()
+        mock_db.get_object_store_by_name.return_value = mock_store
+
+        mock_idb = MagicMock()
+        mock_idb.__contains__ = MagicMock(return_value=True)
+        mock_idb.__getitem__ = MagicMock(return_value=mock_db)
+        mock_ccl.WrappedIndexDB.return_value = mock_idb
+
+        with pytest.raises(ValueError, match="No App Check token"):
+            _read_app_check_token(idb_dir)
+
+        mock_idb.close.assert_called_once()
+
+
+# ── _extract_valid_app_check tests ────────────────────────────
+
+
+class TestExtractValidAppCheck:
+    """Test App Check token validity check."""
+
+    @patch("src.collectors.firebase_idb._read_app_check_token")
+    def test_returns_token_when_valid(self, mock_read):
+        future_ms = (time.time() + 3600) * 1000
+        mock_read.return_value = {
+            "token": "valid-check",
+            "expireTimeMillis": future_ms,
+        }
+        assert _extract_valid_app_check(Path("/fake")) == "valid-check"
+
+    @patch("src.collectors.firebase_idb._read_app_check_token")
+    def test_returns_none_when_expired(self, mock_read):
+        past_ms = (time.time() - 3600) * 1000
+        mock_read.return_value = {
+            "token": "expired",
+            "expireTimeMillis": past_ms,
+        }
+        assert _extract_valid_app_check(Path("/fake")) is None
+
+    @patch("src.collectors.firebase_idb._read_app_check_token")
+    def test_returns_none_on_error(self, mock_read):
+        mock_read.side_effect = ValueError("no token")
+        assert _extract_valid_app_check(Path("/fake")) is None
+
+
+# ── _refresh_app_check_via_browser tests ─────────────────────
+
+
+class TestRefreshAppCheckViaBrowser:
+    """Test browser-based App Check refresh."""
+
+    @patch("src.collectors.firebase_idb._extract_valid_app_check")
+    @patch("src.collectors.firebase_idb.subprocess.run")
+    def test_returns_token_on_success(self, mock_run, mock_extract, tmp_path):
+        mock_run.return_value = MagicMock(returncode=0, stderr="")
+        mock_extract.return_value = "fresh-token"
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", tmp_path):
+            result = _refresh_app_check_via_browser("example.com")
+
+        assert result == "fresh-token"
+        mock_run.assert_called_once()
+
+    @patch("src.collectors.firebase_idb.subprocess.run")
+    def test_returns_none_on_subprocess_failure(self, mock_run, tmp_path):
+        mock_run.return_value = MagicMock(returncode=1, stderr="error")
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", tmp_path):
+            result = _refresh_app_check_via_browser("example.com")
+
+        assert result is None
+
+    @patch("src.collectors.firebase_idb.subprocess.run")
+    def test_returns_none_on_timeout(self, mock_run, tmp_path):
+        mock_run.side_effect = subprocess.TimeoutExpired(cmd="test", timeout=60)
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", tmp_path):
+            result = _refresh_app_check_via_browser("example.com")
+
+        assert result is None
+
+    @patch("src.collectors.firebase_idb._extract_valid_app_check")
+    @patch("src.collectors.firebase_idb.subprocess.run")
+    def test_returns_none_when_no_token_after_visit(self, mock_run, mock_extract, tmp_path):
+        mock_run.return_value = MagicMock(returncode=0, stderr="")
+        mock_extract.return_value = None
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", tmp_path):
+            result = _refresh_app_check_via_browser("example.com")
+
+        assert result is None
+
+
+# ── get_app_check_token tests ────────────────────────────────
+
+
+class TestGetAppCheckToken:
+    """Test end-to-end App Check token retrieval."""
+
+    @patch("src.collectors.firebase_idb._refresh_app_check_via_browser")
+    @patch("src.collectors.firebase_idb._extract_valid_app_check")
+    @patch("src.collectors.firebase_idb._find_idb_path")
+    def test_returns_valid_token_from_disk(self, mock_find, mock_extract, mock_refresh):
+        mock_find.return_value = Path("/fake/idb")
+        mock_extract.return_value = "disk-token"
+
+        result = get_app_check_token("app.fyxer.com")
+        assert result == "disk-token"
+        mock_refresh.assert_not_called()
+
+    @patch("src.collectors.firebase_idb._refresh_app_check_via_browser")
+    @patch("src.collectors.firebase_idb._extract_valid_app_check")
+    @patch("src.collectors.firebase_idb._find_idb_path")
+    def test_falls_back_to_browser_refresh(self, mock_find, mock_extract, mock_refresh):
+        mock_find.return_value = Path("/fake/idb")
+        mock_extract.return_value = None  # expired on disk
+        mock_refresh.return_value = "browser-token"
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", Path("/nonexistent")):
+            result = get_app_check_token("app.fyxer.com")
+
+        assert result == "browser-token"
+        mock_refresh.assert_called_once_with("app.fyxer.com")
+
+    @patch("src.collectors.firebase_idb._refresh_app_check_via_browser")
+    @patch("src.collectors.firebase_idb._find_idb_path")
+    def test_returns_none_when_all_fail(self, mock_find, mock_refresh):
+        mock_find.return_value = None
+        mock_refresh.return_value = None
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", Path("/nonexistent")):
+            result = get_app_check_token("app.fyxer.com")
+
+        assert result is None
+
+    @patch("src.collectors.firebase_idb._refresh_app_check_via_browser")
+    @patch("src.collectors.firebase_idb._extract_valid_app_check")
+    @patch("src.collectors.firebase_idb._find_idb_path")
+    def test_uses_browser_profile_cache(self, mock_find, mock_extract, mock_refresh, tmp_path):
+        mock_find.return_value = None
+
+        # Create the browser profile IndexedDB dir
+        idb_dir = tmp_path / "Default" / "IndexedDB" / "https_app.fyxer.com_0.indexeddb.leveldb"
+        idb_dir.mkdir(parents=True)
+
+        # Only one call: browser profile cache returns a valid token
+        mock_extract.return_value = "cached-browser-token"
+
+        with patch("src.collectors.firebase_idb._APP_CHECK_PROFILE_DIR", tmp_path):
+            result = get_app_check_token("app.fyxer.com")
+
+        assert result == "cached-browser-token"
+        mock_refresh.assert_not_called()

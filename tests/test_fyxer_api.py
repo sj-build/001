@@ -28,6 +28,14 @@ class TestMakeHeaders:
         headers = _make_headers("test-token")
         assert headers["Content-Type"] == "application/json"
 
+    def test_includes_app_check_header(self):
+        headers = _make_headers("test-token", app_check_token="check-123")
+        assert headers["X-Firebase-AppCheck"] == "check-123"
+
+    def test_omits_app_check_when_none(self):
+        headers = _make_headers("test-token", app_check_token=None)
+        assert "X-Firebase-AppCheck" not in headers
+
 
 # ── _unwrap_value tests ────────────────────────────────────────
 
@@ -196,22 +204,26 @@ class TestCollectFyxer:
         result = collect_fyxer(days=7)
         assert result == []
 
+    @patch("src.collectors.fyxer_api.get_app_check_token")
     @patch("src.collectors.fyxer_api._discover_user_org")
     @patch("src.collectors.fyxer_api.get_firebase_token")
-    def test_returns_empty_on_org_error(self, mock_token, mock_org):
+    def test_returns_empty_on_org_error(self, mock_token, mock_org, mock_app_check):
         mock_token.return_value = "test-token"
+        mock_app_check.return_value = None
         mock_org.side_effect = ValueError("no org")
         result = collect_fyxer(days=7)
         assert result == []
 
+    @patch("src.collectors.fyxer_api.get_app_check_token")
     @patch("src.collectors.fyxer_api._fetch_recordings")
     @patch("src.collectors.fyxer_api._detect_recording_collection")
     @patch("src.collectors.fyxer_api._discover_user_org")
     @patch("src.collectors.fyxer_api.get_firebase_token")
     def test_collects_recordings(
-        self, mock_token, mock_org, mock_detect, mock_fetch,
+        self, mock_token, mock_org, mock_detect, mock_fetch, mock_app_check,
     ):
         mock_token.return_value = "test-token"
+        mock_app_check.return_value = "app-check-token"
         mock_org.return_value = "org-123"
         mock_detect.return_value = "call_recordings"
 
@@ -248,14 +260,16 @@ class TestCollectFyxer:
         assert result[1].title == "1:1 with manager"
         assert result[1].preview is None
 
+    @patch("src.collectors.fyxer_api.get_app_check_token")
     @patch("src.collectors.fyxer_api._fetch_recordings")
     @patch("src.collectors.fyxer_api._detect_recording_collection")
     @patch("src.collectors.fyxer_api._discover_user_org")
     @patch("src.collectors.fyxer_api.get_firebase_token")
     def test_filters_old_recordings(
-        self, mock_token, mock_org, mock_detect, mock_fetch,
+        self, mock_token, mock_org, mock_detect, mock_fetch, mock_app_check,
     ):
         mock_token.return_value = "test-token"
+        mock_app_check.return_value = None
         mock_org.return_value = "org-123"
         mock_detect.return_value = "call_recordings"
 
@@ -276,16 +290,18 @@ class TestCollectFyxer:
         result = collect_fyxer(days=7)
         assert len(result) == 0
 
+    @patch("src.collectors.fyxer_api.get_app_check_token")
     @patch("src.collectors.fyxer_api._fetch_recordings")
     @patch("src.collectors.fyxer_api._detect_recording_collection")
     @patch("src.collectors.fyxer_api._discover_user_org")
     @patch("src.collectors.fyxer_api.get_firebase_token")
     def test_handles_api_error(
-        self, mock_token, mock_org, mock_detect, mock_fetch,
+        self, mock_token, mock_org, mock_detect, mock_fetch, mock_app_check,
     ):
         import httpx
 
         mock_token.return_value = "test-token"
+        mock_app_check.return_value = None
         mock_org.return_value = "org-123"
         mock_detect.return_value = "call_recordings"
 
@@ -298,14 +314,16 @@ class TestCollectFyxer:
         result = collect_fyxer(days=7)
         assert result == []
 
+    @patch("src.collectors.fyxer_api.get_app_check_token")
     @patch("src.collectors.fyxer_api._fetch_recordings")
     @patch("src.collectors.fyxer_api._detect_recording_collection")
     @patch("src.collectors.fyxer_api._discover_user_org")
     @patch("src.collectors.fyxer_api.get_firebase_token")
     def test_paginates_results(
-        self, mock_token, mock_org, mock_detect, mock_fetch,
+        self, mock_token, mock_org, mock_detect, mock_fetch, mock_app_check,
     ):
         mock_token.return_value = "test-token"
+        mock_app_check.return_value = None
         mock_org.return_value = "org-123"
         mock_detect.return_value = "call_recordings"
 

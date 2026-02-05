@@ -9,7 +9,7 @@ from typing import Optional
 
 import httpx
 
-from src.collectors.firebase_idb import get_firebase_token
+from src.collectors.firebase_idb import get_app_check_token, get_firebase_token
 from src.ingest.normalize import RawConversation
 
 logger = logging.getLogger("sj_home_agent.collectors.fyxer_api")
@@ -31,12 +31,18 @@ _MAX_PAGES = 50
 _PAGE_SIZE = 50
 
 
-def _make_headers(id_token: str) -> dict[str, str]:
-    """Build request headers with Firebase Bearer auth."""
-    return {
+def _make_headers(
+    id_token: str,
+    app_check_token: str | None = None,
+) -> dict[str, str]:
+    """Build request headers with Firebase Bearer auth and optional App Check."""
+    headers = {
         "Authorization": f"Bearer {id_token}",
         "Content-Type": "application/json",
     }
+    if app_check_token:
+        headers["X-Firebase-AppCheck"] = app_check_token
+    return headers
 
 
 def _unwrap_value(field: dict) -> object:
@@ -75,7 +81,10 @@ def _unwrap_fields(doc: dict) -> dict:
     return {k: _unwrap_value(v) for k, v in fields.items()}
 
 
-def _discover_user_org(id_token: str) -> str:
+def _discover_user_org(
+    id_token: str,
+    app_check_token: str | None = None,
+) -> str:
     """Discover the user's organisation ID in Fyxer.
 
     Queries the ``users`` collection filtered by the authenticated user's
@@ -86,7 +95,7 @@ def _discover_user_org(id_token: str) -> str:
         ValueError: No organisation found for the user.
         httpx.HTTPStatusError: Firestore API error.
     """
-    headers = _make_headers(id_token)
+    headers = _make_headers(id_token, app_check_token)
 
     with httpx.Client(timeout=30) as client:
         # List user documents to find org membership
@@ -109,13 +118,17 @@ def _discover_user_org(id_token: str) -> str:
     raise ValueError("No organisation found for Fyxer user")
 
 
-def _list_subcollections(id_token: str, parent: str) -> list[str]:
+def _list_subcollections(
+    id_token: str,
+    parent: str,
+    app_check_token: str | None = None,
+) -> list[str]:
     """List subcollection IDs under a Firestore document.
 
     Uses the ``listCollectionIds`` API to discover what subcollections
     exist under the given parent path.
     """
-    headers = _make_headers(id_token)
+    headers = _make_headers(id_token, app_check_token)
 
     with httpx.Client(timeout=30) as client:
         resp = client.post(
@@ -135,13 +148,14 @@ def _fetch_recordings(
     collection: str,
     page_size: int = _PAGE_SIZE,
     page_token: str | None = None,
+    app_check_token: str | None = None,
 ) -> tuple[list[dict], str | None]:
     """Fetch call recording documents from Firestore.
 
     Returns:
         (list of raw Firestore documents, next_page_token or None)
     """
-    headers = _make_headers(id_token)
+    headers = _make_headers(id_token, app_check_token)
     params: dict[str, str | int] = {"pageSize": page_size}
     if page_token:
         params["pageToken"] = page_token
@@ -187,7 +201,11 @@ def _extract_date(fields: dict) -> Optional[str]:
     return None
 
 
-def _detect_recording_collection(id_token: str, org_id: str) -> str:
+def _detect_recording_collection(
+    id_token: str,
+    org_id: str,
+    app_check_token: str | None = None,
+) -> str:
     """Detect which subcollection holds call recordings.
 
     Tries known names first, then falls back to listing subcollections.
@@ -204,7 +222,7 @@ def _detect_recording_collection(id_token: str, org_id: str) -> str:
         "meeting-recordings",
     ]
 
-    headers = _make_headers(id_token)
+    headers = _make_headers(id_token, app_check_token)
 
     with httpx.Client(timeout=10) as client:
         for name in known_names:
@@ -223,7 +241,7 @@ def _detect_recording_collection(id_token: str, org_id: str) -> str:
                 continue
 
     subcollections = _list_subcollections(
-        id_token, f"organisations/{org_id}"
+        id_token, f"organisations/{org_id}", app_check_token=app_check_token,
     )
     logger.info("Org subcollections: %s", subcollections)
 
@@ -269,14 +287,18 @@ def collect_fyxer(days: int = 30) -> list[RawConversation]:
         )
         return []
 
+    app_check = get_app_check_token(FYXER_DOMAIN)
+
     try:
-        org_id = _discover_user_org(id_token)
+        org_id = _discover_user_org(id_token, app_check_token=app_check)
     except (ValueError, httpx.HTTPStatusError) as exc:
         logger.error("Failed to discover Fyxer org: %s", exc)
         return []
 
     try:
-        collection = _detect_recording_collection(id_token, org_id)
+        collection = _detect_recording_collection(
+            id_token, org_id, app_check_token=app_check,
+        )
     except ValueError as exc:
         logger.error("Failed to detect recording collection: %s", exc)
         return []
@@ -288,7 +310,8 @@ def collect_fyxer(days: int = 30) -> list[RawConversation]:
     for _page_num in range(_MAX_PAGES):
         try:
             docs, page_token = _fetch_recordings(
-                id_token, org_id, collection, page_token=page_token,
+                id_token, org_id, collection,
+                page_token=page_token, app_check_token=app_check,
             )
         except httpx.HTTPStatusError as exc:
             logger.error(
